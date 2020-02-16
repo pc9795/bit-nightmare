@@ -1,4 +1,5 @@
-package util;
+package utils;
+
 /*
  * Created by Abraham Campbell on 15/01/2020.
  *   Copyright (c) 2020  Abraham Campbell
@@ -22,19 +23,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
    
    (MIT LICENSE ) e.g do what you want with this :-) 
- */ 
+ */
 public class UnitTests {
-	
-	//Unit test to see if missed our target by more than a full frame  very basic and dont use JUNIT just my own version to show you an exmaple 
-	public static void CheckFrameRate(long TargetTime,long DeliveredTime,int TargetFPS)
-	{
-		int TimeBetweenFrames = 1000 / TargetFPS;
-		if( (TargetTime -DeliveredTime) > TimeBetweenFrames)
-		{
-		   System.out.println("FPS failure by 10 m");
-			 System.out.println("Frame was late by  "+ (TargetTime - DeliveredTime) + " ms");
-			//Write out to log file 
-		}
-	}
+
+    //Unit test to see if missed our target by more than a full frame  very basic and dont use JUNIT just my own version to show you an exmaple
+    public static void CheckFrameRate(long TargetTime, long DeliveredTime, int TargetFPS) {
+        int TimeBetweenFrames = 1000 / TargetFPS;
+        if ((TargetTime - DeliveredTime) > TimeBetweenFrames) {
+            System.out.println("FPS failure by 10 m");
+            System.out.println("Frame was late by  " + (TargetTime - DeliveredTime) + " ms");
+            //Write out to log file
+        }
+    }
 
 }

@@ -1,7 +1,5 @@
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /*
  * Created by Abraham Campbell on 15/01/2020.
@@ -26,168 +24,130 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
    
    (MIT LICENSE ) e.g do what you want with this :-) 
- */ 
+ */
 
 //Singeton pattern
 public class Controller implements KeyListener {
-        
-	   private static boolean KeyAPressed= false;
-	   private static boolean KeySPressed= false;
-	   private static boolean KeyDPressed= false;
-	   private static boolean KeyWPressed= false;
-	   private static boolean KeySpacePressed= false;
-	   
-	   private static final Controller instance = new Controller();
-	   
-	 public Controller() { 
-	}
-	 
-	 public static Controller getInstance(){
-	        return instance;
-	    }
-	   
-	@Override
-	// Key pressed , will keep triggering 
-	public void keyTyped(KeyEvent e) { 
-		 
-	}
+    private static boolean KeyAPressed = false;
+    private static boolean KeySPressed = false;
+    private static boolean KeyDPressed = false;
+    private static boolean KeyWPressed = false;
+    private static boolean KeySpacePressed = false;
 
-	@Override
-	public void keyPressed(KeyEvent e) 
-	{ 
-		switch (e.getKeyChar()) 
-		{
-			case 'a':setKeyAPressed(true);break;  
-			case 's':setKeySPressed(true);break;
-			case 'w':setKeyWPressed(true);break;
-			case 'd':setKeyDPressed(true);break;
-			case ' ':setKeySpacePressed(true);break;   
-		    default:
-		    	//System.out.println("Controller test:  Unknown key pressed");
-		        break;
-		}  
-		
-	 // You can implement to keep moving while pressing the key here . 
-		
-	}
+    private static final Controller instance = new Controller();
 
-	@Override
-	public void keyReleased(KeyEvent e) 
-	{ 
-		switch (e.getKeyChar()) 
-		{
-			case 'a':setKeyAPressed(false);break;  
-			case 's':setKeySPressed(false);break;
-			case 'w':setKeyWPressed(false);break;
-			case 'd':setKeyDPressed(false);break;
-			case ' ':setKeySpacePressed(false);break;   
-		    default:
-		    	//System.out.println("Controller test:  Unknown key pressed");
-		        break;
-		}  
-		 //upper case 
-	
-	}
+    public Controller() {
+    }
 
+    static Controller getInstance() {
+        return instance;
+    }
 
-	public boolean isKeyAPressed() {
-		return KeyAPressed;
-	}
+    @Override
+    // Key pressed , will keep triggering
+    public void keyTyped(KeyEvent e) {
 
+    }
 
-	public void setKeyAPressed(boolean keyAPressed) {
-		KeyAPressed = keyAPressed;
-	}
+    @Override
+    public void keyPressed(KeyEvent e) {
+        switch (e.getKeyChar()) {
+            case 'a':
+                setKeyAPressed(true);
+                break;
+            case 's':
+                setKeySPressed(true);
+                break;
+            case 'w':
+                setKeyWPressed(true);
+                break;
+            case 'd':
+                setKeyDPressed(true);
+                break;
+            case ' ':
+                setKeySpacePressed(true);
+                break;
+            default:
+                //System.out.println("Controller test:  Unknown key pressed");
+                break;
+        }
+        // You can implement to keep moving while pressing the key here .
+    }
 
-
-	public boolean isKeySPressed() {
-		return KeySPressed;
-	}
+    @Override
+    public void keyReleased(KeyEvent e) {
+        switch (e.getKeyChar()) {
+            case 'a':
+                setKeyAPressed(false);
+                break;
+            case 's':
+                setKeySPressed(false);
+                break;
+            case 'w':
+                setKeyWPressed(false);
+                break;
+            case 'd':
+                setKeyDPressed(false);
+                break;
+            case ' ':
+                setKeySpacePressed(false);
+                break;
+            default:
+                //System.out.println("Controller test:  Unknown key pressed");
+                break;
+        }
+        //upper case
+    }
 
 
-	public void setKeySPressed(boolean keySPressed) {
-		KeySPressed = keySPressed;
-	}
+    boolean isKeyAPressed() {
+        return KeyAPressed;
+    }
 
 
-	public boolean isKeyDPressed() {
-		return KeyDPressed;
-	}
+    protected void setKeyAPressed(boolean keyAPressed) {
+        KeyAPressed = keyAPressed;
+    }
 
 
-	public void setKeyDPressed(boolean keyDPressed) {
-		KeyDPressed = keyDPressed;
-	}
+    boolean isKeySPressed() {
+        return KeySPressed;
+    }
 
 
-	public boolean isKeyWPressed() {
-		return KeyWPressed;
-	}
+    protected void setKeySPressed(boolean keySPressed) {
+        KeySPressed = keySPressed;
+    }
 
 
-	public void setKeyWPressed(boolean keyWPressed) {
-		KeyWPressed = keyWPressed;
-	}
+    boolean isKeyDPressed() {
+        return KeyDPressed;
+    }
 
 
-	public boolean isKeySpacePressed() {
-		return KeySpacePressed;
-	}
+    protected void setKeyDPressed(boolean keyDPressed) {
+        KeyDPressed = keyDPressed;
+    }
 
 
-	public void setKeySpacePressed(boolean keySpacePressed) {
-		KeySpacePressed = keySpacePressed;
-	} 
-	
-	 
+    boolean isKeyWPressed() {
+        return KeyWPressed;
+    }
+
+
+    protected void setKeyWPressed(boolean keyWPressed) {
+        KeyWPressed = keyWPressed;
+    }
+
+
+    boolean isKeySpacePressed() {
+        return KeySpacePressed;
+    }
+
+
+    protected void setKeySpacePressed(boolean keySpacePressed) {
+        KeySpacePressed = keySpacePressed;
+    }
+
+
 }
-
-/*
- * 
- * KEYBOARD :-) . can you add a mouse or a gamepad 
-
- *@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ @@@@@@@@@@@@@@@
-
-  @@@     @@@@    @@@@    @@@@    @@@@     @@@     @@@     @@@     @@@     @@@  
-
-  @@@     @@@     @@@     @@@@     @@@     @@@     @@@     @@@     @@@     @@@  
-
-  @@@     @@@     @@@     @@@@    @@@@     @@@     @@@     @@@     @@@     @@@  
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@     @@@     @@@     @@@      @@      @@@     @@@     @@@     @@@     @@@     @
-
-@     @@@   W   @@@     @@@      @@      @@@     @@@     @@@     @@@     @@@     @
-
-@@    @@@@     @@@@    @@@@    @@@@    @@@@     @@@     @@@     @@@     @@@     @
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@N@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@     @@@      @@      @@      @@      @@@     @@@     @@@     @@@     @@@    
-
-@@@   A   @@@  S     @@  D     @@      @@@     @@@     @@@     @@@     @@@     @@@    
-
-@@@@ @  @@@@@@@@@@@@ @@@@@@@    @@@@@@@@@@@@    @@@@@@@@@@@@     @@@@   @@@@@   
-
-    @@@     @@@@    @@@@    @@@@    $@@@     @@@     @@@     @@@     @@@     @@@
-
-    @@@ $   @@@      @@      @@ /Q   @@ ]M   @@@     @@@     @@@     @@@     @@@
-
-    @@@     @@@      @@      @@      @@      @@@     @@@     @@@     @@@     @@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@       @@@                                                @@@       @@@       @
-
-@       @@@              SPACE KEY       @@@        @@ PQ     
-
-@       @@@                                                @@@        @@        
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
- * 
- * 
- * 
- * 
- * 
- */
