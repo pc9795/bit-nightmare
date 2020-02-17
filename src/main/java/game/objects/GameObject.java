@@ -113,7 +113,7 @@ public abstract class GameObject {
         return Constants.Sprite.BLANK;
     }
 
-    public abstract void tick(List<GameObject> objects);
+    public abstract void update(List<GameObject> objects);
 
     public abstract void render(Graphics g);
 

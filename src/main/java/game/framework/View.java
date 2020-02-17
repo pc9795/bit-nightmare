@@ -1,7 +1,9 @@
 package game.framework;
 
-import javax.swing.*;
+import game.utils.Constants;
+
 import java.awt.*;
+import java.awt.image.BufferStrategy;
 
 
 /*
@@ -28,19 +30,24 @@ SOFTWARE.
    
    (MIT LICENSE ) e.g do what you want with this :-) 
  */
-public class View extends JPanel {
-    private Model gameworld;
+public class View extends Canvas {
+    private Model gameWorld;
+    private BufferStrategy bs;
 
     public View(Model world) {
-        this.gameworld = world;
+        this.gameWorld = world;
     }
 
     void updateView() {
-        this.repaint();
+        if (bs == null) {
+            createBufferStrategy(Constants.BUFFER_COUNT);
+            bs = getBufferStrategy();
+        }
+        Graphics g = bs.getDrawGraphics();
+        //use graphics object
+        g.dispose();
+        bs.show();
     }
 
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-    }
 }
 

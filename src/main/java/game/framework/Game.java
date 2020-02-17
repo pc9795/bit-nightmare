@@ -1,7 +1,6 @@
 package game.framework;
 
 import game.utils.Constants;
-import game.utils.Utils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,10 +31,11 @@ SOFTWARE.
  */
 
 
-public class Game extends JFrame {
+public class Game extends JFrame implements Runnable {
     private Model gameWorld;
     private View canvas;
     private int width, height;
+    private boolean running;
 
     public Game(String title, int width, int height) {
         super(title);
@@ -43,35 +43,67 @@ public class Game extends JFrame {
         this.height = height;
     }
 
-    private void init() {
-        setSize(width, height);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setLayout(null);
+    public void start() {
         gameWorld = new Model();
         canvas = new View(gameWorld);
-        add(canvas);
-        canvas.setBounds(0, 0, width, height);
-        canvas.setBackground(new Color(255, 255, 255));
-        canvas.setVisible(true);
+        // It is important that the preferred size is set on the GamePanel and not on the JFrame. If the application
+        // size is set on the JFrame, some of the drawing area will be taken up by the frame and the drawing area will
+        // be little smaller.
+        //todo setPreferredSize vs setSize
+        canvas.setPreferredSize(new Dimension(width, height));
+        canvas.setBackground(Color.WHITE);
+        // We are handling repaint on our own.
+        canvas.setIgnoreRepaint(true);
+        //todo getContentPane().add(..) vs add(..)
+        getContentPane().add(canvas);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        // We are handling repaint on our own.
+        setIgnoreRepaint(true);
+        setResizable(false);
+        pack();
         setVisible(true);
+        // Starting game thread
+        Thread gameThread = new Thread(this);
+        gameThread.start();
     }
 
-    public void start() {
-        init();
-        while (true) {
-            //swing has timer class to help us time this but I'm writing my own, you can of course use the timer, but I want to set FPS and display it
-            int timeBetweenFrames = 1000 / Constants.TARGET_FPS;
-            long frameCheck = System.currentTimeMillis() + (long) timeBetweenFrames;
-            while (frameCheck > System.currentTimeMillis()) {
-            }
-            gameLoop();
-            Utils.checkFrameRate(System.currentTimeMillis(), frameCheck, Constants.TARGET_FPS);
+    @Override
+    public void run() {
+        if (running) {
+            return;
         }
-    }
-
-    private void gameLoop() {
-        gameWorld.gameLogic();
-        canvas.updateView();
+        running = true;
+        requestFocus();
+        // Can shift to nano seconds if need more juice with frames.
+        long lastTime = System.currentTimeMillis();
+        double timeBetweenFrames = 1000 / Constants.TARGET_FPS;
+        double delta = 0;
+        // It is safe to use int for updates and frames as it is reset every second.
+        // Updates should be ideally equal to the Target fps.
+        int updates = 0;
+        // It is actual no of frames rendered
+        int frames = 0;
+        // This variable is used for logging frame rate.
+        long timer = lastTime;
+        while (running) {
+            long now = System.currentTimeMillis();
+            delta += (now - lastTime) / timeBetweenFrames;
+            lastTime = now;
+            while (delta >= 1) {
+                gameWorld.gameLogic();
+                delta--;
+                updates++;
+            }
+            frames++;
+            canvas.updateView();
+            // It will print the no of updates and frames every second.
+            if (now - timer > 1000) {
+                timer += 1000;
+                System.out.println(String.format("Frames: %s, Updates: %s", frames, updates));
+                frames = 0;
+                updates = 0;
+            }
+        }
     }
 }
 
