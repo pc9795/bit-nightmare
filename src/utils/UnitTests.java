@@ -27,11 +27,11 @@ SOFTWARE.
 public class UnitTests {
 
     //Unit test to see if missed our target by more than a full frame  very basic and dont use JUNIT just my own version to show you an exmaple
-    public static void CheckFrameRate(long TargetTime, long DeliveredTime, int TargetFPS) {
-        int TimeBetweenFrames = 1000 / TargetFPS;
-        if ((TargetTime - DeliveredTime) > TimeBetweenFrames) {
+    public static void checkFrameRate(long targetTime, long deliveredTime, int targetFPS) {
+        int timeBetweenFrames = 1000 / targetFPS;
+        if ((targetTime - deliveredTime) > timeBetweenFrames) {
             System.out.println("FPS failure by 10 m");
-            System.out.println("Frame was late by  " + (TargetTime - DeliveredTime) + " ms");
+            System.out.println("Frame was late by  " + (targetTime - deliveredTime) + " ms");
             //Write out to log file
         }
     }

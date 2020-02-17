@@ -65,6 +65,6 @@ public class GameObject {
         if (hasTextured) {
             return textureLocation;
         }
-        return Constants.BLANK_SPRITE;
+        return Constants.Sprite.BLANK;
     }
 }

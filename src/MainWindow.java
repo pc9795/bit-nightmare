@@ -39,45 +39,54 @@ SOFTWARE.
 
 public class MainWindow {
     private static JFrame frame = new JFrame(Constants.GAME_NAME);
+    //model
     private static Model gameWorld = new Model();
+    //view
     private static Viewer canvas = new Viewer(gameWorld);
-    private KeyListener Controller = new Controller();
-    private static int TargetFPS = 100;
+    //controller
+    private static KeyListener controller = Controller.getInstance();
     private static boolean startGame = false;
-    private JLabel BackgroundImageForStartMenu;
+    private JLabel backgroundImageForStartMenu;
 
     public MainWindow() {
-        frame.setSize(1000, 1000);  // you can customise this later and adapt it to change on size.
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   //If exit // you can modify with your way of quitting , just is a template.
+        // todo you can customise this later and adapt it to change on size.
+        // todo in the example i am following we are setting width and height in the canvas
+        frame.setSize(1000, 1000);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLayout(null);
         frame.add(canvas);
         canvas.setBounds(0, 0, 1000, 1000);
-        canvas.setBackground(new Color(255, 255, 255)); //white background  replaced by Space background but if you remove the background method this will draw a white screen
-        canvas.setVisible(false);   // this will become visible after you press the key.
+        //white background  replaced by Space background but if you remove the background method this will draw a white screen
+        canvas.setBackground(new Color(255, 255, 255));
+        // this will become visible after you press the key.
+        canvas.setVisible(false);
 
-
-        JButton startMenuButton = new JButton("Start Game");  // start button
+        // start button
+        JButton startMenuButton = new JButton("Start Game");
         startMenuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 startMenuButton.setVisible(false);
-                BackgroundImageForStartMenu.setVisible(false);
+                backgroundImageForStartMenu.setVisible(false);
                 canvas.setVisible(true);
-                canvas.addKeyListener(Controller);    //adding the controller to the Canvas
-                canvas.requestFocusInWindow();   // making sure that the Canvas is in focus so keyboard input will be taking in .
+                //adding the controller to the Canvas
+                canvas.addKeyListener(controller);
+                // making sure that the Canvas is in focus so keyboard input will be taking in .
+                canvas.requestFocusInWindow();
                 startGame = true;
             }
         });
         startMenuButton.setBounds(400, 500, 200, 40);
 
         //loading background image
-        File BackroundToLoad = new File("res/startscreen.png");  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE
+        //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE
+        File backroundToLoad = new File(Constants.Sprite.INITIAL);
         try {
+            BufferedImage myPicture = ImageIO.read(backroundToLoad);
+            backgroundImageForStartMenu = new JLabel(new ImageIcon(myPicture));
+            backgroundImageForStartMenu.setBounds(0, 0, 1000, 1000);
+            frame.add(backgroundImageForStartMenu);
 
-            BufferedImage myPicture = ImageIO.read(BackroundToLoad);
-            BackgroundImageForStartMenu = new JLabel(new ImageIcon(myPicture));
-            BackgroundImageForStartMenu.setBounds(0, 0, 1000, 1000);
-            frame.add(BackgroundImageForStartMenu);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -87,29 +96,27 @@ public class MainWindow {
     }
 
     public static void main(String[] args) {
-        MainWindow hello = new MainWindow();  //sets up environment
-        while (true)   //not nice but remember we do just want to keep looping till the end.  // this could be replaced by a thread but again we want to keep things simple
-        {
+        //sets up environment
+        new MainWindow();
+        //not nice but remember we do just want to keep looping till the end.
+        // this could be replaced by a thread but again we want to keep things simple
+        while (true) {
             //swing has timer class to help us time this but I'm writing my own, you can of course use the timer, but I want to set FPS and display it
-
-            int TimeBetweenFrames = 1000 / TargetFPS;
-            long FrameCheck = System.currentTimeMillis() + (long) TimeBetweenFrames;
+            int timeBetweenFrames = 1000 / Constants.TARGET_FPS;
+            long frameCheck = System.currentTimeMillis() + (long) timeBetweenFrames;
 
             //wait till next time step
-            while (FrameCheck > System.currentTimeMillis()) {
+            while (frameCheck > System.currentTimeMillis()) {
             }
-
 
             if (startGame) {
                 gameloop();
             }
 
             //UNIT test to see if framerate matches
-            UnitTests.CheckFrameRate(System.currentTimeMillis(), FrameCheck, TargetFPS);
+            UnitTests.checkFrameRate(System.currentTimeMillis(), frameCheck, Constants.TARGET_FPS);
 
         }
-
-
     }
 
     //Basic Model-View-Controller pattern
