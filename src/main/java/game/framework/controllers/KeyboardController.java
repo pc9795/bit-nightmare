@@ -1,4 +1,9 @@
-package utils;
+package game.framework.controllers;
+
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.HashMap;
+import java.util.Map;
 
 /*
  * Created by Abraham Campbell on 15/01/2020.
@@ -24,16 +29,32 @@ SOFTWARE.
    
    (MIT LICENSE ) e.g do what you want with this :-) 
  */
-public class UnitTests {
 
-    //Unit test to see if missed our target by more than a full frame  very basic and dont use JUNIT just my own version to show you an exmaple
-    public static void checkFrameRate(long targetTime, long deliveredTime, int targetFPS) {
-        int timeBetweenFrames = 1000 / targetFPS;
-        if ((targetTime - deliveredTime) > timeBetweenFrames) {
-            System.out.println("FPS failure by 10 m");
-            System.out.println("Frame was late by  " + (targetTime - deliveredTime) + " ms");
-            //Write out to log file
-        }
+/**
+ * Singleton class
+ */
+public class KeyboardController implements KeyListener {
+    private static final KeyboardController instance = new KeyboardController();
+    //Right now implemented keys as map. In future can move to array based implementation
+    private Map<Character, Integer> keys = new HashMap<>();
+
+    private KeyboardController() {
     }
 
+    static KeyboardController getInstance() {
+        return instance;
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+    }
 }

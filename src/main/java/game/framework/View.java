@@ -1,4 +1,8 @@
-package utils;
+package game.framework;
+
+import javax.swing.*;
+import java.awt.*;
+
 
 /*
  * Created by Abraham Campbell on 15/01/2020.
@@ -24,47 +28,19 @@ SOFTWARE.
    
    (MIT LICENSE ) e.g do what you want with this :-) 
  */
-public class GameObject {
-    private Point3f centre = new Point3f(0, 0, 0); // Centre of object, using 3D as objects may be scaled
-    private int width = 10;
-    private int height = 10;
-    private boolean hasTextured = false;
-    private String textureLocation;
+public class View extends JPanel {
+    private Model gameworld;
 
-    public GameObject() {
-
+    public View(Model world) {
+        this.gameworld = world;
     }
 
-    public GameObject(String textureLocation, int width, int height, Point3f centre) {
-        this.hasTextured = true;
-        this.textureLocation = textureLocation;
-        this.width = width;
-        this.height = height;
-        this.centre = centre;
+    void updateView() {
+        this.repaint();
     }
 
-    public Point3f getCentre() {
-        return centre;
-    }
-
-    public void setCentre(Point3f centre) {
-        this.centre = centre;
-        //todo make sure to put boundaries on the gameObject
-
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public String getTexture() {
-        if (hasTextured) {
-            return textureLocation;
-        }
-        return Constants.Sprite.BLANK;
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
     }
 }
+

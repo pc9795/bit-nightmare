@@ -1,4 +1,4 @@
-package utils;
+package game.physics;
 /*
  * Modified by Abraham Campbell on 15/01/2020.
  *   Copyright (c) 2020  Abraham Campbell
@@ -26,6 +26,8 @@ SOFTWARE.
 //Modified from Graphics 3033J course point class  by Abey Campbell 
 
 
+import javafx.util.Pair;
+
 /**
  * A point in the 3D space
  * NOTE: Not implemented addition of two points as it is not defined
@@ -34,20 +36,29 @@ public class Point3f {
     private float x;
     private float y;
     private float z;
-    private int boundary = 900;
+    private Pair<Integer, Integer> boundary;
 
-    public Point3f() {
-    }
-
-    public Point3f(float x, float y, float z) {
-        this.setX(x);
-        this.setY(y);
-        this.setZ(z);
-    }
-
-    private void setBoundary(int boundary) {
+    public Point3f(float x, float y, float z, Pair<Integer, Integer> boundary) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
         this.boundary = boundary;
+    }
 
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public float getZ() {
+        return z;
+    }
+
+    public Pair<Integer, Integer> getBoundary() {
+        return new Pair<>(boundary.getKey(), boundary.getValue());
     }
 
     /**
@@ -70,15 +81,15 @@ public class Point3f {
     }
 
     public Point3f add(Vector3f other) {
-        return new Point3f(this.getX() + other.getX(), this.getY() + other.getY(), this.getZ() + other.getZ());
+        return new Point3f(getX() + other.getX(), getY() + other.getY(), getZ() + other.getZ(), boundary);
     }
 
     public Point3f subtract(Vector3f other) {
-        return new Point3f(this.getX() - other.getX(), this.getY() - other.getY(), this.getZ() - other.getZ());
+        return new Point3f(getX() - other.getX(), getY() - other.getY(), getZ() - other.getZ(), boundary);
     }
 
     public Vector3f subtract(Point3f other) {
-        return new Vector3f(this.getX() - other.getX(), this.getY() - other.getY(), this.getZ() - other.getZ());
+        return new Vector3f(getX() - other.getX(), getY() - other.getY(), getZ() - other.getZ());
     }
 
     /**
@@ -86,40 +97,23 @@ public class Point3f {
      *
      * @param vector vector object
      */
+    //todo check what this method is doing
     public void applyVector(Vector3f vector) {
-        setX(checkBoundary(this.getX() + vector.getX()));
-        setY(checkBoundary(this.getY() - vector.getY()));
-        setZ(checkBoundary(this.getZ() - vector.getZ()));
+        x = checkBoundary(this.getX() + vector.getX());
+        y = checkBoundary(this.getY() - vector.getY());
+        z = checkBoundary(this.getZ() - vector.getZ());
     }
 
     private float checkBoundary(float f) {
-        if (f < 0) f = 0.0f;
-        if (f > boundary) f = (float) boundary;
+        //Unbounded point
+        if (boundary == null) {
+            return f;
+        }
+        //Less than lower limit then set lower limit.
+        if (f < boundary.getKey()) f = boundary.getKey();
+        //Greater than higher limit set higher limit.
+        if (f > boundary.getValue()) f = boundary.getValue();
         return f;
-    }
-
-    public float getX() {
-        return x;
-    }
-
-    private void setX(float x) {
-        this.x = x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    private void setY(float y) {
-        this.y = y;
-    }
-
-    float getZ() {
-        return z;
-    }
-
-    private void setZ(float z) {
-        this.z = z;
     }
 
     @Override

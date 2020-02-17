@@ -1,4 +1,4 @@
-package utils;
+package game.physics;
 
 /*
  * Modified by Abraham Campbell on 15/01/2020.
@@ -34,76 +34,60 @@ public class Vector3f {
     private float y;
     private float z;
 
-    public Vector3f() {
-    }
-
     public Vector3f(float x, float y, float z) {
-        this.setX(x);
-        this.setY(y);
-        this.setZ(z);
-    }
-
-    public Vector3f add(Vector3f additional) {
-        return new Vector3f(this.getX() + additional.getX(), this.getY() + additional.getY(), this.getZ() + additional.getZ());
-    }
-
-    public Vector3f subtract(Vector3f other) {
-        return new Vector3f(this.getX() - other.getX(), this.getY() - other.getY(), this.getZ() - other.getZ());
-    }
-
-    public Point3f add(Point3f other) {
-        return new Point3f(this.getX() + other.getX(), this.getY() + other.getY(), this.getZ() + other.getZ());
-    }
-
-
-    private Vector3f scale(float scale) {
-        return new Vector3f(this.getX() * scale, this.getY() * scale, this.getZ() * scale);
-    }
-
-    public Vector3f negate() {
-        return new Vector3f(-this.getX(), -this.getY(), -this.getZ());
-    }
-
-    private float length() {
-        return (float) Math.sqrt(this.getX() * this.getX() + this.getY() * this.getY() + this.getZ() * this.getZ());
-    }
-
-    public Vector3f norm() {
-        return this.scale(1.0f / length());
-    }
-
-    public float dotProduct(Vector3f v) {
-        return (this.getX() * v.getX() + this.getY() * v.getY() + this.getZ() * v.getZ());
-    }
-
-    public Vector3f crossProduct(Vector3f v) {
-        float u0 = (this.getY() * v.getZ() - this.getZ() * v.getY());
-        float u1 = (this.getZ() * v.getX() - this.getX() * v.getZ());
-        float u2 = (this.getX() * v.getY() - this.getY() * v.getX());
-        return new Vector3f(u0, u1, u2);
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
     float getX() {
         return x;
     }
 
-    private void setX(float x) {
-        this.x = x;
-    }
-
     float getY() {
         return y;
-    }
-
-    private void setY(float y) {
-        this.y = y;
     }
 
     float getZ() {
         return z;
     }
 
-    private void setZ(float z) {
-        this.z = z;
+    public Vector3f add(Vector3f additional) {
+        return new Vector3f(getX() + additional.getX(), getY() + additional.getY(), getZ() + additional.getZ());
+    }
+
+    public Vector3f subtract(Vector3f other) {
+        return new Vector3f(getX() - other.getX(), getY() - other.getY(), getZ() - other.getZ());
+    }
+
+    public Point3f add(Point3f other) {
+        return new Point3f(getX() + other.getX(), getY() + other.getY(), getZ() + other.getZ(), other.getBoundary());
+    }
+
+    private Vector3f scale(float scale) {
+        return new Vector3f(getX() * scale, getY() * scale, getZ() * scale);
+    }
+
+    public Vector3f negate() {
+        return new Vector3f(-getX(), -getY(), -getZ());
+    }
+
+    private float length() {
+        return (float) Math.sqrt(getX() * getX() + getY() * getY() + getZ() * getZ());
+    }
+
+    public Vector3f norm() {
+        return scale(1.0f / length());
+    }
+
+    public float dotProduct(Vector3f v) {
+        return (getX() * v.getX() + getY() * v.getY() + getZ() * v.getZ());
+    }
+
+    public Vector3f crossProduct(Vector3f v) {
+        float u0 = (getY() * v.getZ() - getZ() * v.getY());
+        float u1 = (getZ() * v.getX() - getX() * v.getZ());
+        float u2 = (getX() * v.getY() - getY() * v.getX());
+        return new Vector3f(u0, u1, u2);
     }
 }
