@@ -7,6 +7,9 @@ import game.utils.Constants;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 /*
  * Created by Abraham Campbell on 15/01/2020.
@@ -39,6 +42,7 @@ public class Game extends JFrame implements Runnable {
     private View canvas;
     private int width, height;
     private boolean running;
+    private Thread gameThread, gamepadControllerThread;
 
     public Game(String title, int width, int height) {
         super(title);
@@ -49,7 +53,7 @@ public class Game extends JFrame implements Runnable {
     public void start() {
         //Loading model
         try {
-            gameWorld = new Model();
+            gameWorld = new Model(width, height);
 
         } catch (Exception e) {
             System.out.println("Not able to load the game world.");
@@ -64,7 +68,7 @@ public class Game extends JFrame implements Runnable {
         // be little smaller.
         //todo setPreferredSize vs setSize
         canvas.setPreferredSize(new Dimension(width, height));
-        canvas.setBackground(Color.WHITE);
+        canvas.setBackground(Color.BLACK);
         // We are handling repaint on our own.
         canvas.setIgnoreRepaint(true);
 
@@ -74,7 +78,7 @@ public class Game extends JFrame implements Runnable {
         canvas.addMouseMotionListener(MouseController.getInstance());
         canvas.addMouseWheelListener(MouseController.getInstance());
         GamepadController.getInstance().setDetecting(true);
-        Thread gamepadControllerThread = new Thread(GamepadController.getInstance());
+        gamepadControllerThread = new Thread(GamepadController.getInstance());
         gamepadControllerThread.start();
 
         //Configuring game window
@@ -85,11 +89,17 @@ public class Game extends JFrame implements Runnable {
         setIgnoreRepaint(true);
         setResizable(false);
         pack();
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                onWindowClosing();
+            }
+        });
         setVisible(true);
 
         running = true;
         // Starting game thread
-        Thread gameThread = new Thread(this);
+        gameThread = new Thread(this);
         gameThread.start();
     }
 
@@ -128,5 +138,22 @@ public class Game extends JFrame implements Runnable {
                 updates = 0;
             }
         }
+    }
+
+    private void onWindowClosing() {
+        try {
+            running = false;
+            GamepadController.getInstance().setDetecting(false);
+            if (gamepadControllerThread != null) {
+                gamepadControllerThread.join();
+            }
+            if (gameThread != null) {
+                gameThread.join();
+            }
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.exit(0);
     }
 }

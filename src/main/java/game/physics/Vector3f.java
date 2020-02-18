@@ -40,16 +40,28 @@ public class Vector3f {
         this.z = z;
     }
 
-    float getX() {
+    public float getX() {
         return x;
     }
 
-    float getY() {
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public float getY() {
         return y;
     }
 
-    float getZ() {
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public float getZ() {
         return z;
+    }
+
+    public void setZ(float z) {
+        this.z = z;
     }
 
     public Vector3f add(Vector3f additional) {

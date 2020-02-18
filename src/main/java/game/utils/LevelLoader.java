@@ -3,6 +3,7 @@ package game.utils;
 import game.framework.Model;
 import game.objects.GameObject;
 import game.objects.GameObjectFactory;
+import game.physics.Boundary;
 import game.physics.Point3f;
 import javafx.util.Pair;
 
@@ -73,9 +74,8 @@ public final class LevelLoader {
 
                 int width = objectInfo.getValue().getKey();
                 int height = objectInfo.getValue().getValue();
-                model.addGameObject(GameObjectFactory.getGameObject(objectType, width, height,
-                        new Point3f(row * Constants.LEVEL_PIXEL_TO_WIDTH_RATIO,
-                                col * Constants.LEVEL_PIXEL_TO_WIDTH_RATIO, 0, new Pair<>(0, Constants.WIDTH))));
+                Point3f centre = new Point3f(row * Constants.LEVEL_PIXEL_TO_WIDTH_RATIO, col * Constants.LEVEL_PIXEL_TO_WIDTH_RATIO, 0, new Boundary(Constants.WIDTH, Constants.HEIGHT));
+                model.addGameObject(GameObjectFactory.getGameObject(objectType, width, height, centre));
             }
         }
     }

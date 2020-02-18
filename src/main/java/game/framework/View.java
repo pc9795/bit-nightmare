@@ -44,9 +44,12 @@ public class View extends Canvas {
             bs = getBufferStrategy();
         }
         Graphics g = bs.getDrawGraphics();
+        g.clearRect(0, 0, getWidth(), getHeight());
         //Drawing stuff
+        gameWorld.getEnvironment().forEach(object -> object.render(g));
+        gameWorld.getCollectibles().forEach(object -> object.render(g));
+        gameWorld.getEnemies().forEach(object -> object.render(g));
         gameWorld.getPlayer().render(g);
-        gameWorld.getObjects().forEach(obj -> obj.render(g));
         g.dispose();
         bs.show();
     }

@@ -1,9 +1,9 @@
 package game.objects;
 
+import game.framework.Model;
 import game.physics.Point3f;
 
 import java.awt.*;
-import java.util.List;
 
 /**
  * Created By: Prashant Chaubey
@@ -16,7 +16,7 @@ public class BitBot extends GameObject {
     }
 
     @Override
-    public void update(List<GameObject> objects) {
+    public void update() {
 
     }
 
@@ -24,6 +24,11 @@ public class BitBot extends GameObject {
     public void render(Graphics g) {
         g.setColor(new Color(195, 195, 195));
         g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
+    }
+
+    @Override
+    public void collision(Model model) {
+
     }
 
     @Override

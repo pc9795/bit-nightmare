@@ -1,5 +1,6 @@
 package game.objects;
 
+import game.framework.Model;
 import game.physics.Point3f;
 import game.physics.Vector3f;
 import game.utils.Constants;
@@ -47,10 +48,11 @@ public abstract class GameObject {
     protected int width, height;
     protected boolean hasTextured;
     protected String textureLocation;
-    protected Vector3f velocity;
+    protected Vector3f velocity = new Vector3f(0, 0, 0);
     protected GameObjectType type;
     protected boolean jumping, falling;
     protected FacingDirection facingDirection = FacingDirection.RIGHT;
+    protected float gravity = 0f;
 
     public GameObject(int width, int height, Point3f centre, GameObjectType type) {
         this.width = width;
@@ -119,9 +121,11 @@ public abstract class GameObject {
         return Constants.Sprite.BLANK;
     }
 
-    public abstract void update(List<GameObject> objects);
+    public abstract void update();
 
     public abstract void render(Graphics g);
+
+    public abstract void collision(Model model);
 
     /**
      * Get bounds for collision detection

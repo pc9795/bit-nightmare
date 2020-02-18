@@ -36,29 +36,68 @@ public class Point3f {
     private float x;
     private float y;
     private float z;
-    private Pair<Integer, Integer> boundary;
+    private Boundary boundary;
 
-    public Point3f(float x, float y, float z, Pair<Integer, Integer> boundary) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    public Point3f(float x, float y, float z, Boundary boundary) {
         this.boundary = boundary;
+        setX(x);
+        setY(y);
+        setZ(z);
     }
 
     public float getX() {
         return x;
     }
 
+    public void setX(float x) {
+        //Unbounded point
+        if (boundary == null) {
+            this.x = x;
+            return;
+        }
+        //Less than lower limit then set lower limit.
+        if (x < boundary.getxMin()) x = boundary.getxMin();
+        //Greater than higher limit set higher limit.
+        if (x > boundary.getxMax()) x = boundary.getxMax();
+        this.x = x;
+    }
+
     public float getY() {
         return y;
+    }
+
+    public void setY(float y) {
+        //Unbounded point
+        if (boundary == null) {
+            this.y = y;
+            return;
+        }
+        //Less than lower limit then set lower limit.
+        if (y < boundary.getyMin()) y = boundary.getyMin();
+        //Greater than higher limit set higher limit.
+        if (y > boundary.getyMax()) y = boundary.getyMax();
+        this.y = y;
     }
 
     public float getZ() {
         return z;
     }
 
-    public Pair<Integer, Integer> getBoundary() {
-        return new Pair<>(boundary.getKey(), boundary.getValue());
+    public void setZ(float z) {
+        //Unbounded point
+        if (boundary == null) {
+            this.z = z;
+            return;
+        }
+        //Less than lower limit then set lower limit.
+        if (z < boundary.getzMin()) z = boundary.getzMin();
+        //Greater than higher limit set higher limit.
+        if (z > boundary.getzMax()) z = boundary.getzMax();
+        this.z = z;
+    }
+
+    public Boundary getBoundary() {
+        return boundary;
     }
 
     /**
@@ -99,21 +138,9 @@ public class Point3f {
      */
     //todo check what this method is doing
     public void applyVector(Vector3f vector) {
-        x = checkBoundary(this.getX() + vector.getX());
-        y = checkBoundary(this.getY() - vector.getY());
-        z = checkBoundary(this.getZ() - vector.getZ());
-    }
-
-    private float checkBoundary(float f) {
-        //Unbounded point
-        if (boundary == null) {
-            return f;
-        }
-        //Less than lower limit then set lower limit.
-        if (f < boundary.getKey()) f = boundary.getKey();
-        //Greater than higher limit set higher limit.
-        if (f > boundary.getValue()) f = boundary.getValue();
-        return f;
+        setX(this.getX() + vector.getX());
+        setY(this.getY() - vector.getY());
+        setZ(this.getZ() - vector.getZ());
     }
 
     @Override
