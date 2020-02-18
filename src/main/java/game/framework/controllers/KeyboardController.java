@@ -33,7 +33,7 @@ SOFTWARE.
 /**
  * Singleton class
  */
-public class KeyboardController implements KeyListener {
+public final class KeyboardController implements KeyListener {
     private static final KeyboardController instance = new KeyboardController();
     //Right now implemented keys as map. In future can move to array based implementation
     private Map<Character, Integer> keys = new HashMap<>();
@@ -41,7 +41,7 @@ public class KeyboardController implements KeyListener {
     private KeyboardController() {
     }
 
-    static KeyboardController getInstance() {
+    public static KeyboardController getInstance() {
         return instance;
     }
 

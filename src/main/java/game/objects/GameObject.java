@@ -33,6 +33,8 @@ SOFTWARE.
  */
 public abstract class GameObject {
     public enum GameObjectType {
+        BLOCK, LAVA, PLAYER, BIT_BOT, ENEMY1, ENEMY2, ENEMY3, ENEMY_PORTAL, BIT_REVOLVER, BIT_ARRAY_GUN,
+        GATE, MOVABLE_BLOCK, BOSS1, BIT_MATRIX_BLAST, OSCILLATING_BLOCK, END_GATE
     }
 
     public enum FacingDirection {
@@ -41,14 +43,14 @@ public abstract class GameObject {
 
     //Centre of object, using 3D as objects may be scaled
     //todo why there is a z in framework?
-    private Point3f centre;
-    private int width, height;
-    private boolean hasTextured;
-    private String textureLocation;
-    private Vector3f velocity;
-    private GameObjectType type;
-    private boolean jumping, falling = true;
-    private FacingDirection facingDirection = FacingDirection.RIGHT;
+    protected Point3f centre;
+    protected int width, height;
+    protected boolean hasTextured;
+    protected String textureLocation;
+    protected Vector3f velocity;
+    protected GameObjectType type;
+    protected boolean jumping, falling = true;
+    protected FacingDirection facingDirection = FacingDirection.RIGHT;
 
     public GameObject(int width, int height, Point3f centre, GameObjectType type) {
         this.width = width;
@@ -106,6 +108,10 @@ public abstract class GameObject {
         this.facingDirection = facingDirection;
     }
 
+    public GameObjectType getType() {
+        return type;
+    }
+
     public String getTexture() {
         if (hasTextured) {
             return textureLocation;
@@ -123,4 +129,14 @@ public abstract class GameObject {
      * @return bounds for this object
      */
     public abstract Rectangle getBounds();
+
+    @Override
+    public String toString() {
+        return "GameObject{" +
+                "centre=" + centre +
+                ", width=" + width +
+                ", height=" + height +
+                ", type=" + type +
+                '}';
+    }
 }

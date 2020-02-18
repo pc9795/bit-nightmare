@@ -1,7 +1,18 @@
 package game.framework;
 
 import game.objects.GameObject;
+import game.objects.Player;
+import game.physics.Point3f;
+import game.utils.Constants;
+import game.utils.LevelLoader;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -30,8 +41,45 @@ SOFTWARE.
    (MIT LICENSE ) e.g do what you want with this :-) 
  */
 public class Model {
-    private GameObject player;
+    private Player player;
     private List<GameObject> objects = new CopyOnWriteArrayList<>();
+    private List<String> levels = new ArrayList<>();
+
+    public Model() throws IOException, URISyntaxException {
+        init();
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public List<GameObject> getObjects() {
+        return objects;
+    }
+
+    private void init() throws URISyntaxException, IOException {
+        URI uri = Model.class.getResource(Constants.LEVEL_NAMES_FILE).toURI();
+        try (BufferedReader br = Files.newBufferedReader(Paths.get(uri))) {
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                levels.add(line.trim());
+            }
+        }
+        if (levels.size() == 0) {
+            throw new RuntimeException("No levels to load");
+        }
+        switchLevel(levels.get(0));
+    }
+
+    private void switchLevel(String levelName) throws IOException {
+        clean();
+        LevelLoader.getInstance().loadLevel(levelName, this);
+    }
+
+    private void clean() {
+        objects.clear();
+        player = null;
+    }
 
     /**
      * This is the heart of the game , where the model takes in all the inputs ,decides the outcomes and then changes the model accordingly.
@@ -53,4 +101,18 @@ public class Model {
     private void bulletLogic() {
 
     }
+
+    public void addGameObject(GameObject object) {
+        switch (object.getType()) {
+            case PLAYER:
+                player = (Player) object;
+            default:
+                objects.add(object);
+        }
+    }
+
+    public void removeGameObject(GameObject object) {
+
+    }
+
 }

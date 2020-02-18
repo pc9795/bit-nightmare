@@ -1,5 +1,7 @@
 package game.framework;
 
+import game.framework.controllers.KeyboardController;
+import game.framework.controllers.MouseController;
 import game.utils.Constants;
 
 import javax.swing.*;
@@ -44,7 +46,14 @@ public class Game extends JFrame implements Runnable {
     }
 
     public void start() {
-        gameWorld = new Model();
+        try {
+            gameWorld = new Model();
+
+        } catch (Exception e) {
+            System.out.println("Not able to load the game world.");
+            e.printStackTrace();
+            System.exit(1);
+        }
         canvas = new View(gameWorld);
         // It is important that the preferred size is set on the GamePanel and not on the JFrame. If the application
         // size is set on the JFrame, some of the drawing area will be taken up by the frame and the drawing area will
@@ -54,6 +63,11 @@ public class Game extends JFrame implements Runnable {
         canvas.setBackground(Color.WHITE);
         // We are handling repaint on our own.
         canvas.setIgnoreRepaint(true);
+        //Registering controllers
+        canvas.addKeyListener(KeyboardController.getInstance());
+        canvas.addMouseListener(MouseController.getInstance());
+        canvas.addMouseMotionListener(MouseController.getInstance());
+        canvas.addMouseWheelListener(MouseController.getInstance());
         //todo getContentPane().add(..) vs add(..)
         getContentPane().add(canvas);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

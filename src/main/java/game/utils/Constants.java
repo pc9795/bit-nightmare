@@ -15,6 +15,10 @@ public final class Constants {
     public static final int WIDTH = 1366;
     public static final int HEIGHT = 768;
     public static final int BUFFER_COUNT = 3;
+    public static final int LEVEL_PIXEL_TO_WIDTH_RATIO = 32;
+    public static final String LEVEL_NAMES_FILE = "/levelnames.txt";
+    public static final String LEVEL_PROPERTIES_FORMAT = "/levels/%s.properties";
+    public static final String LEVEL_PNG_FORMAT = "/levels/%s.png";
 
     public static final class Sprite {
         private Sprite() {
