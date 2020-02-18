@@ -1,9 +1,12 @@
 package game.objects;
 
 import game.framework.Model;
+import game.objects.weapons.Weapon;
 import game.physics.Point3f;
+import game.utils.Constants;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,10 +15,33 @@ import java.util.List;
  * Purpose: TODO:
  **/
 public class Player extends GameObject {
+    //The weapon at the front is the primary weapon.
+    private List<Weapon> weapons;
+    private int currentWeaponIndex;
+    private boolean ducking;
+
     public Player(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.PLAYER);
-        gravity = .098f;
+        gravity = Constants.PLAYER_GRAVITY;
         falling = true;
+        weapons = new ArrayList<>();
+        currentWeaponIndex = -1;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public boolean isDucking() {
+        return ducking;
+    }
+
+    public void setDucking(boolean ducking) {
+        this.ducking = ducking;
     }
 
     @Override
@@ -40,16 +66,82 @@ public class Player extends GameObject {
     @Override
     public void render(Graphics g) {
         g.setColor(new Color(0, 0, 255));
-        g.fill3DRect((int) centre.getX(), (int) centre.getY(), width, height, true);
+        g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
+        Graphics2D g2d = (Graphics2D) g;
+        g.setColor(Color.RED);
+        g2d.draw(getBoundsBottom());
+        g2d.draw(getBoundsLeft());
+        g2d.draw(getBoundsRight());
+        g2d.draw(getBoundsTop());
     }
 
     @Override
     public void collision(Model model) {
+        collisionWithEnvironment(model);
+    }
 
+    private void collisionWithEnvironment(Model model) {
+        List<GameObject> willCollide = model.getEnvironmentQuadTree().retrieve(this);
+        for (GameObject env : willCollide) {
+            Rectangle bounds = env.getBounds();
+            if (bounds.intersects(getBoundsBottom())) {
+                //Bottom collision
+                centre.setY(env.getCentre().getY() - height);
+                falling = false;
+                jumping = false;
+            }
+            if (bounds.intersects(getBoundsTop())) {
+                //Top collision
+                centre.setY(env.getCentre().getY() + env.getWidth() + 5);
+                velocity.setY(0);
+            }
+            if (bounds.intersects(getBoundsLeft())) {
+                //Left collision
+                centre.setX(env.getCentre().getX() + 5);
+            }
+            if (bounds.intersects(getBoundsRight())) {
+                //Right collision
+                centre.setX(env.getCentre().getX() - width - 5);
+            }
+        }
     }
 
     @Override
     public Rectangle getBounds() {
         return new Rectangle((int) centre.getX(), (int) centre.getY(), width, height);
+    }
+
+    private Rectangle getBoundsLeft() {
+        return new Rectangle((int) centre.getX(), (int) centre.getY() + 10, 5, height - 20);
+    }
+
+    private Rectangle getBoundsRight() {
+        return new Rectangle((int) (centre.getX() + width - 5), (int) (centre.getY() + 10), 5, height - 20);
+    }
+
+    private Rectangle getBoundsTop() {
+        return new Rectangle((int) (centre.getX() + (width / 2) - (width / 4)), (int) centre.getY(), width / 2, height / 2);
+    }
+
+    private Rectangle getBoundsBottom() {
+        return new Rectangle((int) (centre.getX() + (width / 2) - (width / 4)), (int) (centre.getY() + height / 2), width / 2, height / 2);
+    }
+
+    public void cycleWeapon() {
+        if (currentWeaponIndex == -1) {
+            return;
+        }
+        currentWeaponIndex = (currentWeaponIndex + 1) / weapons.size();
+    }
+
+    public void fireWeapon() {
+        if (currentWeaponIndex == -1) {
+            return;
+        }
+        weapons.get(currentWeaponIndex).fire();
+    }
+
+    public void addWeapon(Weapon weapon) {
+        weapons.add(weapon);
     }
 }

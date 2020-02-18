@@ -121,6 +121,14 @@ public abstract class GameObject {
         return Constants.Sprite.BLANK;
     }
 
+    public Vector3f getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(Vector3f velocity) {
+        this.velocity = velocity;
+    }
+
     public abstract void update();
 
     public abstract void render(Graphics g);

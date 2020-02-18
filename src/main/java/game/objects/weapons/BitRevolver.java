@@ -11,7 +11,7 @@ import java.awt.*;
  * Created On: 18-02-2020 00:01
  * Purpose: TODO:
  **/
-public class BitRevolver extends GameObject {
+public class BitRevolver extends GameObject implements Weapon {
     public BitRevolver(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.BIT_REVOLVER);
     }
@@ -35,5 +35,10 @@ public class BitRevolver extends GameObject {
     @Override
     public Rectangle getBounds() {
         return new Rectangle((int) centre.getX(), (int) centre.getY(), width, height);
+    }
+
+    @Override
+    public void fire() {
+
     }
 }

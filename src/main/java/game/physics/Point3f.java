@@ -133,14 +133,14 @@ public class Point3f {
 
     /**
      * Use for direct application of a Vector
+     * We are considering primary motion in x-axis as right and in y-axis as up. That's why a minus in y-direction and
+     * plus in x-direction.
      *
      * @param vector vector object
      */
-    //todo check what this method is doing
     public void applyVector(Vector3f vector) {
         setX(this.getX() + vector.getX());
         setY(this.getY() - vector.getY());
-        setZ(this.getZ() - vector.getZ());
     }
 
     @Override

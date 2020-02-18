@@ -105,7 +105,7 @@ public class Game extends JFrame implements Runnable {
 
     @Override
     public void run() {
-        requestFocus();
+        canvas.requestFocus();
         // Can shift to nano seconds if need more juice with frames.
         long lastTime = System.currentTimeMillis();
         double timeBetweenFrames = 1000 / Constants.TARGET_FPS;
@@ -131,7 +131,7 @@ public class Game extends JFrame implements Runnable {
             // It will print the no of updates and frames every second.
             if (now - timer > 1000) {
                 timer += 1000;
-                if (updates != Constants.TARGET_FPS) {
+                if (updates < Constants.TARGET_FPS - 10) {
                     System.out.println(String.format("!!!FPS Miss!!!: Frames: %s, Updates: %s", frames, updates));
                 }
                 frames = 0;

@@ -1,5 +1,6 @@
 package game.framework;
 
+import game.framework.controllers.MouseController;
 import game.utils.Constants;
 
 import java.awt.*;
@@ -49,7 +50,12 @@ public class View extends Canvas {
         gameWorld.getEnvironment().forEach(object -> object.render(g));
         gameWorld.getCollectibles().forEach(object -> object.render(g));
         gameWorld.getEnemies().forEach(object -> object.render(g));
-        gameWorld.getPlayer().render(g);
+        gameWorld.getPlayer1().render(g);
+
+        //todo remove; only for debug
+        Point mousePos = MouseController.getInstance().getCurrentPos();
+        g.drawString(String.format("X=%s,Y=%s", mousePos.getX(), mousePos.getY()), mousePos.x, mousePos.y);
+
         g.dispose();
         bs.show();
     }

@@ -1,5 +1,6 @@
 package game.framework;
 
+import game.framework.controllers.KeyboardController;
 import game.objects.GameObject;
 import game.objects.Player;
 import game.physics.QuadTree;
@@ -42,7 +43,7 @@ SOFTWARE.
    (MIT LICENSE ) e.g do what you want with this :-) 
  */
 public class Model {
-    private Player player;
+    private Player player1;
     private List<GameObject> enemies;
     private QuadTree environmentQuadTree;
     private List<GameObject> environment;
@@ -74,8 +75,8 @@ public class Model {
         switchLevel(levels.get(0));
     }
 
-    public Player getPlayer() {
-        return player;
+    public Player getPlayer1() {
+        return player1;
     }
 
     public List<GameObject> getEnemies() {
@@ -101,25 +102,62 @@ public class Model {
 
     private void clean() {
         enemies.clear();
-        player = null;
+        player1 = null;
     }
 
     /**
      * This is the heart of the game , where the model takes in all the inputs ,decides the outcomes and then changes the model accordingly.
      */
     public void gameLogic() {
+        processInput();
         playerLogic();
     }
 
+    private void processInput() {
+        KeyboardController keyboardController = KeyboardController.getInstance();
+        //Left
+        if (keyboardController.isAPressed()) {
+            player1.getVelocity().setX(-Constants.PLAYER_VELOCITY_X);
+        } else {
+            player1.getVelocity().setX(0);
+        }
+        //Right
+        if (keyboardController.isDPressed()) {
+            player1.getVelocity().setX(Constants.PLAYER_VELOCITY_X);
+        } else {
+            player1.getVelocity().setX(0);
+        }
+        //Jump
+        if (keyboardController.isWPressed()) {
+            player1.getVelocity().setY(Constants.PLAYER_VELOCITY_Y);
+            player1.setFalling(true);
+        }
+        //Duck
+        if (keyboardController.isAPressed()) {
+            player1.setHeight(player1.getHeight() / 2);
+            player1.setDucking(true);
+        } else if (player1.isDucking()) {
+            player1.setHeight(player1.getHeight() * 2);
+        }
+        //Cycle weapon
+        if (keyboardController.isQPressed()) {
+            player1.cycleWeapon();
+        }
+        //Fire weapon
+        if (keyboardController.isSpacePressed()) {
+            player1.fireWeapon();
+        }
+    }
+
     private void playerLogic() {
-        player.update();
-        player.collision(this);
+        player1.update();
+        player1.collision(this);
     }
 
     public void addGameObject(GameObject object) {
         switch (object.getType()) {
             case PLAYER:
-                player = (Player) object;
+                player1 = (Player) object;
                 break;
             case BOSS1:
             case ENEMY1:
@@ -140,14 +178,11 @@ public class Model {
             case BIT_ARRAY_GUN:
             case BIT_MATRIX_BLAST:
             case BIT_REVOLVER:
+            case BIT_BOT:
                 collectibles.add(object);
                 break;
             default:
                 System.out.println(String.format("Object type is not supported: %s by the Model", object.getType()));
         }
-    }
-
-    public void removeGameObject(GameObject object) {
-
     }
 }

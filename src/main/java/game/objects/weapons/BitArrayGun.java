@@ -11,7 +11,7 @@ import java.awt.*;
  * Created On: 18-02-2020 00:02
  * Purpose: TODO:
  **/
-public class BitArrayGun extends GameObject {
+public class BitArrayGun extends GameObject implements Weapon {
     public BitArrayGun(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.BIT_ARRAY_GUN);
     }
@@ -35,5 +35,10 @@ public class BitArrayGun extends GameObject {
     @Override
     public Rectangle getBounds() {
         return new Rectangle((int) centre.getX(), (int) centre.getY(), width, height);
+    }
+
+    @Override
+    public void fire() {
+
     }
 }

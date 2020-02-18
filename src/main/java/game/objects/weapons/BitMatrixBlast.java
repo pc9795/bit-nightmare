@@ -11,7 +11,7 @@ import java.awt.*;
  * Created On: 18-02-2020 00:02
  * Purpose: TODO:
  **/
-public class BitMatrixBlast extends GameObject {
+public class BitMatrixBlast extends GameObject implements Weapon {
     public BitMatrixBlast(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.BIT_MATRIX_BLAST);
     }
@@ -35,5 +35,10 @@ public class BitMatrixBlast extends GameObject {
     @Override
     public Rectangle getBounds() {
         return new Rectangle((int) centre.getX(), (int) centre.getY(), width, height);
+    }
+
+    @Override
+    public void fire() {
+
     }
 }
