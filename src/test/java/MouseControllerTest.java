@@ -1,4 +1,4 @@
-import game.framework.controllers.KeyboardController;
+import game.framework.controllers.MouseController;
 import org.junit.Test;
 
 import javax.swing.*;
@@ -7,17 +7,19 @@ import java.awt.image.BufferStrategy;
 
 /**
  * Created By: Prashant Chaubey
- * Created On: 18-02-2020 15:01
+ * Created On: 18-02-2020 16:23
  * Purpose: TODO:
  **/
-public class KeyboardControllerTest {
+public class MouseControllerTest {
     @Test
-    public void testKeyboardControllerWorking() {
-        JFrame testFrame = new JFrame("Keyboard Test");
+    public void testMouseControllerWorking() {
+        JFrame testFrame = new JFrame("Mouse Test");
         Canvas testCanvas = new Canvas();
         testCanvas.setPreferredSize(new Dimension(1000, 500));
         testCanvas.setBackground(Color.WHITE);
-        testCanvas.addKeyListener(KeyboardController.getInstance());
+        testCanvas.addMouseListener(MouseController.getInstance());
+        testCanvas.addMouseMotionListener(MouseController.getInstance());
+        testCanvas.addMouseWheelListener(MouseController.getInstance());
         testCanvas.setIgnoreRepaint(true);
         testFrame.getContentPane().add(testCanvas);
         testFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -33,13 +35,13 @@ public class KeyboardControllerTest {
             public void run() {
                 testCanvas.createBufferStrategy(3);
                 running = true;
-                printKeyboardControllerStats();
+                printMouseControllerStatus();
             }
 
-            private void printKeyboardControllerStats() {
+            private void printMouseControllerStatus() {
                 testCanvas.requestFocus();
                 BufferStrategy bs = testCanvas.getBufferStrategy();
-                KeyboardController controller = KeyboardController.getInstance();
+                MouseController controller = MouseController.getInstance();
                 while (running) {
                     Graphics g = bs.getDrawGraphics();
                     g.clearRect(0, 0, testCanvas.getWidth(), testCanvas.getHeight());
@@ -48,21 +50,11 @@ public class KeyboardControllerTest {
                     int fontHeight = fm.getHeight() + fm.getAscent() + fm.getDescent();
                     int initialTextPos = fontHeight;
 
-                    g.drawString("PRESS keyboard keys and TEST", 5, initialTextPos);
+                    g.drawString("PRESS and MOVE mouse keys and TEST", 5, initialTextPos);
                     initialTextPos += fontHeight;
-                    g.drawString(String.format("W Pressed: %s", controller.isWPressed()), 5, initialTextPos);
+                    g.drawString(String.format("Current positoin: %s", controller.getCurrentPos()), 5, initialTextPos);
                     initialTextPos += fontHeight;
-                    g.drawString(String.format("A Pressed: %s", controller.isAPressed()), 5, initialTextPos);
-                    initialTextPos += fontHeight;
-                    g.drawString(String.format("D Pressed: %s", controller.isDPressed()), 5, initialTextPos);
-                    initialTextPos += fontHeight;
-                    g.drawString(String.format("S Pressed: %s", controller.isSPressed()), 5, initialTextPos);
-                    initialTextPos += fontHeight;
-                    g.drawString(String.format("Q Pressed: %s", controller.isQPressed()), 5, initialTextPos);
-                    initialTextPos += fontHeight;
-                    g.drawString(String.format("Space Pressed: %s", controller.isSpacePressed()), 5, initialTextPos);
-                    initialTextPos += fontHeight;
-                    g.drawString(String.format("Escape Pressed: %s", controller.isEscPressed()), 5, initialTextPos);
+                    g.drawString(String.format("Left cliked: %s", controller.isLeftClicked()), 5, initialTextPos);
                     g.dispose();
                     bs.show();
                 }
