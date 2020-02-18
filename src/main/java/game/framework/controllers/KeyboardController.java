@@ -36,9 +36,23 @@ SOFTWARE.
 public final class KeyboardController implements KeyListener {
     private static final KeyboardController instance = new KeyboardController();
     //Right now implemented keys as map. In future can move to array based implementation
-    private Map<Character, Integer> keys = new HashMap<>();
+    private Map<Integer, Boolean> keys = new HashMap<>();
 
     private KeyboardController() {
+        init();
+    }
+
+
+    private void init() {
+        // All the keys supported by the class must be entered in the map for one time. Else it can result in
+        // NullPointerException if we trying to access a non-existing key.
+        keys.put(KeyEvent.VK_W, false);
+        keys.put(KeyEvent.VK_A, false);
+        keys.put(KeyEvent.VK_D, false);
+        keys.put(KeyEvent.VK_S, false);
+        keys.put(KeyEvent.VK_Q, false);
+        keys.put(KeyEvent.VK_SPACE, false);
+        keys.put(KeyEvent.VK_ESCAPE, false);
     }
 
     public static KeyboardController getInstance() {
@@ -47,14 +61,44 @@ public final class KeyboardController implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-
+        //Not needed
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
+        keys.put(e.getKeyCode(), true);
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+        keys.put(e.getKeyCode(), false);
+    }
+
+    public boolean isWPressed() {
+        return keys.get(KeyEvent.VK_W);
+    }
+
+    public boolean isAPressed() {
+        return keys.get(KeyEvent.VK_A);
+    }
+
+    public boolean isDPressed() {
+        return keys.get(KeyEvent.VK_D);
+    }
+
+    public boolean isSPressed() {
+        return keys.get(KeyEvent.VK_S);
+    }
+
+    public boolean isQPressed() {
+        return keys.get(KeyEvent.VK_Q);
+    }
+
+    public boolean isSpacePressed() {
+        return keys.get(KeyEvent.VK_SPACE);
+    }
+
+    public boolean isEscPressed() {
+        return keys.get(KeyEvent.VK_ESCAPE);
     }
 }

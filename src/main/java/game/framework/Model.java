@@ -60,7 +60,7 @@ public class Model {
     private void init() throws URISyntaxException, IOException {
         URI uri = Model.class.getResource(Constants.LEVEL_NAMES_FILE).toURI();
         try (BufferedReader br = Files.newBufferedReader(Paths.get(uri))) {
-            String line = null;
+            String line;
             while ((line = br.readLine()) != null) {
                 levels.add(line.trim());
             }
