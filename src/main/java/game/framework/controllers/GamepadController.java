@@ -17,16 +17,26 @@ public class GamepadController implements Runnable {
     private Controller gamepad;
     private boolean detecting;
 
+    public static class GamepadEvent {
+        public static final String BUTTON_0 = "Button 0";
+        public static final String BUTTON_1 = "Button 1";
+        public static final String BUTTON_2 = "Button 2";
+        public static final String BUTTON_3 = "Button 3";
+        public static final String BUTTON_7 = "Button 7";
+        public static final String X_AXIS = "X Axis";
+
+    }
+
     private GamepadController() {
         init();
     }
 
     private void init() {
-        keys.put("Button 0", false);
-        keys.put("Button 1", false);
-        keys.put("Button 2", false);
-        keys.put("Button 3", false);
-        keys.put("Button 7", false);
+        keys.put(GamepadEvent.BUTTON_0, false);
+        keys.put(GamepadEvent.BUTTON_1, false);
+        keys.put(GamepadEvent.BUTTON_2, false);
+        keys.put(GamepadEvent.BUTTON_3, false);
+        keys.put(GamepadEvent.BUTTON_7, false);
     }
 
     public static GamepadController getInstance() {
@@ -53,7 +63,7 @@ public class GamepadController implements Runnable {
             while (queue.getNextEvent(event)) {
 
                 Component comp = event.getComponent();
-                if (comp.getName().equals("X Axis")) {
+                if (comp.getName().equals(GamepadEvent.X_AXIS)) {
                     xAxis = event.getValue();
                     continue;
                 }
@@ -85,23 +95,23 @@ public class GamepadController implements Runnable {
     }
 
     public boolean isAPressed() {
-        return keys.get("Button 0");
+        return keys.get(GamepadEvent.BUTTON_0);
     }
 
     public boolean isXPressed() {
-        return keys.get("Button 1");
+        return keys.get(GamepadEvent.BUTTON_1);
     }
 
     public boolean isYPressed() {
-        return keys.get("Button 2");
+        return keys.get(GamepadEvent.BUTTON_2);
     }
 
     public boolean isBPressed() {
-        return keys.get("Button 3");
+        return keys.get(GamepadEvent.BUTTON_3);
     }
 
     public boolean isStartPressed() {
-        return keys.get("Button 7");
+        return keys.get(GamepadEvent.BUTTON_7);
     }
 
     public boolean isRightPressed() {

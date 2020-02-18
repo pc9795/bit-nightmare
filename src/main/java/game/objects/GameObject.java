@@ -49,7 +49,7 @@ public abstract class GameObject {
     protected String textureLocation;
     protected Vector3f velocity;
     protected GameObjectType type;
-    protected boolean jumping, falling = true;
+    protected boolean jumping, falling;
     protected FacingDirection facingDirection = FacingDirection.RIGHT;
 
     public GameObject(int width, int height, Point3f centre, GameObjectType type) {

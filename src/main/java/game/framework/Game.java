@@ -1,5 +1,6 @@
 package game.framework;
 
+import game.framework.controllers.GamepadController;
 import game.framework.controllers.KeyboardController;
 import game.framework.controllers.MouseController;
 import game.utils.Constants;
@@ -46,6 +47,7 @@ public class Game extends JFrame implements Runnable {
     }
 
     public void start() {
+        //Loading model
         try {
             gameWorld = new Model();
 
@@ -54,6 +56,8 @@ public class Game extends JFrame implements Runnable {
             e.printStackTrace();
             System.exit(1);
         }
+
+        //Loading and configuring view
         canvas = new View(gameWorld);
         // It is important that the preferred size is set on the GamePanel and not on the JFrame. If the application
         // size is set on the JFrame, some of the drawing area will be taken up by the frame and the drawing area will
@@ -63,11 +67,17 @@ public class Game extends JFrame implements Runnable {
         canvas.setBackground(Color.WHITE);
         // We are handling repaint on our own.
         canvas.setIgnoreRepaint(true);
+
         //Registering controllers
         canvas.addKeyListener(KeyboardController.getInstance());
         canvas.addMouseListener(MouseController.getInstance());
         canvas.addMouseMotionListener(MouseController.getInstance());
         canvas.addMouseWheelListener(MouseController.getInstance());
+        GamepadController.getInstance().setDetecting(true);
+        Thread gamepadControllerThread = new Thread(GamepadController.getInstance());
+        gamepadControllerThread.start();
+
+        //Configuring game window
         //todo getContentPane().add(..) vs add(..)
         getContentPane().add(canvas);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -76,6 +86,8 @@ public class Game extends JFrame implements Runnable {
         setResizable(false);
         pack();
         setVisible(true);
+
+        running = true;
         // Starting game thread
         Thread gameThread = new Thread(this);
         gameThread.start();
@@ -83,10 +95,6 @@ public class Game extends JFrame implements Runnable {
 
     @Override
     public void run() {
-        if (running) {
-            return;
-        }
-        running = true;
         requestFocus();
         // Can shift to nano seconds if need more juice with frames.
         long lastTime = System.currentTimeMillis();
@@ -113,12 +121,12 @@ public class Game extends JFrame implements Runnable {
             // It will print the no of updates and frames every second.
             if (now - timer > 1000) {
                 timer += 1000;
-                System.out.println(String.format("Frames: %s, Updates: %s", frames, updates));
+                if (updates != Constants.TARGET_FPS) {
+                    System.out.println(String.format("!!!FPS Miss!!!: Frames: %s, Updates: %s", frames, updates));
+                }
                 frames = 0;
                 updates = 0;
             }
         }
     }
 }
-
-

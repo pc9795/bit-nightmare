@@ -29,9 +29,17 @@ public final class LevelLoader {
         return INSTANCE;
     }
 
+    private String getLevelPropertiesFilename(String levelName) {
+        return String.format(Constants.LEVEL_PROPERTIES_FORMAT, levelName);
+    }
+
+    private String getLevelDesignFilename(String levelName) {
+        return String.format(Constants.LEVEL_PNG_FORMAT, levelName);
+    }
+
     public void loadLevel(String levelName, Model model) throws IOException {
         Properties levelProperties = new Properties();
-        try (InputStream in = LevelLoader.class.getResourceAsStream(String.format(Constants.LEVEL_PROPERTIES_FORMAT, levelName))) {
+        try (InputStream in = LevelLoader.class.getResourceAsStream(getLevelPropertiesFilename(levelName))) {
             levelProperties.load(in);
         }
         Map<Color, Pair<String, Pair<Integer, Integer>>> objectInfoMap = new HashMap<>();
@@ -49,7 +57,7 @@ public final class LevelLoader {
             int height = Integer.valueOf(items[4].trim());
             objectInfoMap.put(new Color(red, green, blue), new Pair<>(objectType.trim(), new Pair<>(width, height)));
         }
-        BufferedImage levelImg = BufferedImageLoader.getInstance().loadImage(String.format(Constants.LEVEL_PNG_FORMAT, levelName));
+        BufferedImage levelImg = BufferedImageLoader.getInstance().loadImage(getLevelDesignFilename(levelName));
 
         int w = levelImg.getWidth();
         int h = levelImg.getHeight();

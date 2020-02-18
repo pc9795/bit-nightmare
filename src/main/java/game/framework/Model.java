@@ -2,7 +2,6 @@ package game.framework;
 
 import game.objects.GameObject;
 import game.objects.Player;
-import game.physics.Point3f;
 import game.utils.Constants;
 import game.utils.LevelLoader;
 

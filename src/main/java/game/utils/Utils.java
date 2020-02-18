@@ -1,7 +1,5 @@
 package game.utils;
 
-import javax.rmi.CORBA.Util;
-
 /*
  * Created by Abraham Campbell on 15/01/2020.
  *   Copyright (c) 2020  Abraham Campbell
@@ -29,20 +27,4 @@ SOFTWARE.
 public final class Utils {
     private Utils() {
     }
-
-    /**
-     * to see if missed our target by more than a full frame.
-     *
-     * @param targetTime    the time at which the frame should be delivered
-     * @param deliveredTime the time at which frame was originally delivered
-     * @param targetFPS     target fps
-     */
-    public static void checkFrameRate(long targetTime, long deliveredTime, int targetFPS) {
-        int timeBetweenFrames = 1000 / targetFPS;
-        if ((targetTime - deliveredTime) > timeBetweenFrames) {
-            //todo write out to log file.
-            System.out.println("Frame was late by  " + (targetTime - deliveredTime) + " ms");
-        }
-    }
-
 }
