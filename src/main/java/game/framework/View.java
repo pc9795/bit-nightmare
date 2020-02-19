@@ -34,9 +34,11 @@ SOFTWARE.
 public class View extends Canvas {
     private Model gameWorld;
     private BufferStrategy bs;
+    private Camera camera;
 
     public View(Model world) {
         this.gameWorld = world;
+        this.camera = new Camera(0, 0);
     }
 
     void updateView() {
@@ -44,13 +46,17 @@ public class View extends Canvas {
             createBufferStrategy(Constants.BUFFER_COUNT);
             bs = getBufferStrategy();
         }
+        camera.update(gameWorld.getPlayer1());
         Graphics g = bs.getDrawGraphics();
         g.clearRect(0, 0, getWidth(), getHeight());
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.translate(camera.getX(), camera.getY());
         //Drawing stuff
         gameWorld.getEnvironment().forEach(object -> object.render(g));
         gameWorld.getCollectibles().forEach(object -> object.render(g));
         gameWorld.getEnemies().forEach(object -> object.render(g));
         gameWorld.getPlayer1().render(g);
+        g2d.translate(-camera.getX(), -camera.getY());
 
         //todo remove; only for debug
         Point mousePos = MouseController.getInstance().getCurrentPos();
