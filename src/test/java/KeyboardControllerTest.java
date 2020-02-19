@@ -41,6 +41,7 @@ public class KeyboardControllerTest {
                 BufferStrategy bs = testCanvas.getBufferStrategy();
                 KeyboardController controller = KeyboardController.getInstance();
                 while (running) {
+                    controller.poll();
                     Graphics g = bs.getDrawGraphics();
                     g.clearRect(0, 0, testCanvas.getWidth(), testCanvas.getHeight());
                     g.setFont(new Font("Courier New", Font.BOLD, 20));

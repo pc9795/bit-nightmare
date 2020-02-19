@@ -116,34 +116,38 @@ public class Model {
 
     private void processInput() {
         KeyboardController keyboardController = KeyboardController.getInstance();
-        //Left
+        keyboardController.poll();
+
+        //Left and right
         if (keyboardController.isAPressed()) {
-            //Addition to take effect of gravity in count.
-            player1.getCentre().applyVector(new Vector3f(-Constants.PLAYER_VELOCITY_X, 0, 0).add(player1.getVelocity()));
-        }
-        //Right
-        if (keyboardController.isDPressed()) {
-            //Addition to take effect of gravity in count.
-            player1.getCentre().applyVector(new Vector3f(Constants.PLAYER_VELOCITY_X, 0, 0).add(player1.getVelocity()));
+            player1.getVelocity().setX(-Constants.PLAYER_VELOCITY_X);
+        } else if (keyboardController.isDPressed()) {
+            player1.getVelocity().setX(Constants.PLAYER_VELOCITY_X);
+        } else {
+            player1.getVelocity().setX(0);
         }
         //Jump
-        if (keyboardController.isWPressed() && !player1.isJumping()) {
+        if (keyboardController.isWPressedOnce() && !player1.isJumping()) {
             player1.getVelocity().setY(-Constants.PLAYER_VELOCITY_Y);
             player1.setJumping(true);
         }
         //Duck
-        if (keyboardController.isSPressed()) {
-            player1.setHeight(player1.getHeight() / 2);
-            player1.setDucking(true);
-        } else if (player1.isDucking()) {
-            player1.setHeight(player1.getHeight() * 2);
+        if (keyboardController.isSPressedOnce()) {
+            if (player1.isDucking()) {
+                player1.setHeight(player1.getHeight() * 2);
+                player1.setDucking(false);
+            } else {
+                player1.getCentre().setY(player1.getCentre().getY() + player1.getHeight() / 2);
+                player1.setHeight(player1.getHeight() / 2);
+                player1.setDucking(true);
+            }
         }
         //Cycle weapon
-        if (keyboardController.isQPressed()) {
+        if (keyboardController.isQPressedOnce()) {
             player1.cycleWeapon();
         }
         //Fire weapon
-        if (keyboardController.isSpacePressed()) {
+        if (keyboardController.isSpacePressedOnce()) {
             player1.fireWeapon();
         }
     }

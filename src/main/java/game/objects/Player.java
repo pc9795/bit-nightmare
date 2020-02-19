@@ -46,6 +46,8 @@ public class Player extends GameObject {
 
     @Override
     public void update() {
+        //Movement
+        centre.setX(centre.getX() + velocity.getX());
         //Gravity
         centre.setY(centre.getY() + velocity.getY());
         if (falling || jumping) {
@@ -55,6 +57,9 @@ public class Player extends GameObject {
 
     @Override
     public void render(Graphics g) {
+        if (isDucking()) {
+            System.out.println();
+        }
         g.setColor(new Color(0, 0, 255));
         g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
         Graphics2D g2d = (Graphics2D) g;

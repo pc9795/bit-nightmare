@@ -2,7 +2,10 @@ package game.framework.controllers;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.security.Key;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /*
@@ -37,6 +40,7 @@ public final class KeyboardController implements KeyListener {
     private static final KeyboardController instance = new KeyboardController();
     //Right now implemented keys as map. In future can move to array based implementation
     private Map<Integer, Boolean> keys = new HashMap<>();
+    private Map<Integer, Integer> pollCount = new HashMap<>();
 
     private KeyboardController() {
         init();
@@ -46,17 +50,26 @@ public final class KeyboardController implements KeyListener {
     private void init() {
         // All the keys supported by the class must be entered in the map for one time. Else it can result in
         // NullPointerException if we trying to access a non-existing key.
-        keys.put(KeyEvent.VK_W, false);
-        keys.put(KeyEvent.VK_A, false);
-        keys.put(KeyEvent.VK_D, false);
-        keys.put(KeyEvent.VK_S, false);
-        keys.put(KeyEvent.VK_Q, false);
-        keys.put(KeyEvent.VK_SPACE, false);
-        keys.put(KeyEvent.VK_ESCAPE, false);
+        List<Integer> configuredKeys = Arrays.asList(KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_S,
+                KeyEvent.VK_Q, KeyEvent.VK_SPACE, KeyEvent.VK_ESCAPE);
+        for (Integer key : configuredKeys) {
+            keys.put(key, false);
+            pollCount.put(key, 0);
+        }
     }
 
     public static KeyboardController getInstance() {
         return instance;
+    }
+
+    public void poll() {
+        for (Integer key : pollCount.keySet()) {
+            if (keys.get(key)) {
+                pollCount.put(key, pollCount.get(key) + 1);
+            } else {
+                pollCount.put(key, 0);
+            }
+        }
     }
 
     @Override
@@ -75,30 +88,50 @@ public final class KeyboardController implements KeyListener {
     }
 
     public boolean isWPressed() {
-        return keys.get(KeyEvent.VK_W);
+        return pollCount.get(KeyEvent.VK_W) > 0;
+    }
+
+    public boolean isWPressedOnce() {
+        return pollCount.get(KeyEvent.VK_W) == 1;
     }
 
     public boolean isAPressed() {
-        return keys.get(KeyEvent.VK_A);
+        return pollCount.get(KeyEvent.VK_A) > 0;
     }
 
     public boolean isDPressed() {
-        return keys.get(KeyEvent.VK_D);
+        return pollCount.get(KeyEvent.VK_D) > 0;
+    }
+
+    public boolean isSPressedOnce() {
+        return pollCount.get(KeyEvent.VK_S) == 1;
     }
 
     public boolean isSPressed() {
-        return keys.get(KeyEvent.VK_S);
+        return pollCount.get(KeyEvent.VK_S) > 0;
+    }
+
+    public boolean isQPressedOnce() {
+        return pollCount.get(KeyEvent.VK_Q) == 1;
     }
 
     public boolean isQPressed() {
-        return keys.get(KeyEvent.VK_Q);
+        return pollCount.get(KeyEvent.VK_Q) > 0;
+    }
+
+    public boolean isSpacePressedOnce() {
+        return pollCount.get(KeyEvent.VK_SPACE) == 1;
     }
 
     public boolean isSpacePressed() {
-        return keys.get(KeyEvent.VK_SPACE);
+        return pollCount.get(KeyEvent.VK_SPACE) > 0;
+    }
+
+    public boolean isEscPressedOnce() {
+        return pollCount.get(KeyEvent.VK_ESCAPE) == 1;
     }
 
     public boolean isEscPressed() {
-        return keys.get(KeyEvent.VK_ESCAPE);
+        return pollCount.get(KeyEvent.VK_ESCAPE) > 0;
     }
 }
