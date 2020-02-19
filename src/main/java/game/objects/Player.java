@@ -46,18 +46,8 @@ public class Player extends GameObject {
 
     @Override
     public void update() {
-        //Moving
-        centre.setX(centre.getX() + velocity.getX());
-        centre.setY(centre.getY() + velocity.getY());
-
-        //Setting direction
-        if (velocity.getX() < 0) {
-            facingDirection = FacingDirection.LEFT;
-        } else if (velocity.getX() > 0) {
-            facingDirection = FacingDirection.RIGHT;
-        }
-
         //Gravity
+        centre.setY(centre.getY() + velocity.getY());
         if (falling || jumping) {
             velocity.setY(velocity.getY() + gravity);
         }
@@ -73,6 +63,7 @@ public class Player extends GameObject {
         g2d.draw(getBoundsLeft());
         g2d.draw(getBoundsRight());
         g2d.draw(getBoundsTop());
+        g.drawString(String.format("X:%s,Y:%s", (int) centre.getX(), (int) centre.getY()), (int) centre.getX(), (int) centre.getY());
     }
 
     @Override
@@ -81,14 +72,17 @@ public class Player extends GameObject {
     }
 
     private void collisionWithEnvironment(Model model) {
+        boolean bottomIntersection = false;
         List<GameObject> willCollide = model.getEnvironmentQuadTree().retrieve(this);
         for (GameObject env : willCollide) {
             Rectangle bounds = env.getBounds();
             if (bounds.intersects(getBoundsBottom())) {
                 //Bottom collision
-                centre.setY(env.getCentre().getY() - height);
+                centre.setY(env.getCentre().getY() - height + 1);
+                getVelocity().setY(0);
                 falling = false;
                 jumping = false;
+                bottomIntersection = true;
             }
             if (bounds.intersects(getBoundsTop())) {
                 //Top collision
@@ -97,12 +91,15 @@ public class Player extends GameObject {
             }
             if (bounds.intersects(getBoundsLeft())) {
                 //Left collision
-                centre.setX(env.getCentre().getX() + 5);
+                centre.setX(env.getCentre().getX() + env.getWidth());
             }
             if (bounds.intersects(getBoundsRight())) {
                 //Right collision
-                centre.setX(env.getCentre().getX() - width - 5);
+                centre.setX(env.getCentre().getX() - width);
             }
+        }
+        if (!bottomIntersection) {
+            falling = true;
         }
     }
 

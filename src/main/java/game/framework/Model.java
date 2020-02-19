@@ -4,6 +4,7 @@ import game.framework.controllers.KeyboardController;
 import game.objects.GameObject;
 import game.objects.Player;
 import game.physics.QuadTree;
+import game.physics.Vector3f;
 import game.utils.Constants;
 import game.utils.LevelLoader;
 
@@ -117,23 +118,21 @@ public class Model {
         KeyboardController keyboardController = KeyboardController.getInstance();
         //Left
         if (keyboardController.isAPressed()) {
-            player1.getVelocity().setX(-Constants.PLAYER_VELOCITY_X);
-        } else {
-            player1.getVelocity().setX(0);
+            //Addition to take effect of gravity in count.
+            player1.getCentre().applyVector(new Vector3f(-Constants.PLAYER_VELOCITY_X, 0, 0).add(player1.getVelocity()));
         }
         //Right
         if (keyboardController.isDPressed()) {
-            player1.getVelocity().setX(Constants.PLAYER_VELOCITY_X);
-        } else {
-            player1.getVelocity().setX(0);
+            //Addition to take effect of gravity in count.
+            player1.getCentre().applyVector(new Vector3f(Constants.PLAYER_VELOCITY_X, 0, 0).add(player1.getVelocity()));
         }
         //Jump
-        if (keyboardController.isWPressed()) {
-            player1.getVelocity().setY(Constants.PLAYER_VELOCITY_Y);
-            player1.setFalling(true);
+        if (keyboardController.isWPressed() && !player1.isJumping()) {
+            player1.getVelocity().setY(-Constants.PLAYER_VELOCITY_Y);
+            player1.setJumping(true);
         }
         //Duck
-        if (keyboardController.isAPressed()) {
+        if (keyboardController.isSPressed()) {
             player1.setHeight(player1.getHeight() / 2);
             player1.setDucking(true);
         } else if (player1.isDucking()) {
