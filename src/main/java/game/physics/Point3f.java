@@ -38,6 +38,17 @@ public class Point3f {
     private float z;
     private Boundary boundary;
 
+    public Point3f(float x, float y) {
+        setX(x);
+        setY(y);
+    }
+
+    public Point3f(float x, float y, Boundary boundary) {
+        this.boundary = boundary;
+        setX(x);
+        setY(y);
+    }
+
     public Point3f(float x, float y, float z, Boundary boundary) {
         this.boundary = boundary;
         setX(x);
@@ -57,8 +68,7 @@ public class Point3f {
         }
         //Less than lower limit then set lower limit.
         if (x < boundary.getxMin()) x = boundary.getxMin();
-        //Greater than higher limit set higher limit.
-        if (x > boundary.getxMax()) x = boundary.getxMax();
+        //No higher limit as it is a platformer.
         this.x = x;
     }
 
@@ -98,6 +108,10 @@ public class Point3f {
 
     public Boundary getBoundary() {
         return boundary;
+    }
+
+    public void setBoundary(Boundary boundary) {
+        this.boundary = boundary;
     }
 
     /**

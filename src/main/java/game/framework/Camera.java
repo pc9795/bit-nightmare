@@ -25,6 +25,6 @@ public class Camera {
     }
 
     public void update(GameObject object) {
-        point.x = (int) -(object.getCentre().getX() - 50);
+        point.x = (int) -(object.getCentre().getX() - 100);
     }
 }

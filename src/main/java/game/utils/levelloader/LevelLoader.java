@@ -1,19 +1,14 @@
-package game.utils;
+package game.utils.levelloader;
 
-import game.framework.Model;
-import game.objects.GameObject;
-import game.objects.GameObjectFactory;
-import game.physics.Boundary;
-import game.physics.Point3f;
-import javafx.util.Pair;
+import game.utils.BufferedImageLoader;
+import game.utils.Constants;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
+import java.util.List;
 
 /**
  * Created By: Prashant Chaubey
@@ -38,12 +33,12 @@ public final class LevelLoader {
         return String.format(Constants.LEVEL_PNG_FORMAT, levelName);
     }
 
-    public void loadLevel(String levelName, Model model) throws IOException {
+    public Level loadLevel(String levelName) throws IOException {
         Properties levelProperties = new Properties();
         try (InputStream in = LevelLoader.class.getResourceAsStream(getLevelPropertiesFilename(levelName))) {
             levelProperties.load(in);
         }
-        Map<Color, Pair<String, Pair<Integer, Integer>>> objectInfoMap = new HashMap<>();
+        Map<Color, LevelConfig> objectInfo = new HashMap<>();
         for (Object key : levelProperties.keySet()) {
             String objectType = String.valueOf(key);
             String row = levelProperties.getProperty(objectType);
@@ -56,27 +51,28 @@ public final class LevelLoader {
             int blue = Integer.valueOf(items[2].trim());
             int width = Integer.valueOf(items[3].trim());
             int height = Integer.valueOf(items[4].trim());
-            objectInfoMap.put(new Color(red, green, blue), new Pair<>(objectType.trim(), new Pair<>(width, height)));
+            LevelConfig config = new LevelConfig(red, green, blue, width, height, objectType);
+            objectInfo.put(config.getColor(), config);
         }
         BufferedImage levelImg = BufferedImageLoader.getInstance().loadImage(getLevelDesignFilename(levelName));
 
         int w = levelImg.getWidth();
         int h = levelImg.getHeight();
+        int maxX = 0;
+        int maxY = 0;
+        List<LevelObject> levelObjects = new ArrayList<>();
         for (int row = 0; row < w; row++) {
             for (int col = 0; col < h; col++) {
                 Color color = new Color(levelImg.getRGB(row, col));
-                if (!objectInfoMap.containsKey(color)) {
+                if (!objectInfo.containsKey(color)) {
                     continue;
                 }
-                Pair<String, Pair<Integer, Integer>> objectInfo = objectInfoMap.get(color);
-                String objectTypeStr = objectInfo.getKey();
-                GameObject.GameObjectType objectType = GameObject.GameObjectType.valueOf(objectTypeStr);
-
-                int width = objectInfo.getValue().getKey();
-                int height = objectInfo.getValue().getValue();
-                Point3f centre = new Point3f(row * Constants.LEVEL_PIXEL_TO_WIDTH_RATIO, col * Constants.LEVEL_PIXEL_TO_WIDTH_RATIO, 0, new Boundary(Constants.WIDTH, Constants.HEIGHT));
-                model.addGameObject(GameObjectFactory.getGameObject(objectType, width, height, centre));
+                maxX = Math.max(maxX, row);
+                maxY = Math.max(maxY, col);
+                LevelConfig config = objectInfo.get(color);
+                levelObjects.add(new LevelObject(row, col, config.getType(), config.getWidth(), config.getHeight()));
             }
         }
+        return new Level(maxX, maxY, levelObjects);
     }
 }

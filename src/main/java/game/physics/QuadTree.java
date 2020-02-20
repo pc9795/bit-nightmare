@@ -15,7 +15,7 @@ public class QuadTree {
     //How many objects a node can hold
     private int MAX_OBJECTS = 10;
     //Deepest level of the sub-node.
-    private int MAX_LEVELS = 5;
+    private int MAX_LEVELS = 0;
 
     //current node level; 0 is the root node
     private int level;

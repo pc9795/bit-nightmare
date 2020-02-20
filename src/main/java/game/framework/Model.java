@@ -2,11 +2,15 @@ package game.framework;
 
 import game.framework.controllers.KeyboardController;
 import game.objects.GameObject;
+import game.objects.GameObjectFactory;
 import game.objects.Player;
+import game.physics.Boundary;
+import game.physics.Point3f;
 import game.physics.QuadTree;
-import game.physics.Vector3f;
 import game.utils.Constants;
-import game.utils.LevelLoader;
+import game.utils.levelloader.Level;
+import game.utils.levelloader.LevelLoader;
+import game.utils.levelloader.LevelObject;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -98,11 +102,30 @@ public class Model {
 
     private void switchLevel(String levelName) throws IOException {
         clean();
-        LevelLoader.getInstance().loadLevel(levelName, this);
+        Level level = LevelLoader.getInstance().loadLevel(levelName);
+        createLevel(level);
+    }
+
+    private void createLevel(Level level) {
+        Boundary boundary = new Boundary(level.getMaxX() * Constants.LEVEL_PIXEL_TO_WIDTH_RATIO,
+                level.getMaxY() * Constants.LEVEL_PIXEL_TO_WIDTH_RATIO);
+        // QuadTree is to be initialized by the new boundaries.
+        environmentQuadTree = new QuadTree(0, new Rectangle(0, 0, (int) boundary.getxMax(), (int) boundary.getyMax()));
+
+        for (LevelObject object : level.getLevelObjects()) {
+            GameObject.GameObjectType type = GameObject.GameObjectType.valueOf(object.getType());
+            Point3f center = new Point3f(object.getCentre().getX() * Constants.LEVEL_PIXEL_TO_WIDTH_RATIO,
+                    object.getCentre().getY() * Constants.LEVEL_PIXEL_TO_WIDTH_RATIO, boundary);
+            GameObject gameObject = GameObjectFactory.getGameObject(type, object.getWidth(), object.getHeight(), center);
+            addGameObject(gameObject);
+        }
     }
 
     private void clean() {
         enemies.clear();
+        environmentQuadTree.clear();
+        environment.clear();
+        collectibles.clear();
         player1 = null;
     }
 

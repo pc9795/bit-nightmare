@@ -34,6 +34,7 @@ public class Gate extends GameObject {
 
     @Override
     public Rectangle getBounds() {
-        return new Rectangle((int) centre.getX(), (int) centre.getY(), width, height);
+        //todo fix it
+        return new Rectangle((int) centre.getX(), (int) centre.getY(), 0, 0);
     }
 }
