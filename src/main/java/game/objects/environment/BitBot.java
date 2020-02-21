@@ -1,6 +1,7 @@
-package game.objects;
+package game.objects.environment;
 
 import game.framework.Model;
+import game.objects.GameObject;
 import game.physics.Point3f;
 
 import java.awt.*;

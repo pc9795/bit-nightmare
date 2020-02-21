@@ -51,7 +51,7 @@ public final class KeyboardController implements KeyListener {
         // All the keys supported by the class must be entered in the map for one time. Else it can result in
         // NullPointerException if we trying to access a non-existing key.
         List<Integer> configuredKeys = Arrays.asList(KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_S,
-                KeyEvent.VK_Q, KeyEvent.VK_SPACE, KeyEvent.VK_ESCAPE);
+                KeyEvent.VK_Q, KeyEvent.VK_SPACE, KeyEvent.VK_ESCAPE, KeyEvent.VK_E);
         for (Integer key : configuredKeys) {
             keys.put(key, false);
             pollCount.put(key, 0);
@@ -134,4 +134,9 @@ public final class KeyboardController implements KeyListener {
     public boolean isEscPressed() {
         return pollCount.get(KeyEvent.VK_ESCAPE) > 0;
     }
+
+    public boolean isEPressed() {
+        return pollCount.get(KeyEvent.VK_E) > 0;
+    }
+
 }

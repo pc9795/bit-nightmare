@@ -31,20 +31,17 @@ public class BitRevolverBullet extends GameObject {
 
     @Override
     public void collision(Model model) {
+        //Currently Block, Movable Blocks and Oscillating Blocks will remove the bullet
         List<GameObject> willCollide = model.getEnvironmentQuadTree().retrieve(this);
         for (GameObject env : willCollide) {
-            if (env.getType() != GameObjectType.BLOCK || !env.getBounds().intersects(getBounds())) {
-                continue;
+            if (env.getType() == GameObjectType.BLOCK && env.getBounds().intersects(getBounds())) {
+                model.getBullets().remove(this);
             }
-            model.getBullets().remove(this);
-            return;
         }
         for (GameObject obj : model.getMovableEnvironment()) {
-            if (!obj.getBounds().intersects(getBounds())) {
-                continue;
+            if (obj.getBounds().intersects(getBounds())) {
+                model.getBullets().remove(this);
             }
-            model.getBullets().remove(this);
-            return;
         }
     }
 }

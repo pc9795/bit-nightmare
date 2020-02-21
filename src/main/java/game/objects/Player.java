@@ -1,6 +1,7 @@
 package game.objects;
 
 import game.framework.Model;
+import game.framework.controllers.KeyboardController;
 import game.objects.weapons.Weapon;
 import game.physics.Point3f;
 import game.utils.Constants;
@@ -25,7 +26,9 @@ public class Player extends GameObject {
 
     public Player(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.PLAYER);
-        gravity = Constants.PLAYER_GRAVITY;
+        //todo remove
+        //this.centre = new Point3f(8000, 577, centre.getBoundary());
+        gravity = Constants.GRAVITY;
         falling = true;
         weapons = new ArrayList<>();
         currentWeaponIndex = -1;
@@ -83,47 +86,67 @@ public class Player extends GameObject {
     }
 
     private void collisionWithEnvironment(Model model) {
+        //This is set currently by a block object.
         boolean bottomIntersection = false;
         List<GameObject> willCollide = model.getEnvironmentQuadTree().retrieve(this);
         for (GameObject env : willCollide) {
             Rectangle bounds = env.getBounds();
+            if (env.type != GameObjectType.BLOCK && !bounds.intersects(getBounds())) {
+                continue;
+            }
+            // Changing level
+            if (env.type == GameObjectType.CHANGE_LEVEL) {
+                //todo change level logic
+                continue;
+            }
+            //Ending the game
+            if (env.type == GameObjectType.END_GAME) {
+                //todo end game logic
+                continue;
+            }
             // Saving last checkpoint
             //todo can add additional equality check that same check point is not saved every time. not important though
-            if (env.type == GameObjectType.CHECKPOINT && bounds.intersects(getBounds())) {
+            if (env.type == GameObjectType.CHECKPOINT) {
                 model.setLastCheckpoint(env.getCentre().copy());
                 continue;
             }
             // If you touch it you will burn.
-            if (env.type == GameObjectType.LAVA && bounds.intersects(getBounds())) {
+            if (env.type == GameObjectType.LAVA) {
                 centre = model.getLastCheckpoint().copy();
                 health = 100;
                 continue;
             }
-            if (bounds.intersects(getBoundsBottom())) {
-                //Bottom collision
-                centre.setY(env.getCentre().getY() - height + 1);
-                getVelocity().setY(0);
-                falling = false;
-                jumping = false;
-                bottomIntersection = true;
-            }
-            if (bounds.intersects(getBoundsTop())) {
-                //Top collision
-                centre.setY(env.getCentre().getY() + env.getWidth() + 5);
-                velocity.setY(0);
-            }
-            if (bounds.intersects(getBoundsLeft())) {
-                //Left collision
-                centre.setX(env.getCentre().getX() + env.getWidth());
-            }
-            if (bounds.intersects(getBoundsRight())) {
-                //Right collision
-                centre.setX(env.getCentre().getX() - width);
+            if (env.type == GameObjectType.BLOCK) {
+                if (bounds.intersects(getBoundsBottom())) {
+                    //Bottom collision
+                    centre.setY(env.getCentre().getY() - height + 1);
+                    getVelocity().setY(0);
+                    falling = false;
+                    jumping = false;
+                    bottomIntersection = true;
+                }
+                if (bounds.intersects(getBoundsTop())) {
+                    //Top collision
+                    //todo make hardcoded value configurable
+                    centre.setY(env.getCentre().getY() + env.getWidth() + 5);
+                    velocity.setY(0);
+                }
+                if (bounds.intersects(getBoundsLeft())) {
+                    //Left collision
+                    centre.setX(env.getCentre().getX() + env.getWidth());
+                }
+                if (bounds.intersects(getBoundsRight())) {
+                    //Right collision
+                    centre.setX(env.getCentre().getX() - width);
+                }
             }
         }
         if (!bottomIntersection) {
             falling = true;
         }
+    }
+
+    private void collisionWithMovableEnvironment(Model model) {
     }
 
     private void collisionWithCollectibles(Model model) {
@@ -144,7 +167,6 @@ public class Player extends GameObject {
             //I am using object equality maybe can check this later.
             model.getCollectibles().remove(obj);
         }
-
     }
 
     //todo look for a way to make these hardcoded values configurable
@@ -152,6 +174,7 @@ public class Player extends GameObject {
         return new Rectangle((int) centre.getX(), (int) centre.getY() + 10, 5, height - 20);
     }
 
+    //todo look for a way to make these hardcoded values configurable
     private Rectangle getBoundsRight() {
         return new Rectangle((int) (centre.getX() + width - 5), (int) (centre.getY() + 10), 5, height - 20);
     }

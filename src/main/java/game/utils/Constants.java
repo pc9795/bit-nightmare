@@ -19,7 +19,7 @@ public final class Constants {
     public static final String LEVEL_NAMES_FILE = "/levelnames.txt";
     public static final String LEVEL_PROPERTIES_FORMAT = "/levels/%s.properties";
     public static final String LEVEL_PNG_FORMAT = "/levels/%s.png";
-    public static final float PLAYER_GRAVITY = 0.1f;
+    public static final float GRAVITY = 0.1f;
     public static final float PLAYER_VELOCITY_X = 3f;
     public static final float PLAYER_VELOCITY_Y = 5f;
 
