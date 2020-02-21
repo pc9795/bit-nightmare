@@ -57,11 +57,12 @@ public class Model {
 
     public Model(int width, int height) throws IOException, URISyntaxException {
         this.enemies = new CopyOnWriteArrayList<>();
-        this.environmentQuadTree = new QuadTree(0, new Rectangle(0, 0, width, height));
-        //It will not be modified.
+        //It will not be modified therefore ArrayList
         this.environment = new ArrayList<>();
         this.collectibles = new CopyOnWriteArrayList<>();
+        //It will not be modified therefore ArrayList
         this.levels = new ArrayList<>();
+        this.environmentQuadTree = new QuadTree(0, new Rectangle(width, height));
         init();
 
     }
@@ -119,11 +120,17 @@ public class Model {
             GameObject gameObject = GameObjectFactory.getGameObject(type, object.getWidth(), object.getHeight(), center);
             addGameObject(gameObject);
         }
+        if (player1 == null) {
+            throw new RuntimeException("No player found in the level.");
+        }
     }
 
     private void clean() {
         enemies.clear();
-        environmentQuadTree.clear();
+        //As QuadTree can't be initialized until player is found so it can be null for the first time.
+        if (environmentQuadTree != null) {
+            environmentQuadTree.clear();
+        }
         environment.clear();
         collectibles.clear();
         player1 = null;
@@ -198,8 +205,8 @@ public class Model {
             case LAVA:
             case MOVABLE_BLOCK:
             case OSCILLATING_BLOCK:
-                environmentQuadTree.insert(object);
                 environment.add(object);
+                environmentQuadTree.insert(object);
                 break;
             case BIT_ARRAY_GUN:
             case BIT_MATRIX_BLAST:

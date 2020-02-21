@@ -2,6 +2,7 @@ package game.objects;
 
 import game.framework.Game;
 import game.framework.Model;
+import game.objects.environment.Block;
 import game.objects.weapons.Weapon;
 import game.physics.Point3f;
 import game.utils.Constants;
@@ -94,6 +95,7 @@ public class Player extends GameObject {
             if (bounds.intersects(getBoundsTop())) {
                 //Top collision
                 centre.setY(env.getCentre().getY() + env.getWidth() + 5);
+                ((Block) env).collision = true;
                 velocity.setY(0);
             }
             if (bounds.intersects(getBoundsLeft())) {

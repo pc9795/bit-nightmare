@@ -58,7 +58,7 @@ public class View extends Canvas {
         gameWorld.getPlayer1().render(g);
         g2d.translate(-camera.getX(), -camera.getY());
 
-        //todo remove; only for debug
+        //todo remove; only for debugd
         Point mousePos = MouseController.getInstance().getCurrentPos();
         g.drawString(String.format("X=%s,Y=%s", mousePos.getX(), mousePos.getY()), mousePos.x, mousePos.y);
 
