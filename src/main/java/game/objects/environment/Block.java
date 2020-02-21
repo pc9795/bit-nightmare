@@ -12,9 +12,6 @@ import java.awt.*;
  * Purpose: TODO:
  **/
 public class Block extends GameObject {
-    //todo remove
-    public boolean collision;
-
     public Block(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.BLOCK);
     }
@@ -28,11 +25,6 @@ public class Block extends GameObject {
     public void render(Graphics g) {
         g.setColor(Color.WHITE);
         g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
-        //todo remove
-        if (collision) {
-            g.setColor(Color.RED);
-            g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
-        }
     }
 
     @Override

@@ -1,8 +1,6 @@
 package game.objects;
 
-import game.framework.Game;
 import game.framework.Model;
-import game.objects.environment.Block;
 import game.objects.weapons.Weapon;
 import game.physics.Point3f;
 import game.utils.Constants;
@@ -10,7 +8,6 @@ import game.utils.Constants;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created By: Prashant Chaubey
@@ -65,6 +62,7 @@ public class Player extends GameObject {
         }
         g.setColor(new Color(0, 0, 255));
         g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
+        //todo remove
         Graphics2D g2d = (Graphics2D) g;
         g.setColor(Color.RED);
         g2d.draw(getBoundsBottom());
@@ -95,7 +93,6 @@ public class Player extends GameObject {
             if (bounds.intersects(getBoundsTop())) {
                 //Top collision
                 centre.setY(env.getCentre().getY() + env.getWidth() + 5);
-                ((Block) env).collision = true;
                 velocity.setY(0);
             }
             if (bounds.intersects(getBoundsLeft())) {
