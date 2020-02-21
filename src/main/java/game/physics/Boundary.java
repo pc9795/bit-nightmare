@@ -3,7 +3,8 @@ package game.physics;
 /**
  * Created By: Prashant Chaubey
  * Created On: 18-02-2020 19:21
- * Purpose: TODO:
+ * No setters so effectively immutable. Have to check before adding setters as this object instance is shared between
+ * multiple objects.
  **/
 public class Boundary {
     private float xMin;

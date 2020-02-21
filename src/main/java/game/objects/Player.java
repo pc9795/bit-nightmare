@@ -1,7 +1,8 @@
 package game.objects;
 
 import game.framework.Model;
-import game.framework.controllers.KeyboardController;
+import game.objects.colliders.FineGrainedCollider;
+import game.objects.environment.movables.MovableBlock;
 import game.objects.weapons.Weapon;
 import game.physics.Point3f;
 import game.utils.Constants;
@@ -15,7 +16,7 @@ import java.util.List;
  * Created On: 17-02-2020 23:07
  * Purpose: TODO:
  **/
-public class Player extends GameObject {
+public class Player extends GameObject implements FineGrainedCollider {
     //The weapon at the front is the primary weapon.
     private List<Weapon> weapons;
     private int currentWeaponIndex;
@@ -26,8 +27,11 @@ public class Player extends GameObject {
 
     public Player(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.PLAYER);
+
         //todo remove
-        //this.centre = new Point3f(8000, 577, centre.getBoundary());
+        this.centre = new Point3f(8000, 577, centre.getBoundary());
+        bitBotFound = true;
+
         gravity = Constants.GRAVITY;
         falling = true;
         weapons = new ArrayList<>();
@@ -86,8 +90,9 @@ public class Player extends GameObject {
     }
 
     private void collisionWithEnvironment(Model model) {
+        boolean[] collisions;
+        boolean bottomCollision = false;
         //This is set currently by a block object.
-        boolean bottomIntersection = false;
         List<GameObject> willCollide = model.getEnvironmentQuadTree().retrieve(this);
         for (GameObject env : willCollide) {
             Rectangle bounds = env.getBounds();
@@ -117,36 +122,26 @@ public class Player extends GameObject {
                 continue;
             }
             if (env.type == GameObjectType.BLOCK) {
-                if (bounds.intersects(getBoundsBottom())) {
-                    //Bottom collision
-                    centre.setY(env.getCentre().getY() - height + 1);
-                    getVelocity().setY(0);
-                    falling = false;
-                    jumping = false;
-                    bottomIntersection = true;
-                }
-                if (bounds.intersects(getBoundsTop())) {
-                    //Top collision
-                    //todo make hardcoded value configurable
-                    centre.setY(env.getCentre().getY() + env.getWidth() + 5);
-                    velocity.setY(0);
-                }
-                if (bounds.intersects(getBoundsLeft())) {
-                    //Left collision
-                    centre.setX(env.getCentre().getX() + env.getWidth());
-                }
-                if (bounds.intersects(getBoundsRight())) {
-                    //Right collision
-                    centre.setX(env.getCentre().getX() - width);
+                collisions = fineGrainedCollision(this, env);
+                if (collisions[FineGrainedCollider.BOTTOM]) {
+                    bottomCollision = true;
                 }
             }
         }
-        if (!bottomIntersection) {
+        //Right now movable environments are oscilating blocks and movable blocks
+        for (GameObject obj : model.getMovableEnvironment()) {
+            collisions = fineGrainedCollision(this, obj);
+            if (obj.type == GameObjectType.MOVABLE_BLOCK) {
+                if (collisions[FineGrainedCollider.LEFT] || collisions[FineGrainedCollider.RIGHT]) {
+                    ((MovableBlock) obj).setTouchingPlayer(true);
+                } else {
+                    ((MovableBlock) obj).setTouchingPlayer(false);
+                }
+            }
+        }
+        if (!bottomCollision) {
             falling = true;
         }
-    }
-
-    private void collisionWithMovableEnvironment(Model model) {
     }
 
     private void collisionWithCollectibles(Model model) {
@@ -170,20 +165,20 @@ public class Player extends GameObject {
     }
 
     //todo look for a way to make these hardcoded values configurable
-    private Rectangle getBoundsLeft() {
+    public Rectangle getBoundsLeft() {
         return new Rectangle((int) centre.getX(), (int) centre.getY() + 10, 5, height - 20);
     }
 
     //todo look for a way to make these hardcoded values configurable
-    private Rectangle getBoundsRight() {
+    public Rectangle getBoundsRight() {
         return new Rectangle((int) (centre.getX() + width - 5), (int) (centre.getY() + 10), 5, height - 20);
     }
 
-    private Rectangle getBoundsTop() {
+    public Rectangle getBoundsTop() {
         return new Rectangle((int) (centre.getX() + (width / 2) - (width / 4)), (int) centre.getY(), width / 2, height / 2);
     }
 
-    private Rectangle getBoundsBottom() {
+    public Rectangle getBoundsBottom() {
         return new Rectangle((int) (centre.getX() + (width / 2) - (width / 4)), (int) (centre.getY() + height / 2), width / 2, height / 2);
     }
 

@@ -1,4 +1,4 @@
-package game.objects.environment;
+package game.objects.environment.movables;
 
 import game.framework.Model;
 import game.objects.GameObject;

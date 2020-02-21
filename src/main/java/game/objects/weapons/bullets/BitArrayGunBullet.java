@@ -1,20 +1,19 @@
 package game.objects.weapons.bullets;
 
-import game.framework.Game;
 import game.framework.Model;
 import game.objects.GameObject;
+import game.objects.colliders.BulletCollider;
 import game.physics.Point3f;
 import game.utils.Constants;
 
 import java.awt.*;
-import java.util.List;
 
 /**
  * Created By: Prashant Chaubey
  * Created On: 21-02-2020 18:06
  * Purpose: TODO:
  **/
-public class BitArrayGunBullet extends GameObject {
+public class BitArrayGunBullet extends GameObject implements BulletCollider {
     public BitArrayGunBullet(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.BIT_ARRAY_GUN_BULLET);
     }
@@ -22,7 +21,7 @@ public class BitArrayGunBullet extends GameObject {
     @Override
     public void update() {
         //Movement
-        centre.setX(centre.getX() + velocity.getX());
+        centre.setX(centre.getX() + (facingDirection == FacingDirection.RIGHT ? 1 : -1) * Constants.Bullet.BIT_ARRAY_GUN_VELOCITY);
     }
 
     @Override
@@ -36,18 +35,7 @@ public class BitArrayGunBullet extends GameObject {
 
     @Override
     public void collision(Model model) {
-        //Currently Block, Movable Blocks and Oscillating Blocks will remove the bullet
-        List<GameObject> willCollide = model.getEnvironmentQuadTree().retrieve(this);
-        for (GameObject env : willCollide) {
-            if (env.getType() == GameObjectType.BLOCK && env.getBounds().intersects(getBounds())) {
-                model.getBullets().remove(this);
-            }
-        }
-        for (GameObject obj : model.getMovableEnvironment()) {
-            if (obj.getBounds().intersects(getBounds())) {
-                model.getBullets().remove(this);
-            }
-        }
+        bulletCollision(model, this);
     }
 
     @Override

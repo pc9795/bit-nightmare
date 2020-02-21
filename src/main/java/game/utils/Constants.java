@@ -22,6 +22,8 @@ public final class Constants {
     public static final float GRAVITY = 0.1f;
     public static final float PLAYER_VELOCITY_X = 3f;
     public static final float PLAYER_VELOCITY_Y = 5f;
+    public static final float MOVABLE_BLOCK_VELOCITY_X = 3f;
+    public static final float MOVABLE_BLOCK_FRICTION = 0.2f;
 
     public static final class Bullet {
         private Bullet() {
@@ -36,7 +38,7 @@ public final class Constants {
         public static final int BIT_ARRAY_GUN_COUNT = 5;
         public static final int BIT_ARRAY_GUN_WIDTH = 10;
         public static final int BIT_ARRAY_GUN_HEIGHT = 10;
-
+        //Bit Matrix Blast
         public static final float BIT_MATRIX_BLAST_VELOCITY = 4f;
         public static final int BIT_MATRIX_BLAST_WIDTH = 30;
         public static final int BIT_MATRIX_BLAST_HEIGHT = 30;

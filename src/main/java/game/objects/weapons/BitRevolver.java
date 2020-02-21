@@ -4,7 +4,6 @@ import game.framework.Model;
 import game.objects.GameObject;
 import game.objects.weapons.bullets.BitRevolverBullet;
 import game.physics.Point3f;
-import game.physics.Vector3f;
 import game.utils.Constants;
 
 import java.awt.*;
@@ -37,13 +36,8 @@ public class BitRevolver extends GameObject implements Weapon {
 
     @Override
     public GameObject fire(Point3f centre, FacingDirection direction) {
-        BitRevolverBullet bullet = new BitRevolverBullet(Constants.Bullet.BIT_REVOLVER_WIDTH,
-                Constants.Bullet.BIT_REVOLVER_HEIGHT, centre.copy());
-        if (facingDirection == FacingDirection.RIGHT) {
-            bullet.setVelocity(new Vector3f(Constants.Bullet.BIT_REVOLVER_VELOCITY, 0, 0));
-        } else {
-            bullet.setVelocity(new Vector3f(-Constants.Bullet.BIT_REVOLVER_VELOCITY, 0, 0));
-        }
+        BitRevolverBullet bullet = new BitRevolverBullet(Constants.Bullet.BIT_REVOLVER_WIDTH, Constants.Bullet.BIT_REVOLVER_HEIGHT, centre.copy());
+        bullet.setFacingDirection(direction);
         return bullet;
     }
 }

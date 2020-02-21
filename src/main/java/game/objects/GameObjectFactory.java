@@ -2,6 +2,8 @@ package game.objects;
 
 import game.objects.enemies.*;
 import game.objects.environment.*;
+import game.objects.environment.movables.MovableBlock;
+import game.objects.environment.movables.OscillatingBlock;
 import game.objects.weapons.BitArrayGun;
 import game.objects.weapons.BitMatrixBlast;
 import game.objects.weapons.BitRevolver;

@@ -59,6 +59,7 @@ public class Model {
     private List<GameObject> bullets;
     private List<String> levels;
     private Point3f lastCheckpoint;
+    private Boundary levelBoundary;
 
     public Model(int width, int height) throws IOException, URISyntaxException {
         this.enemies = new CopyOnWriteArrayList<>();
@@ -70,6 +71,7 @@ public class Model {
         this.environmentQuadTree = new QuadTree(0, new Rectangle(width, height));
         this.movableEnvironment = new ArrayList<>();
         this.bullets = new CopyOnWriteArrayList<>();
+        this.levelBoundary = new Boundary(width, height);
         init();
 
     }
@@ -124,6 +126,10 @@ public class Model {
         return bullets;
     }
 
+    public Boundary getLevelBoundary() {
+        return levelBoundary;
+    }
+
     private void switchLevel(String levelName) throws IOException {
         clean();
         Level level = LevelLoader.getInstance().loadLevel(levelName);
@@ -131,15 +137,15 @@ public class Model {
     }
 
     private void createLevel(Level level) {
-        Boundary boundary = new Boundary(level.getMaxX() * Constants.LEVEL_PIXEL_TO_WIDTH_RATIO,
+        levelBoundary = new Boundary(level.getMaxX() * Constants.LEVEL_PIXEL_TO_WIDTH_RATIO,
                 level.getMaxY() * Constants.LEVEL_PIXEL_TO_WIDTH_RATIO);
         // QuadTree is to be initialized by the new boundaries.
-        environmentQuadTree = new QuadTree(0, new Rectangle(0, 0, (int) boundary.getxMax(), (int) boundary.getyMax()));
+        environmentQuadTree = new QuadTree(0, new Rectangle(0, 0, (int) levelBoundary.getxMax(), (int) levelBoundary.getyMax()));
 
         for (LevelObject object : level.getLevelObjects()) {
             GameObject.GameObjectType type = GameObject.GameObjectType.valueOf(object.getType());
             Point3f center = new Point3f(object.getCentre().getX() * Constants.LEVEL_PIXEL_TO_WIDTH_RATIO,
-                    object.getCentre().getY() * Constants.LEVEL_PIXEL_TO_WIDTH_RATIO, boundary);
+                    object.getCentre().getY() * Constants.LEVEL_PIXEL_TO_WIDTH_RATIO, levelBoundary);
             GameObject gameObject = GameObjectFactory.getGameObject(type, object.getWidth(), object.getHeight(), center);
             addGameObject(gameObject);
         }
@@ -165,12 +171,22 @@ public class Model {
      */
     public void gameLogic() {
         processInput();
+        //Player
         player1.update();
         player1.collision(this);
+        //Bullets
         bullets.forEach(GameObject::update);
         bullets.forEach(object -> object.collision(this));
+        //Movable environment
+        movableEnvironment.forEach(GameObject::update);
+        movableEnvironment.forEach(object -> object.collision(this));
     }
 
+    /**
+     * Process the input. My philosophy is that the controllers are affecting the state fo the player. So it can be
+     * handled centrally in the model class. If another objects needs information then it can check the state of player
+     * as it will have a method with `Model` object in it. Maybe this approach can change in future.
+     */
     private void processInput() {
         KeyboardController keyboardController = KeyboardController.getInstance();
         keyboardController.poll();
@@ -183,6 +199,12 @@ public class Model {
             player1.getVelocity().setX(Constants.PLAYER_VELOCITY_X);
             player1.setFacingDirection(GameObject.FacingDirection.RIGHT);
         } else {
+            float velX = player1.getVelocity().getX();
+            if (velX > 0) {
+                player1.setFacingDirection(GameObject.FacingDirection.RIGHT);
+            } else if (velX < 0) {
+                player1.setFacingDirection(GameObject.FacingDirection.LEFT);
+            }
             player1.getVelocity().setX(0);
         }
         //Jump
@@ -214,7 +236,7 @@ public class Model {
         }
     }
 
-    public void addGameObject(GameObject object) {
+    private void addGameObject(GameObject object) {
         switch (object.getType()) {
             case PLAYER:
                 player1 = (Player) object;
