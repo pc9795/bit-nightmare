@@ -136,13 +136,15 @@ public class QuadTree {
         int index = getIndex(object.getBounds());
         if (index != -1 && isSplitted()) {
             children[index].retrieveUtil(willCollide, object);
-        }
-        GameObject[] parts = chop(object);
-        for (int i = 0; i < 4; i++) {
-            if (parts[i] == null || children[i] == null) {
-                continue;
+        } else {
+            //They don't belong to a single children then we break the object apart
+            GameObject[] parts = chop(object);
+            for (int i = 0; i < 4; i++) {
+                if (parts[i] == null || children[i] == null) {
+                    continue;
+                }
+                children[i].retrieveUtil(willCollide, parts[i]);
             }
-            children[i].retrieveUtil(willCollide, parts[i]);
         }
         willCollide.addAll(objects);
     }

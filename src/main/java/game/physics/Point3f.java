@@ -133,6 +133,10 @@ public class Point3f {
         }
     }
 
+    public Point3f copy() {
+        return new Point3f(x, y, boundary);
+    }
+
     public Point3f add(Vector3f other) {
         return new Point3f(getX() + other.getX(), getY() + other.getY(), getZ() + other.getZ(), boundary);
     }

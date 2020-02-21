@@ -43,7 +43,6 @@ public abstract class GameObject {
     }
 
     //Centre of object, using 3D as objects may be scaled
-    //todo why there is a z in framework?
     protected Point3f centre;
     protected int width, height;
     protected boolean hasTextured;

@@ -45,6 +45,14 @@ public class Player extends GameObject {
         this.ducking = ducking;
     }
 
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
     @Override
     public void update() {
         //Movement
@@ -82,10 +90,19 @@ public class Player extends GameObject {
         boolean bottomIntersection = false;
         List<GameObject> willCollide = model.getEnvironmentQuadTree().retrieve(this);
         for (GameObject env : willCollide) {
-            //Saving last checkpoint
+            if (env.getType() == GameObjectType.LAVA) {
+                System.out.println();
+            }
+            // Saving last checkpointa
             //todo can add additional equality check that same check point is not saved every time. not important though
             if (env.type == GameObjectType.CHECKPOINT && env.getBounds().intersects(getBounds())) {
-                model.setLastCheckpoint(env.getCentre());
+                model.setLastCheckpoint(env.getCentre().copy());
+                continue;
+            }
+            // If you touch it you will burn.
+            if (env.type == GameObjectType.LAVA && env.getBounds().intersects(getBounds())) {
+                centre = model.getLastCheckpoint().copy();
+                health = 100;
                 continue;
             }
             Rectangle bounds = env.getBounds();

@@ -4,7 +4,6 @@ import game.framework.controllers.KeyboardController;
 import game.objects.GameObject;
 import game.objects.GameObjectFactory;
 import game.objects.Player;
-import game.objects.environment.Checkpoint;
 import game.physics.Boundary;
 import game.physics.Point3f;
 import game.physics.QuadTree;
@@ -52,7 +51,10 @@ public class Model {
     private Player player1;
     private List<GameObject> enemies;
     private QuadTree environmentQuadTree;
+    //Immovable things
     private List<GameObject> environment;
+    //Movable things
+    private List<GameObject> movableEnvironment;
     private List<GameObject> collectibles;
     private List<String> levels;
     private Point3f lastCheckpoint;
@@ -65,6 +67,7 @@ public class Model {
         //It will not be modified therefore ArrayList
         this.levels = new ArrayList<>();
         this.environmentQuadTree = new QuadTree(0, new Rectangle(width, height));
+        this.movableEnvironment = new ArrayList<>();
         init();
 
     }
@@ -111,6 +114,10 @@ public class Model {
         this.lastCheckpoint = lastCheckpoint;
     }
 
+    public List<GameObject> getMovableEnvironment() {
+        return movableEnvironment;
+    }
+
     private void switchLevel(String levelName) throws IOException {
         clean();
         Level level = LevelLoader.getInstance().loadLevel(levelName);
@@ -133,7 +140,7 @@ public class Model {
         if (player1 == null) {
             throw new RuntimeException("No player found in the level.");
         }
-        lastCheckpoint = new Point3f(player1.getCentre().getX(), player1.getCentre().getY());
+        lastCheckpoint = player1.getCentre().copy();
     }
 
     private void clean() {
@@ -214,12 +221,14 @@ public class Model {
             case ENEMY_PORTAL:
             case GATE:
             case LAVA:
-            case MOVABLE_BLOCK:
-            case OSCILLATING_BLOCK:
             case CHANGE_LEVEL:
             case CHECKPOINT:
                 environment.add(object);
                 environmentQuadTree.insert(object);
+                break;
+            case MOVABLE_BLOCK:
+            case OSCILLATING_BLOCK:
+                movableEnvironment.add(object);
                 break;
             case BIT_ARRAY_GUN:
             case BIT_MATRIX_BLAST:
