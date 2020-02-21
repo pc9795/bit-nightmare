@@ -23,17 +23,12 @@ public class Boss1 extends GameObject {
 
     @Override
     public void render(Graphics g) {
-        g.setColor(new Color(196, 255, 14));
+        g.setColor(new Color(0, 168, 243));
         g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
     }
 
     @Override
     public void collision(Model model) {
 
-    }
-
-    @Override
-    public Rectangle getBounds() {
-        return new Rectangle((int) centre.getX(), (int) centre.getY(), width, height);
     }
 }

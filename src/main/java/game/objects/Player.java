@@ -19,6 +19,7 @@ public class Player extends GameObject {
     private List<Weapon> weapons;
     private int currentWeaponIndex;
     private boolean ducking;
+    private int health = 100;
 
     public Player(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.PLAYER);
@@ -81,6 +82,12 @@ public class Player extends GameObject {
         boolean bottomIntersection = false;
         List<GameObject> willCollide = model.getEnvironmentQuadTree().retrieve(this);
         for (GameObject env : willCollide) {
+            //Saving last checkpoint
+            //todo can add additional equality check that same check point is not saved every time. not important though
+            if (env.type == GameObjectType.CHECKPOINT && env.getBounds().intersects(getBounds())) {
+                model.setLastCheckpoint(env.getCentre());
+                continue;
+            }
             Rectangle bounds = env.getBounds();
             if (bounds.intersects(getBoundsBottom())) {
                 //Bottom collision
@@ -109,11 +116,7 @@ public class Player extends GameObject {
         }
     }
 
-    @Override
-    public Rectangle getBounds() {
-        return new Rectangle((int) centre.getX(), (int) centre.getY(), width, height);
-    }
-
+    //todo look for a way to make these hardcoded values configurable
     private Rectangle getBoundsLeft() {
         return new Rectangle((int) centre.getX(), (int) centre.getY() + 10, 5, height - 20);
     }

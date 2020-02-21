@@ -35,7 +35,7 @@ SOFTWARE.
 public abstract class GameObject {
     public enum GameObjectType {
         BLOCK, LAVA, PLAYER, BIT_BOT, ENEMY1, ENEMY2, ENEMY3, ENEMY_PORTAL, BIT_REVOLVER, BIT_ARRAY_GUN,
-        GATE, MOVABLE_BLOCK, BOSS1, BIT_MATRIX_BLAST, OSCILLATING_BLOCK, END_GATE
+        GATE, MOVABLE_BLOCK, BOSS1, BIT_MATRIX_BLAST, OSCILLATING_BLOCK, END_GAME, CHECKPOINT, CHANGE_LEVEL
     }
 
     public enum FacingDirection {
@@ -140,7 +140,9 @@ public abstract class GameObject {
      *
      * @return bounds for this object
      */
-    public abstract Rectangle getBounds();
+    public Rectangle getBounds() {
+        return new Rectangle((int) centre.getX(), (int) centre.getY(), width, height);
+    }
 
     @Override
     public String toString() {

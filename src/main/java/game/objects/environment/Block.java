@@ -31,9 +31,4 @@ public class Block extends GameObject {
     public void collision(Model model) {
 
     }
-
-    @Override
-    public Rectangle getBounds() {
-        return new Rectangle((int) centre.getX(), (int) centre.getY(), width, height);
-    }
 }

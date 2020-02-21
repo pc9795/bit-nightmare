@@ -4,6 +4,7 @@ import game.framework.controllers.KeyboardController;
 import game.objects.GameObject;
 import game.objects.GameObjectFactory;
 import game.objects.Player;
+import game.objects.environment.Checkpoint;
 import game.physics.Boundary;
 import game.physics.Point3f;
 import game.physics.QuadTree;
@@ -54,6 +55,7 @@ public class Model {
     private List<GameObject> environment;
     private List<GameObject> collectibles;
     private List<String> levels;
+    private Point3f lastCheckpoint;
 
     public Model(int width, int height) throws IOException, URISyntaxException {
         this.enemies = new CopyOnWriteArrayList<>();
@@ -101,6 +103,14 @@ public class Model {
         return collectibles;
     }
 
+    public Point3f getLastCheckpoint() {
+        return lastCheckpoint;
+    }
+
+    public void setLastCheckpoint(Point3f lastCheckpoint) {
+        this.lastCheckpoint = lastCheckpoint;
+    }
+
     private void switchLevel(String levelName) throws IOException {
         clean();
         Level level = LevelLoader.getInstance().loadLevel(levelName);
@@ -123,6 +133,7 @@ public class Model {
         if (player1 == null) {
             throw new RuntimeException("No player found in the level.");
         }
+        lastCheckpoint = new Point3f(player1.getCentre().getX(), player1.getCentre().getY());
     }
 
     private void clean() {
@@ -199,12 +210,14 @@ public class Model {
                 enemies.add(object);
                 break;
             case BLOCK:
-            case END_GATE:
+            case END_GAME:
             case ENEMY_PORTAL:
             case GATE:
             case LAVA:
             case MOVABLE_BLOCK:
             case OSCILLATING_BLOCK:
+            case CHANGE_LEVEL:
+            case CHECKPOINT:
                 environment.add(object);
                 environmentQuadTree.insert(object);
                 break;

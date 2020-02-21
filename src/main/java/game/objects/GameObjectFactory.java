@@ -27,8 +27,12 @@ public final class GameObjectFactory {
                 return new EnemyPortal(width, height, centre);
             case BLOCK:
                 return new Block(width, height, centre);
-            case END_GATE:
-                return new EndGate(width, height, centre);
+            case END_GAME:
+                return new EndGame(width, height, centre);
+            case CHANGE_LEVEL:
+                return new ChangeLevel(width, height, centre);
+            case CHECKPOINT:
+                return new Checkpoint(width, height, centre);
             case GATE:
                 return new Gate(width, height, centre);
             case LAVA:

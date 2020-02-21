@@ -23,18 +23,13 @@ public class BitArrayGun extends GameObject implements Weapon {
 
     @Override
     public void render(Graphics g) {
-        g.setColor(new Color(0, 168, 243));
+        g.setColor(new Color(63, 72, 204));
         g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
     }
 
     @Override
     public void collision(Model model) {
 
-    }
-
-    @Override
-    public Rectangle getBounds() {
-        return new Rectangle((int) centre.getX(), (int) centre.getY(), width, height);
     }
 
     @Override

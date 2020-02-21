@@ -33,11 +33,6 @@ public class BitMatrixBlast extends GameObject implements Weapon {
     }
 
     @Override
-    public Rectangle getBounds() {
-        return new Rectangle((int) centre.getX(), (int) centre.getY(), width, height);
-    }
-
-    @Override
     public void fire() {
 
     }
