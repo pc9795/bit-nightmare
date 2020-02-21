@@ -53,8 +53,10 @@ public class View extends Canvas {
         g2d.translate(camera.getX(), camera.getY());
         //Drawing stuff
         gameWorld.getEnvironment().forEach(object -> object.render(g));
+        gameWorld.getMovableEnvironment().forEach(object -> object.render(g));
         gameWorld.getCollectibles().forEach(object -> object.render(g));
         gameWorld.getEnemies().forEach(object -> object.render(g));
+        gameWorld.getBullets().forEach(object -> object.render(g));
         gameWorld.getPlayer1().render(g);
         g2d.translate(-camera.getX(), -camera.getY());
 

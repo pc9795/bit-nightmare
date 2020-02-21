@@ -56,6 +56,7 @@ public class Model {
     //Movable things
     private List<GameObject> movableEnvironment;
     private List<GameObject> collectibles;
+    private List<GameObject> bullets;
     private List<String> levels;
     private Point3f lastCheckpoint;
 
@@ -68,6 +69,7 @@ public class Model {
         this.levels = new ArrayList<>();
         this.environmentQuadTree = new QuadTree(0, new Rectangle(width, height));
         this.movableEnvironment = new ArrayList<>();
+        this.bullets = new CopyOnWriteArrayList<>();
         init();
 
     }
@@ -118,6 +120,10 @@ public class Model {
         return movableEnvironment;
     }
 
+    public List<GameObject> getBullets() {
+        return bullets;
+    }
+
     private void switchLevel(String levelName) throws IOException {
         clean();
         Level level = LevelLoader.getInstance().loadLevel(levelName);
@@ -159,7 +165,10 @@ public class Model {
      */
     public void gameLogic() {
         processInput();
-        playerLogic();
+        player1.update();
+        player1.collision(this);
+        bullets.forEach(GameObject::update);
+        bullets.forEach(object -> object.collision(this));
     }
 
     private void processInput() {
@@ -169,13 +178,15 @@ public class Model {
         //Left and right
         if (keyboardController.isAPressed()) {
             player1.getVelocity().setX(-Constants.PLAYER_VELOCITY_X);
+            player1.setFacingDirection(GameObject.FacingDirection.LEFT);
         } else if (keyboardController.isDPressed()) {
             player1.getVelocity().setX(Constants.PLAYER_VELOCITY_X);
+            player1.setFacingDirection(GameObject.FacingDirection.RIGHT);
         } else {
             player1.getVelocity().setX(0);
         }
         //Jump
-        if (keyboardController.isWPressedOnce() && !player1.isJumping()) {
+        if (keyboardController.isWPressedOnce() && !player1.isJumping() && player1.isBitBotFound()) {
             player1.getVelocity().setY(-Constants.PLAYER_VELOCITY_Y);
             player1.setJumping(true);
         }
@@ -196,13 +207,11 @@ public class Model {
         }
         //Fire weapon
         if (keyboardController.isSpacePressedOnce()) {
-            player1.fireWeapon();
+            GameObject bullet = player1.fireWeapon();
+            if (bullet != null) {
+                bullets.add(bullet);
+            }
         }
-    }
-
-    private void playerLogic() {
-        player1.update();
-        player1.collision(this);
     }
 
     public void addGameObject(GameObject object) {

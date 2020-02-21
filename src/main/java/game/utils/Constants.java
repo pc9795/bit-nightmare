@@ -23,10 +23,29 @@ public final class Constants {
     public static final float PLAYER_VELOCITY_X = 3f;
     public static final float PLAYER_VELOCITY_Y = 5f;
 
+    public static final class Bullet {
+        private Bullet() {
+        }
+
+        //Bit Revolver
+        public static final float BIT_REVOLVER_VELOCITY = 5f;
+        public static final int BIT_REVOLVER_WIDTH = 10;
+        public static final int BIT_REVOLVER_HEIGHT = 10;
+        //Bit Array Gun
+        public static final float BIT_ARRAY_GUN_VELOCITY = 5f;
+        public static final int BIT_ARRAY_GUN_COUNT = 5;
+        public static final int BIT_ARRAY_GUN_WIDTH = 10;
+        public static final int BIT_ARRAY_GUN_HEIGHT = 10;
+
+        public static final float BIT_MATRIX_BLAST_VELOCITY = 4f;
+        public static final int BIT_MATRIX_BLAST_WIDTH = 30;
+        public static final int BIT_MATRIX_BLAST_HEIGHT = 30;
+
+        public static final int BULLET_FREQ_IN_SEC = 1;
+    }
 
     public static final class Sprite {
         private Sprite() {
-
         }
 
         public static final String BLANK = "blankSprite.png";

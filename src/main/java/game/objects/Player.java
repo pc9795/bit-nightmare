@@ -20,6 +20,8 @@ public class Player extends GameObject {
     private int currentWeaponIndex;
     private boolean ducking;
     private int health = 100;
+    private boolean bitBotFound;
+    private long lastFiredBullet = System.currentTimeMillis();
 
     public Player(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.PLAYER);
@@ -45,12 +47,8 @@ public class Player extends GameObject {
         this.ducking = ducking;
     }
 
-    public int getHealth() {
-        return health;
-    }
-
-    public void setHealth(int health) {
-        this.health = health;
+    public boolean isBitBotFound() {
+        return bitBotFound;
     }
 
     @Override
@@ -66,9 +64,6 @@ public class Player extends GameObject {
 
     @Override
     public void render(Graphics g) {
-        if (isDucking()) {
-            System.out.println();
-        }
         g.setColor(new Color(0, 0, 255));
         g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
         //todo remove
@@ -84,28 +79,26 @@ public class Player extends GameObject {
     @Override
     public void collision(Model model) {
         collisionWithEnvironment(model);
+        collisionWithCollectibles(model);
     }
 
     private void collisionWithEnvironment(Model model) {
         boolean bottomIntersection = false;
         List<GameObject> willCollide = model.getEnvironmentQuadTree().retrieve(this);
         for (GameObject env : willCollide) {
-            if (env.getType() == GameObjectType.LAVA) {
-                System.out.println();
-            }
-            // Saving last checkpointa
+            Rectangle bounds = env.getBounds();
+            // Saving last checkpoint
             //todo can add additional equality check that same check point is not saved every time. not important though
-            if (env.type == GameObjectType.CHECKPOINT && env.getBounds().intersects(getBounds())) {
+            if (env.type == GameObjectType.CHECKPOINT && bounds.intersects(getBounds())) {
                 model.setLastCheckpoint(env.getCentre().copy());
                 continue;
             }
             // If you touch it you will burn.
-            if (env.type == GameObjectType.LAVA && env.getBounds().intersects(getBounds())) {
+            if (env.type == GameObjectType.LAVA && bounds.intersects(getBounds())) {
                 centre = model.getLastCheckpoint().copy();
                 health = 100;
                 continue;
             }
-            Rectangle bounds = env.getBounds();
             if (bounds.intersects(getBoundsBottom())) {
                 //Bottom collision
                 centre.setY(env.getCentre().getY() - height + 1);
@@ -133,6 +126,27 @@ public class Player extends GameObject {
         }
     }
 
+    private void collisionWithCollectibles(Model model) {
+        for (GameObject obj : model.getCollectibles()) {
+            if (!obj.getBounds().intersects(getBounds())) {
+                continue;
+            }
+            switch (obj.getType()) {
+                case BIT_BOT:
+                    bitBotFound = true;
+                    break;
+                case BIT_REVOLVER:
+                case BIT_ARRAY_GUN:
+                case BIT_MATRIX_BLAST:
+                    addWeapon((Weapon) obj);
+                    break;
+            }
+            //I am using object equality maybe can check this later.
+            model.getCollectibles().remove(obj);
+        }
+
+    }
+
     //todo look for a way to make these hardcoded values configurable
     private Rectangle getBoundsLeft() {
         return new Rectangle((int) centre.getX(), (int) centre.getY() + 10, 5, height - 20);
@@ -154,17 +168,25 @@ public class Player extends GameObject {
         if (currentWeaponIndex == -1) {
             return;
         }
-        currentWeaponIndex = (currentWeaponIndex + 1) / weapons.size();
+        currentWeaponIndex = (currentWeaponIndex + 1) % weapons.size();
     }
 
-    public void fireWeapon() {
+    public GameObject fireWeapon() {
         if (currentWeaponIndex == -1) {
-            return;
+            return null;
         }
-        weapons.get(currentWeaponIndex).fire();
+        //Rate limiter; one bullet per second.
+        long now = System.currentTimeMillis();
+        long diff = now - lastFiredBullet;
+        if (diff <= Constants.Bullet.BULLET_FREQ_IN_SEC * 1000) {
+            return null;
+        }
+        lastFiredBullet = now;
+        return weapons.get(currentWeaponIndex).fire(centre, facingDirection);
     }
 
     public void addWeapon(Weapon weapon) {
         weapons.add(weapon);
+        currentWeaponIndex = weapons.size() - 1;
     }
 }
