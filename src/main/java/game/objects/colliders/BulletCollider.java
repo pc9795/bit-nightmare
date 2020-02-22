@@ -11,23 +11,30 @@ import java.util.List;
  * Purpose: TODO:
  **/
 public interface BulletCollider {
-    default void bulletCollision(Model model, GameObject bullet) {
+    default boolean bulletCollision(Model model, GameObject bullet) {
         //Out of the frame
         if (bullet.getCentre().getX() < model.getLevelBoundary().getxMin()
                 || bullet.getCentre().getX() > model.getLevelBoundary().getxMax()) {
             model.getBullets().remove(bullet);
+            return true;
         }
         //Currently Block, Movable Blocks and Oscillating Blocks will remove the bullet
         List<GameObject> willCollide = model.getEnvironmentQuadTree().retrieve(bullet);
+        //Merging lists as same behavior
+        willCollide.addAll(model.getMovableEnvironment());
         for (GameObject env : willCollide) {
-            if (env.getType() == GameObject.GameObjectType.BLOCK && env.getBounds().intersects(bullet.getBounds())) {
-                model.getBullets().remove(bullet);
+            switch (env.getType()) {
+                case BLOCK:
+                case GATE:
+                case LAVA:
+                case HIDING_BLOCK:
+                case MOVABLE_BLOCK:
+                    if (env.getBounds().intersects(bullet.getBounds())) {
+                        model.getBullets().remove(bullet);
+                        return true;
+                    }
             }
         }
-        for (GameObject obj : model.getMovableEnvironment()) {
-            if (obj.getBounds().intersects(bullet.getBounds())) {
-                model.getBullets().remove(bullet);
-            }
-        }
+        return false;
     }
 }

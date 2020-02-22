@@ -243,6 +243,7 @@ public class Model {
         //Duck
         if (keyboardController.isSPressedOnce() || gamepadController.isXPressedOnce()) {
             if (player1.isDucking()) {
+                //todo check that here I am not resetting y-axis. I think code is working fine because of bottom collision.
                 player1.setHeight(player1.getHeight() * 2);
                 player1.setDucking(false);
             } else {

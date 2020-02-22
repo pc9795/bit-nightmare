@@ -14,8 +14,15 @@ import java.awt.*;
  * Purpose: TODO:
  **/
 public class BitArrayGunBullet extends GameObject implements BulletCollider {
+    boolean isFiredByPlayer;
+
     public BitArrayGunBullet(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.BIT_ARRAY_GUN_BULLET);
+    }
+
+    public BitArrayGunBullet(int width, int height, Point3f centre, boolean isFiredByPlayer) {
+        super(width, height, centre, GameObjectType.BIT_REVOLVER_BULLET);
+        this.isFiredByPlayer = isFiredByPlayer;
     }
 
     @Override

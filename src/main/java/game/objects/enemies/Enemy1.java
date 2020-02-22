@@ -3,6 +3,7 @@ package game.objects.enemies;
 import game.framework.Model;
 import game.objects.GameObject;
 import game.objects.colliders.FineGrainedCollider;
+import game.objects.properties.Healthy;
 import game.physics.Point3f;
 import game.utils.Constants;
 
@@ -14,8 +15,9 @@ import java.util.List;
  * Created On: 18-02-2020 00:01
  * Purpose: TODO:
  **/
-public class Enemy1 extends GameObject implements FineGrainedCollider {
+public class Enemy1 extends GameObject implements FineGrainedCollider, Healthy {
     private boolean playerDetected;
+    private int health = 100;
 
     public Enemy1(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.ENEMY1);
@@ -38,12 +40,15 @@ public class Enemy1 extends GameObject implements FineGrainedCollider {
     public void render(Graphics g) {
         g.setColor(new Color(136, 9, 27));
         g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
+        showHealth(centre, health, g);
     }
 
     @Override
     public void collision(Model model) {
-        boolean[] collisions;
-        boolean bottomCollision = false;
+        if (health <= 0) {
+            model.getEnemies().remove(this);
+        }
+
         //Detect player and attack
         if (!playerDetected) {
             int playerX = (int) model.getPlayer1().getCentre().getX();
@@ -58,6 +63,9 @@ public class Enemy1 extends GameObject implements FineGrainedCollider {
                 playerDetected = true;
             }
         }
+
+        boolean[] collisions;
+        boolean bottomCollision = false;
         List<GameObject> willCollide = model.getEnvironmentQuadTree().retrieve(this);
         //Combining all the environments as behavior is same
         willCollide.addAll(model.getMovableEnvironment());
@@ -106,5 +114,9 @@ public class Enemy1 extends GameObject implements FineGrainedCollider {
 
     public Rectangle getBoundsBottom() {
         return new Rectangle((int) (centre.getX() + (width / 2) - (width / 4)), (int) (centre.getY() + height / 2), width / 2, height / 2);
+    }
+
+    public void damageHealth(int damage) {
+        health -= damage;
     }
 }

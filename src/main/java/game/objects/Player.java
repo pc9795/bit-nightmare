@@ -4,6 +4,7 @@ import game.framework.Model;
 import game.objects.colliders.FineGrainedCollider;
 import game.objects.environment.HidingBlock;
 import game.objects.environment.movables.MovableBlock;
+import game.objects.properties.Healthy;
 import game.objects.weapons.Weapon;
 import game.physics.Point3f;
 import game.utils.Constants;
@@ -17,7 +18,7 @@ import java.util.List;
  * Created On: 17-02-2020 23:07
  * Purpose: TODO:
  **/
-public class Player extends GameObject implements FineGrainedCollider {
+public class Player extends GameObject implements FineGrainedCollider, Healthy {
     //The weapon at the front is the primary weapon.
     private List<Weapon> weapons;
     private int currentWeaponIndex;
@@ -30,7 +31,7 @@ public class Player extends GameObject implements FineGrainedCollider {
         super(width, height, centre, GameObjectType.PLAYER);
 
         //todo remove
-        //this.centre = new Point3f(7715, 577, centre.getBoundary());
+        //this.centre = new Point3f(3200, 289, centre.getBoundary());
         //bitBotFound = true;
 
         gravity = Constants.GRAVITY;
@@ -85,7 +86,8 @@ public class Player extends GameObject implements FineGrainedCollider {
         g2d.draw(getBoundsLeft());
         g2d.draw(getBoundsRight());
         g2d.draw(getBoundsTop());
-        g.drawString(String.format("X:%s,Y:%s", (int) centre.getX(), (int) centre.getY()), (int) centre.getX(), (int) centre.getY());
+        g.drawString(String.format("X:%s,Y:%s", (int) centre.getX(), (int) centre.getY()), (int) centre.getX(), (int) centre.getY() - 20);
+        showHealth(centre, health, g);
     }
 
     @Override
@@ -185,7 +187,6 @@ public class Player extends GameObject implements FineGrainedCollider {
                 case BOSS1:
                 case ENEMY2:
                 case ENEMY3:
-                    break;
                 case ENEMY1:
                     //Don't touch me
                     if (obj.getBounds().intersects(getBounds())) {
@@ -228,7 +229,7 @@ public class Player extends GameObject implements FineGrainedCollider {
         //Rate limiter; one bullet per second.
         long now = System.currentTimeMillis();
         long diff = now - lastFiredBullet;
-        if (diff <= Constants.Bullet.BULLET_FREQ_IN_SEC * 1000) {
+        if (diff <= Constants.Bullet.PLAYER_BULLET_FREQ_IN_SEC * 1000) {
             return null;
         }
         lastFiredBullet = now;
@@ -238,5 +239,10 @@ public class Player extends GameObject implements FineGrainedCollider {
     public void addWeapon(Weapon weapon) {
         weapons.add(weapon);
         currentWeaponIndex = weapons.size() - 1;
+    }
+
+    @Override
+    public void damageHealth(int damage) {
+        health -= damage;
     }
 }
