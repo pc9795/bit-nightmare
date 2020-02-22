@@ -3,8 +3,7 @@ package game.objects.environment.movables;
 import game.framework.Model;
 import game.objects.GameObject;
 import game.objects.colliders.FineGrainedCollider;
-import game.physics.Point3f;
-import game.utils.Constants;
+import game.physics.Point2f;
 
 import java.awt.*;
 import java.util.List;
@@ -20,11 +19,11 @@ public class MovableBlock extends GameObject implements FineGrainedCollider {
     private static final float DEFAULT_SPEED_X = 4f;
     private static final float DEFAULT_FRICTION = 0.1f;
     private boolean touchingPlayer;
-    private Point3f lastPosition;
+    private Point2f lastPosition;
     private float friction;
     private float speedX;
 
-    public MovableBlock(int width, int height, Point3f centre) {
+    public MovableBlock(int width, int height, Point2f centre) {
         super(width, height, centre, GameObjectType.MOVABLE_BLOCK);
         gravity = DEFAULT_GRAVITY;
         lastPosition = centre.copy();

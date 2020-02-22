@@ -1,6 +1,6 @@
 import game.framework.Model;
 import game.objects.GameObject;
-import game.physics.Point3f;
+import game.physics.Point2f;
 import game.physics.QuadTree;
 import org.junit.Test;
 
@@ -16,7 +16,7 @@ public class QuadTreeTest {
     @Test
     public void testChop_ObjectLiesIn2ndAnd3rdQuadrant() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         QuadTree tree = new QuadTree(0, new Rectangle(100, 100));
-        TestGameObject obj = new TestGameObject(10, 50, new Point3f(10, 10), null);
+        TestGameObject obj = new TestGameObject(10, 50, new Point2f(10, 10), null);
         Method method = tree.getClass().getDeclaredMethod("chop", GameObject.class);
         method.setAccessible(true);
 
@@ -42,7 +42,7 @@ public class QuadTreeTest {
     @Test
     public void testChop_ObjectInCentre() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         QuadTree tree = new QuadTree(0, new Rectangle(100, 100));
-        TestGameObject obj = new TestGameObject(50, 50, new Point3f(10, 10), null);
+        TestGameObject obj = new TestGameObject(50, 50, new Point2f(10, 10), null);
         Method method = tree.getClass().getDeclaredMethod("chop", GameObject.class);
         method.setAccessible(true);
 
@@ -78,7 +78,7 @@ public class QuadTreeTest {
      */
     public static class TestGameObject extends GameObject {
 
-        TestGameObject(int width, int height, Point3f centre, GameObjectType type) {
+        TestGameObject(int width, int height, Point2f centre, GameObjectType type) {
             super(width, height, centre, type);
         }
 

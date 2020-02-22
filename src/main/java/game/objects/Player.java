@@ -6,8 +6,7 @@ import game.objects.environment.HidingBlock;
 import game.objects.environment.movables.MovableBlock;
 import game.objects.properties.Healthy;
 import game.objects.weapons.Weapon;
-import game.physics.Point3f;
-import game.utils.Constants;
+import game.physics.Point2f;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -33,7 +32,7 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
     private long lastFiredBullet = System.currentTimeMillis();
     private float bulletFreqInSec;
 
-    public Player(int width, int height, Point3f centre) {
+    public Player(int width, int height, Point2f centre) {
         super(width, height, centre, GameObjectType.PLAYER);
         gravity = DEFAULT_GRAVITY;
         falling = true;

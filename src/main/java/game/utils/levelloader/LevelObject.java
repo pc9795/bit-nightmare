@@ -1,6 +1,6 @@
 package game.utils.levelloader;
 
-import game.physics.Point3f;
+import game.physics.Point2f;
 
 /**
  * Created By: Prashant Chaubey
@@ -8,15 +8,15 @@ import game.physics.Point3f;
  * Purpose: Represents an object inside a level
  **/
 public class LevelObject {
-    private Point3f centre;
+    private Point2f centre;
     private String type;
 
     LevelObject(int x, int y, String type) {
-        this.centre = new Point3f(x, y);
+        this.centre = new Point2f(x, y);
         this.type = type;
     }
 
-    public Point3f getCentre() {
+    public Point2f getCentre() {
         return centre;
     }
 

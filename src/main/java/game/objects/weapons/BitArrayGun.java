@@ -3,7 +3,7 @@ package game.objects.weapons;
 import game.framework.Model;
 import game.objects.GameObject;
 import game.objects.weapons.bullets.BitArrayGunBullet;
-import game.physics.Point3f;
+import game.physics.Point2f;
 import game.utils.Constants;
 
 import java.awt.*;
@@ -17,7 +17,7 @@ public class BitArrayGun extends GameObject implements Weapon {
     private static final int DEFAULT_WIDTH = 32;
     private static final int DEFAULT_HEIGHT = 32;
 
-    public BitArrayGun(int width, int height, Point3f centre) {
+    public BitArrayGun(int width, int height, Point2f centre) {
         super(width, height, centre, GameObjectType.BIT_ARRAY_GUN);
     }
 
@@ -38,7 +38,7 @@ public class BitArrayGun extends GameObject implements Weapon {
     }
 
     @Override
-    public GameObject fire(Point3f centre, FacingDirection direction) {
+    public GameObject fire(Point2f centre, FacingDirection direction) {
         BitArrayGunBullet bullet = new BitArrayGunBullet(Constants.Bullet.BIT_ARRAY_GUN_WIDTH, Constants.Bullet.BIT_ARRAY_GUN_HEIGHT, centre.copy());
         bullet.setFacingDirection(direction);
         return bullet;

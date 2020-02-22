@@ -2,7 +2,7 @@ package game.objects.environment;
 
 import game.framework.Model;
 import game.objects.GameObject;
-import game.physics.Point3f;
+import game.physics.Point2f;
 
 import java.awt.*;
 
@@ -15,7 +15,7 @@ public class Lava extends GameObject {
     private static final int DEFAULT_WIDTH = 32;
     private static final int DEFAULT_HEIGHT = 32;
 
-    public Lava(int width, int height, Point3f centre) {
+    public Lava(int width, int height, Point2f centre) {
         super(width, height, centre, GameObjectType.LAVA);
     }
 

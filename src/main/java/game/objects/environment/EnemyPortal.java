@@ -3,7 +3,7 @@ package game.objects.environment;
 import game.framework.Model;
 import game.objects.GameObject;
 import game.objects.GameObjectFactory;
-import game.physics.Point3f;
+import game.physics.Point2f;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -29,7 +29,7 @@ public class EnemyPortal extends GameObject {
     private int range;
     private float spawnFreqInSec;
 
-    public EnemyPortal(int width, int height, Point3f centre) {
+    public EnemyPortal(int width, int height, Point2f centre) {
         super(width, height, centre, GameObjectType.ENEMY_PORTAL);
         enemyTypes = Arrays.asList(GameObjectType.ENEMY1, GameObjectType.ENEMY2, GameObjectType.ENEMY3);
         los = DEFAULT_LOS;
@@ -80,7 +80,7 @@ public class EnemyPortal extends GameObject {
                 float x = centre.getX();
                 int position = random.nextInt(range);
                 x -= facingDirection == FacingDirection.LEFT ? position : -position;
-                GameObject enemy = GameObjectFactory.getGameObject(type, width, height, new Point3f(x, centre.getY(), model.getLevelBoundary()));
+                GameObject enemy = GameObjectFactory.getGameObject(type, width, height, new Point2f(x, centre.getY(), model.getLevelBoundary()));
                 model.getEnemies().add(enemy);
                 lastBeingSpawned = now;
                 enemyCount--;

@@ -1,7 +1,7 @@
 package game.objects.weapons;
 
 import game.objects.GameObject;
-import game.physics.Point3f;
+import game.physics.Point2f;
 
 /**
  * Created By: Prashant Chaubey
@@ -9,5 +9,5 @@ import game.physics.Point3f;
  * Purpose: TODO:
  **/
 public interface Weapon {
-    GameObject fire(Point3f position, GameObject.FacingDirection direction);
+    GameObject fire(Point2f position, GameObject.FacingDirection direction);
 }

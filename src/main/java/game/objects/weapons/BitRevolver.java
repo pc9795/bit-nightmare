@@ -3,7 +3,7 @@ package game.objects.weapons;
 import game.framework.Model;
 import game.objects.GameObject;
 import game.objects.weapons.bullets.BitRevolverBullet;
-import game.physics.Point3f;
+import game.physics.Point2f;
 import game.utils.Constants;
 
 import java.awt.*;
@@ -17,7 +17,7 @@ public class BitRevolver extends GameObject implements Weapon {
     private static final int DEFAULT_WIDTH = 32;
     private static final int DEFAULT_HEIGHT = 32;
 
-    public BitRevolver(int width, int height, Point3f centre) {
+    public BitRevolver(int width, int height, Point2f centre) {
         super(width, height, centre, GameObjectType.BIT_REVOLVER);
     }
 
@@ -38,7 +38,7 @@ public class BitRevolver extends GameObject implements Weapon {
     }
 
     @Override
-    public GameObject fire(Point3f centre, FacingDirection direction) {
+    public GameObject fire(Point2f centre, FacingDirection direction) {
         BitRevolverBullet bullet = new BitRevolverBullet(Constants.Bullet.BIT_REVOLVER_WIDTH, Constants.Bullet.BIT_REVOLVER_HEIGHT, centre.copy());
         bullet.setFacingDirection(direction);
         return bullet;

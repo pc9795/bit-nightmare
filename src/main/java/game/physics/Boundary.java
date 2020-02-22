@@ -11,36 +11,13 @@ public class Boundary {
     private float xMax;
     private float yMin;
     private float yMax;
-    private float zMin;
-    private float zMax;
 
     public Boundary(float xMax, float yMax) {
         //Minimums are set to 0 by default.
+        this.xMin = 0;
+        this.yMin = 0;
         this.xMax = xMax;
         this.yMax = yMax;
-    }
-
-    public Boundary(float xMax, float yMax, float zMax) {
-        //Minimums are set to 0 by default.
-        this.xMax = xMax;
-        this.yMax = yMax;
-        this.zMax = zMax;
-    }
-
-    public Boundary(float xMin, float xMax, float yMin, float yMax) {
-        this.xMin = xMin;
-        this.xMax = xMax;
-        this.yMin = yMin;
-        this.yMax = yMax;
-    }
-
-    public Boundary(float xMin, float xMax, float yMin, float yMax, float zMin, float zMax) {
-        this.xMin = xMin;
-        this.xMax = xMax;
-        this.yMin = yMin;
-        this.yMax = yMax;
-        this.zMin = zMin;
-        this.zMax = zMax;
     }
 
     public float getxMin() {
@@ -51,20 +28,12 @@ public class Boundary {
         return xMax;
     }
 
-    public float getyMin() {
+    float getyMin() {
         return yMin;
     }
 
     public float getyMax() {
         return yMax;
-    }
-
-    public float getzMin() {
-        return zMin;
-    }
-
-    public float getzMax() {
-        return zMax;
     }
 
     @Override
@@ -74,8 +43,6 @@ public class Boundary {
                 ", xMax=" + xMax +
                 ", yMin=" + yMin +
                 ", yMax=" + yMax +
-                ", zMin=" + zMin +
-                ", zMax=" + zMax +
                 '}';
     }
 }

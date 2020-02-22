@@ -1,8 +1,8 @@
 package game.objects;
 
 import game.framework.Model;
-import game.physics.Point3f;
-import game.physics.Vector3f;
+import game.physics.Point2f;
+import game.physics.Vector2f;
 import game.utils.Constants;
 
 import java.awt.*;
@@ -44,24 +44,24 @@ public abstract class GameObject {
 
     public static final float DEFAULT_GRAVITY = 0.1f;
     //Centre of object, using 3D as objects may be scaled
-    protected Point3f centre;
+    protected Point2f centre;
     protected int width, height;
     protected boolean hasTextured;
     protected String textureLocation;
-    protected Vector3f velocity = new Vector3f(0, 0, 0);
+    protected Vector2f velocity = new Vector2f(0, 0, 0);
     protected GameObjectType type;
     protected boolean jumping, falling;
     protected FacingDirection facingDirection = FacingDirection.RIGHT;
     protected float gravity = 0f;
 
-    public GameObject(int width, int height, Point3f centre, GameObjectType type) {
+    public GameObject(int width, int height, Point2f centre, GameObjectType type) {
         this.width = width;
         this.height = height;
         this.centre = centre;
         this.type = type;
     }
 
-    public GameObject(String textureLocation, int width, int height, Point3f centre, GameObjectType type) {
+    public GameObject(String textureLocation, int width, int height, Point2f centre, GameObjectType type) {
         this.hasTextured = true;
         this.textureLocation = textureLocation;
         this.width = width;
@@ -70,11 +70,11 @@ public abstract class GameObject {
         this.type = type;
     }
 
-    public Point3f getCentre() {
+    public Point2f getCentre() {
         return centre;
     }
 
-    public void setCentre(Point3f centre) {
+    public void setCentre(Point2f centre) {
         this.centre = centre;
     }
 
@@ -121,11 +121,11 @@ public abstract class GameObject {
         return Constants.Sprite.BLANK;
     }
 
-    public Vector3f getVelocity() {
+    public Vector2f getVelocity() {
         return velocity;
     }
 
-    public void setVelocity(Vector3f velocity) {
+    public void setVelocity(Vector2f velocity) {
         this.velocity = velocity;
     }
 

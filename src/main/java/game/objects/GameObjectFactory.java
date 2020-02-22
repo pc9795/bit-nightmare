@@ -7,7 +7,7 @@ import game.objects.environment.HidingBlock;
 import game.objects.weapons.BitArrayGun;
 import game.objects.weapons.BitMatrixBlast;
 import game.objects.weapons.BitRevolver;
-import game.physics.Point3f;
+import game.physics.Point2f;
 
 /**
  * Created By: Prashant Chaubey
@@ -15,7 +15,7 @@ import game.physics.Point3f;
  * Purpose: TODO:
  **/
 public final class GameObjectFactory {
-    public static GameObject getGameObject(GameObject.GameObjectType type, int width, int height, Point3f centre) {
+    public static GameObject getGameObject(GameObject.GameObjectType type, int width, int height, Point2f centre) {
         switch (type) {
             case BOSS1:
                 return new Boss1(width, height, centre);

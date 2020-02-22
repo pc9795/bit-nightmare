@@ -5,7 +5,7 @@ import game.objects.GameObject;
 import game.objects.colliders.FineGrainedCollider;
 import game.objects.properties.Healthy;
 import game.objects.weapons.bullets.BitRevolverBullet;
-import game.physics.Point3f;
+import game.physics.Point2f;
 import game.utils.Constants;
 
 import java.awt.*;
@@ -29,7 +29,7 @@ public class Enemy2 extends GameObject implements FineGrainedCollider, Healthy {
     private int los;
     private float bulletFreqInSec;
 
-    public Enemy2(int width, int height, Point3f centre) {
+    public Enemy2(int width, int height, Point2f centre) {
         super(width, height, centre, GameObjectType.ENEMY2);
         gravity = DEFAULT_GRAVITY;
         falling = true;

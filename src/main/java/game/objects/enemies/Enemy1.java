@@ -4,7 +4,7 @@ import game.framework.Model;
 import game.objects.GameObject;
 import game.objects.colliders.FineGrainedCollider;
 import game.objects.properties.Healthy;
-import game.physics.Point3f;
+import game.physics.Point2f;
 
 import java.awt.*;
 import java.util.List;
@@ -24,7 +24,7 @@ public class Enemy1 extends GameObject implements FineGrainedCollider, Healthy {
     private int los;
     private float speedX;
 
-    public Enemy1(int width, int height, Point3f centre) {
+    public Enemy1(int width, int height, Point2f centre) {
         super(width, height, centre, GameObjectType.ENEMY1);
         gravity = DEFAULT_GRAVITY;
         falling = true;

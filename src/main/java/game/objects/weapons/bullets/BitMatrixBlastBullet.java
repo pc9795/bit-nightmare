@@ -4,8 +4,7 @@ import game.framework.Model;
 import game.objects.GameObject;
 import game.objects.colliders.BulletCollider;
 import game.objects.properties.Healthy;
-import game.physics.Point3f;
-import game.utils.Constants;
+import game.physics.Point2f;
 
 import java.awt.*;
 
@@ -21,13 +20,13 @@ public class BitMatrixBlastBullet extends GameObject implements BulletCollider {
     private boolean isFiredByPlayer;
     private float speedX;
 
-    public BitMatrixBlastBullet(int width, int height, Point3f centre) {
+    public BitMatrixBlastBullet(int width, int height, Point2f centre) {
         super(width, height, centre, GameObjectType.BIT_MATRIX_BLAST_BULLET);
         this.isFiredByPlayer = true;
         speedX = DEFAULT_SPEED_X;
     }
 
-    public BitMatrixBlastBullet(int width, int height, Point3f centre, boolean isFiredByPlayer) {
+    public BitMatrixBlastBullet(int width, int height, Point2f centre, boolean isFiredByPlayer) {
         super(width, height, centre, GameObjectType.BIT_REVOLVER_BULLET);
         this.isFiredByPlayer = isFiredByPlayer;
     }

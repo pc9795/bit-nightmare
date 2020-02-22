@@ -7,7 +7,7 @@ import game.objects.GameObjectFactory;
 import game.objects.Player;
 import game.objects.weapons.Weapon;
 import game.physics.Boundary;
-import game.physics.Point3f;
+import game.physics.Point2f;
 import game.physics.QuadTree;
 import game.utils.Constants;
 import game.utils.levelloader.Level;
@@ -60,7 +60,7 @@ public class Model {
     private List<GameObject> collectibles;
     private List<GameObject> bullets;
     private List<String> levels;
-    private Point3f lastCheckpoint;
+    private Point2f lastCheckpoint;
     private Boundary levelBoundary;
     private String currentLevel;
 
@@ -71,7 +71,7 @@ public class Model {
         this.collectibles = new CopyOnWriteArrayList<>();
         //It will not be modified therefore ArrayList
         this.levels = new ArrayList<>();
-        this.environmentQuadTree = new QuadTree(0, new Rectangle(width, height));
+        this.environmentQuadTree = new QuadTree(new Rectangle(width, height));
         this.movableEnvironment = new ArrayList<>();
         this.bullets = new CopyOnWriteArrayList<>();
         this.levelBoundary = new Boundary(width, height);
@@ -113,11 +113,11 @@ public class Model {
         return collectibles;
     }
 
-    public Point3f getLastCheckpoint() {
+    public Point2f getLastCheckpoint() {
         return lastCheckpoint;
     }
 
-    public void setLastCheckpoint(Point3f lastCheckpoint) {
+    public void setLastCheckpoint(Point2f lastCheckpoint) {
         this.lastCheckpoint = lastCheckpoint;
     }
 
@@ -140,7 +140,7 @@ public class Model {
         currentLevel = levelName;
     }
 
-    private void loadLevel(String levelName, Point3f lastCheckpoint) throws IOException {
+    private void loadLevel(String levelName, Point2f lastCheckpoint) throws IOException {
         clean();
         Level level = LevelLoader.getInstance().loadLevel(levelName);
         loadLevelUtil(level);
@@ -156,7 +156,7 @@ public class Model {
 
         for (LevelObject object : level.getLevelObjects()) {
             GameObject.GameObjectType type = GameObject.GameObjectType.valueOf(object.getType());
-            Point3f center = new Point3f(object.getCentre().getX() * Constants.Level.PIXEL_TO_WIDTH_RATIO,
+            Point2f center = new Point2f(object.getCentre().getX() * Constants.Level.PIXEL_TO_WIDTH_RATIO,
                     object.getCentre().getY() * Constants.Level.PIXEL_TO_WIDTH_RATIO, levelBoundary);
             GameObject gameObject = GameObjectFactory.getGameObject(type, object.getWidth(), object.getHeight(), center);
             addGameObject(gameObject);

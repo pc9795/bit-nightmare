@@ -2,7 +2,7 @@ package game.objects.environment;
 
 import game.framework.Model;
 import game.objects.GameObject;
-import game.physics.Point3f;
+import game.physics.Point2f;
 
 import java.awt.*;
 
@@ -15,7 +15,7 @@ public class ChangeLevel extends GameObject {
     private static final int DEFAULT_WIDTH = 16;
     private static final int DEFAULT_HEIGHT = 64;
 
-    public ChangeLevel(int width, int height, Point3f centre) {
+    public ChangeLevel(int width, int height, Point2f centre) {
         super(width, height, centre, GameObjectType.CHANGE_LEVEL);
     }
 

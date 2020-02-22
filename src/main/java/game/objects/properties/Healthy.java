@@ -1,6 +1,6 @@
 package game.objects.properties;
 
-import game.physics.Point3f;
+import game.physics.Point2f;
 
 import java.awt.*;
 
@@ -10,7 +10,7 @@ import java.awt.*;
  * Purpose: TODO:
  **/
 public interface Healthy {
-    default void showHealth(Point3f centre, int health, Graphics g) {
+    default void showHealth(Point2f centre, int health, Graphics g) {
         g.setColor(Color.GREEN);
         //todo Make configurable
         g.fillRect((int) centre.getX(), (int) centre.getY() - 10, (int) (health * 0.3), 5);

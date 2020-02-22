@@ -6,7 +6,7 @@ import game.objects.colliders.FineGrainedCollider;
 import game.objects.properties.Healthy;
 import game.objects.weapons.bullets.BitArrayGunBullet;
 import game.objects.weapons.bullets.BitMatrixBlastBullet;
-import game.physics.Point3f;
+import game.physics.Point2f;
 import game.utils.Constants;
 
 import java.awt.*;
@@ -35,7 +35,7 @@ public class Boss1 extends GameObject implements Healthy, FineGrainedCollider {
     private float bulletFreqInSec;
     private float speedX;
 
-    public Boss1(int width, int height, Point3f centre) {
+    public Boss1(int width, int height, Point2f centre) {
         super(width, height, centre, GameObjectType.BOSS1);
         gravity = DEFAULT_GRAVITY;
         falling = true;
@@ -105,12 +105,12 @@ public class Boss1 extends GameObject implements Healthy, FineGrainedCollider {
                     } else {
                         BitArrayGunBullet bullet = new BitArrayGunBullet(Constants.Bullet.BIT_ARRAY_GUN_WIDTH,
                                 Constants.Bullet.BIT_ARRAY_GUN_HEIGHT,
-                                new Point3f(centre.getX(), centre.getY(), centre.getBoundary()), false);
+                                new Point2f(centre.getX(), centre.getY(), centre.getBoundary()), false);
                         bullet.setFacingDirection(facingDirection);
                         model.getBullets().add(bullet);
 
                         bullet = new BitArrayGunBullet(Constants.Bullet.BIT_ARRAY_GUN_WIDTH, Constants.Bullet.BIT_ARRAY_GUN_HEIGHT,
-                                new Point3f(centre.getX(), centre.getY() + (height / 2), centre.getBoundary()), false);
+                                new Point2f(centre.getX(), centre.getY() + (height / 2), centre.getBoundary()), false);
                         bullet.setFacingDirection(facingDirection);
                         model.getBullets().add(bullet);
                     }

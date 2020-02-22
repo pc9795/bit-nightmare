@@ -3,8 +3,7 @@ package game.objects.weapons.bullets;
 import game.framework.Model;
 import game.objects.GameObject;
 import game.objects.properties.Healthy;
-import game.physics.Point3f;
-import game.utils.Constants;
+import game.physics.Point2f;
 
 import java.awt.*;
 import java.util.List;
@@ -23,14 +22,14 @@ public class BitArrayGunBullet extends GameObject {
     private int count;
     private float speedX;
 
-    public BitArrayGunBullet(int width, int height, Point3f centre) {
+    public BitArrayGunBullet(int width, int height, Point2f centre) {
         super(width, height, centre, GameObjectType.BIT_ARRAY_GUN_BULLET);
         isFiredByPlayer = true;
         count = DEFAULT_COUNT;
         speedX = DEFAULT_SPEED_X;
     }
 
-    public BitArrayGunBullet(int width, int height, Point3f centre, boolean isFiredByPlayer) {
+    public BitArrayGunBullet(int width, int height, Point2f centre, boolean isFiredByPlayer) {
         super(width, height, centre, GameObjectType.BIT_REVOLVER_BULLET);
         this.isFiredByPlayer = isFiredByPlayer;
         count = DEFAULT_COUNT;

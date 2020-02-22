@@ -2,7 +2,7 @@ package game.objects.environment;
 
 import game.framework.Model;
 import game.objects.GameObject;
-import game.physics.Point3f;
+import game.physics.Point2f;
 
 import java.awt.*;
 
@@ -21,7 +21,7 @@ public class HidingBlock extends GameObject {
     private boolean hidden;
     private int hidingTimeInSec;
 
-    public HidingBlock(int width, int height, Point3f centre) {
+    public HidingBlock(int width, int height, Point2f centre) {
         super(width, height, centre, GameObjectType.HIDING_BLOCK);
         hidingTimeInSec = DEFAULT_HIDING_TIME_IN_SEC;
     }
