@@ -1,5 +1,10 @@
+# Intellij related
 .idea/
 *.iml
 target/
+
+# Eclipse related
 bin/
+
+# Word related
 ~$*.docx
