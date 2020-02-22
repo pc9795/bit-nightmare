@@ -12,6 +12,9 @@ import java.awt.*;
  * Purpose: TODO:
  **/
 public class EndGame extends GameObject {
+    private static final int DEFAULT_WIDTH = 16;
+    private static final int DEFAULT_HEIGHT = 64;
+
     public EndGame(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.END_GAME);
     }

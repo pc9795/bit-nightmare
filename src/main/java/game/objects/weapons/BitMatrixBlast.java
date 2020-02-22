@@ -14,6 +14,9 @@ import java.awt.*;
  * Purpose: TODO:
  **/
 public class BitMatrixBlast extends GameObject implements Weapon {
+    private static final int DEFAULT_WIDTH = 32;
+    private static final int DEFAULT_HEIGHT = 32;
+
     public BitMatrixBlast(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.BIT_MATRIX_BLAST);
     }

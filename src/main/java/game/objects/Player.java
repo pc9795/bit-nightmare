@@ -19,6 +19,8 @@ import java.util.List;
  * Purpose: TODO:
  **/
 public class Player extends GameObject implements FineGrainedCollider, Healthy {
+    private static final int DEFAULT_WIDTH = 32;
+    private static final int DEFAULT_HEIGHT = 64;
     //The weapon at the front is the primary weapon.
     private List<Weapon> weapons;
     private int currentWeaponIndex;

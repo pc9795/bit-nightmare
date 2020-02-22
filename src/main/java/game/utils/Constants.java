@@ -16,7 +16,7 @@ public final class Constants {
     public static final int HEIGHT = 768;
     public static final int BUFFER_COUNT = 3;
     public static final int LEVEL_PIXEL_TO_WIDTH_RATIO = 32;
-    public static final String LEVEL_NAMES_FILE = "/levelnames.txt";
+    public static final String LEVEL_NAMES_FILE = "/level_names.txt";
     public static final String LEVEL_PROPERTIES_FORMAT = "/levels/%s.properties";
     public static final String LEVEL_PNG_FORMAT = "/levels/%s.png";
     public static final float GRAVITY = 0.1f;
@@ -71,7 +71,7 @@ public final class Constants {
         private Sprite() {
         }
 
-        public static final String BLANK = "blankSprite.png";
+        public static final String BLANK = "blank_sprite.png";
 
     }
 }

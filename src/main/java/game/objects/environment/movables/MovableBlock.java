@@ -15,6 +15,8 @@ import java.util.List;
  * Purpose: TODO:
  **/
 public class MovableBlock extends GameObject implements FineGrainedCollider {
+    private static final int DEFAULT_WIDTH = 32;
+    private static final int DEFAULT_HEIGHT = 32;
     private boolean touchingPlayer;
     private Point3f lastPosition;
 

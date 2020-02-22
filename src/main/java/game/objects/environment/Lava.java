@@ -12,6 +12,9 @@ import java.awt.*;
  * Purpose: TODO:
  **/
 public class Lava extends GameObject {
+    private static final int DEFAULT_WIDTH = 32;
+    private static final int DEFAULT_HEIGHT = 32;
+
     public Lava(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.LAVA);
     }

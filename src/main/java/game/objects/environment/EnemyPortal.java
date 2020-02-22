@@ -19,6 +19,8 @@ import java.util.Random;
  * Purpose: TODO:
  **/
 public class EnemyPortal extends GameObject {
+    private static final int DEFAULT_WIDTH = 64;
+    private static final int DEFAULT_HEIGHT = 64;
     private List<GameObjectType> enemyTypes;
     private long lastBeingSpawned;
     private Random random = new Random();

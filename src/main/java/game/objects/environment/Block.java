@@ -12,6 +12,9 @@ import java.awt.*;
  * Purpose: TODO:
  **/
 public class Block extends GameObject {
+    private static final int DEFAULT_WIDTH = 32;
+    private static final int DEFAULT_HEIGHT = 32;
+
     public Block(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.BLOCK);
     }

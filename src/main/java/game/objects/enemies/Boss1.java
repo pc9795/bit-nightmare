@@ -19,6 +19,8 @@ import java.util.Random;
  * Purpose: TODO:
  **/
 public class Boss1 extends GameObject implements Healthy, FineGrainedCollider {
+    private static final int DEFAULT_WIDTH = 32;
+    private static final int DEFAULT_HEIGHT = 64;
     private int health = 100;
     private Random random = new Random();
     private long lastFiredBullet = System.currentTimeMillis();

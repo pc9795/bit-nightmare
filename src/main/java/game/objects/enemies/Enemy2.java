@@ -18,6 +18,8 @@ import java.util.Random;
  * Purpose: TODO:
  **/
 public class Enemy2 extends GameObject implements FineGrainedCollider, Healthy {
+    private static final int DEFAULT_WIDTH = 32;
+    private static final int DEFAULT_HEIGHT = 64;
     private int health = 100;
     private boolean ducking;
     private Random random = new Random();

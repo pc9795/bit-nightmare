@@ -15,6 +15,8 @@ import java.util.List;
  * Purpose: TODO:
  **/
 public class BitArrayGunBullet extends GameObject {
+    private static final int DEFAULT_WIDTH = 32;
+    private static final int DEFAULT_HEIGHT = 64;
     private boolean isFiredByPlayer;
     private int count;
 

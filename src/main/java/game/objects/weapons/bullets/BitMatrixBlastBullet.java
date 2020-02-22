@@ -15,6 +15,8 @@ import java.awt.*;
  * Purpose: TODO:
  **/
 public class BitMatrixBlastBullet extends GameObject implements BulletCollider {
+    private static final int DEFAULT_WIDTH = 32;
+    private static final int DEFAULT_HEIGHT = 64;
     private boolean isFiredByPlayer;
 
     public BitMatrixBlastBullet(int width, int height, Point3f centre) {

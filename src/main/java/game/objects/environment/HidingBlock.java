@@ -14,6 +14,8 @@ import static game.utils.Constants.HIDING_BLOCK_HIDING_TIME_IN_SEC;
  * Purpose: TODO:
  **/
 public class HidingBlock extends GameObject {
+    private static final int DEFAULT_WIDTH = 32;
+    private static final int DEFAULT_HEIGHT = 32;
     private boolean touchingPlayer;
     private long lastHiddenTime;
     private boolean hidden;

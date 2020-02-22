@@ -16,6 +16,8 @@ import java.util.List;
  * Purpose: TODO:
  **/
 public class Enemy1 extends GameObject implements FineGrainedCollider, Healthy {
+    private static final int DEFAULT_WIDTH = 32;
+    private static final int DEFAULT_HEIGHT = 32;
     private boolean playerDetected;
     private int health = 100;
 

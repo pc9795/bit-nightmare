@@ -52,6 +52,7 @@ public class GamepadControllerTest {
                 BufferStrategy bs = testCanvas.getBufferStrategy();
                 GamepadController controller = GamepadController.getInstance();
                 while (running) {
+                    controller.poll();
                     Graphics g = bs.getDrawGraphics();
                     g.clearRect(0, 0, testCanvas.getWidth(), testCanvas.getHeight());
                     g.setFont(new Font("Courier New", Font.BOLD, 20));
