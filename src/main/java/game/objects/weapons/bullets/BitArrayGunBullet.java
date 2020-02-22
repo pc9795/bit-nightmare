@@ -94,7 +94,7 @@ public class BitArrayGunBullet extends GameObject {
                 case ENEMY3:
                     //todo make it configurable
                     if (isFiredByPlayer && obj.getBounds().intersects(getBounds())) {
-                        ((Healthy) obj).damageHealth(10);
+                        ((Healthy) obj).damageHealth(100);
                         if (facingDirection == FacingDirection.RIGHT) {
                             centre.setX(centre.getX() + width);
                         }

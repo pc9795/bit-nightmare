@@ -133,6 +133,7 @@ public abstract class GameObject {
 
     public abstract void render(Graphics g);
 
+    //todo rename this method; like - sense()
     public abstract void collision(Model model);
 
     /**
