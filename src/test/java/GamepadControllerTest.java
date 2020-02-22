@@ -8,18 +8,23 @@ import java.awt.image.BufferStrategy;
 /**
  * Created By: Prashant Chaubey
  * Created On: 18-02-2020 18:07
- * Purpose: TODO:
  **/
 public class GamepadControllerTest {
+    /**
+     * It is more of an integration test to check game-pad controller. I didn't wrote much documentation about how frame is
+     * displayed here. For more info refer to the `Game` class.
+     */
     @Test
-    public void testKeyboardControllerWorking() {
+    public void testKeyboardControllerWorking() throws InterruptedException {
         JFrame testFrame = new JFrame("Gamepad Test");
         Canvas testCanvas = new Canvas();
         testCanvas.setPreferredSize(new Dimension(1000, 500));
         testCanvas.setBackground(Color.WHITE);
+
+        //Game-pad thread
         GamepadController.getInstance().setDetecting(true);
-        //Gamepad thread
         new Thread(GamepadController.getInstance()).start();
+
         testCanvas.setIgnoreRepaint(true);
         testFrame.getContentPane().add(testCanvas);
         testFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -28,7 +33,8 @@ public class GamepadControllerTest {
         testFrame.setVisible(true);
         testFrame.setIgnoreRepaint(true);
 
-        new Thread(new Runnable() {
+        //Starting a new thread to render the screen.
+        Thread thread = new Thread(new Runnable() {
             boolean running;
 
             @Override
@@ -38,6 +44,9 @@ public class GamepadControllerTest {
                 printGamepadControllerStatus();
             }
 
+            /**
+             * Method of interest
+             */
             private void printGamepadControllerStatus() {
                 testCanvas.requestFocus();
                 BufferStrategy bs = testCanvas.getBufferStrategy();
@@ -65,14 +74,14 @@ public class GamepadControllerTest {
                     g.drawString(String.format("Left Pressed: %s", controller.isLeftPressed()), 5, initialTextPos);
                     initialTextPos += fontHeight;
                     g.drawString(String.format("Start Pressed: %s", controller.isStartPressed()), 5, initialTextPos);
+
                     g.dispose();
                     bs.show();
                 }
             }
-        }).start();
+        });
 
-        while (true) {
-            //Stops frame from closing
-        }
+        thread.start();
+        thread.join();
     }
 }

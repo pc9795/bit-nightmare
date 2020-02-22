@@ -8,16 +8,22 @@ import java.awt.image.BufferStrategy;
 /**
  * Created By: Prashant Chaubey
  * Created On: 18-02-2020 15:01
- * Purpose: TODO:
  **/
 public class KeyboardControllerTest {
+    /**
+     * It is more of an integration test to check keypad controller. I didn't wrote much documentation about how frame is
+     * displayed here. For more info refer to the `Game` class.
+     */
     @Test
-    public void testKeyboardControllerWorking() {
+    public void testKeyboardControllerWorking() throws InterruptedException {
         JFrame testFrame = new JFrame("Keyboard Test");
         Canvas testCanvas = new Canvas();
         testCanvas.setPreferredSize(new Dimension(1000, 500));
         testCanvas.setBackground(Color.WHITE);
+
+        //Adding listeners
         testCanvas.addKeyListener(KeyboardController.getInstance());
+
         testCanvas.setIgnoreRepaint(true);
         testFrame.getContentPane().add(testCanvas);
         testFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -26,7 +32,8 @@ public class KeyboardControllerTest {
         testFrame.setVisible(true);
         testFrame.setIgnoreRepaint(true);
 
-        new Thread(new Runnable() {
+        //Starting a new thread to render the screen.
+        Thread thread = new Thread(new Runnable() {
             boolean running;
 
             @Override
@@ -36,6 +43,9 @@ public class KeyboardControllerTest {
                 printKeyboardControllerStats();
             }
 
+            /**
+             * Method of interest
+             */
             private void printKeyboardControllerStats() {
                 testCanvas.requestFocus();
                 BufferStrategy bs = testCanvas.getBufferStrategy();
@@ -64,14 +74,14 @@ public class KeyboardControllerTest {
                     g.drawString(String.format("Space Pressed: %s", controller.isSpacePressed()), 5, initialTextPos);
                     initialTextPos += fontHeight;
                     g.drawString(String.format("Escape Pressed: %s", controller.isEscPressed()), 5, initialTextPos);
+
                     g.dispose();
                     bs.show();
                 }
             }
-        }).start();
+        });
 
-        while (true) {
-            //Stops frame from closing
-        }
+        thread.start();
+        thread.join();
     }
 }
