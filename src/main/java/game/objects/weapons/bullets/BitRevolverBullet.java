@@ -46,6 +46,7 @@ public class BitRevolverBullet extends GameObject implements BulletCollider {
         }
         if (!isFiredByPlayer && model.getPlayer1().getBounds().intersects(getBounds())) {
             //todo make it configurable
+            //todo remove 100 damage for testing only.
             model.getPlayer1().damageHealth(10);
             model.getBullets().remove(this);
             return;
@@ -54,9 +55,10 @@ public class BitRevolverBullet extends GameObject implements BulletCollider {
             switch (obj.getType()) {
                 case ENEMY1:
                 case ENEMY2:
+                case ENEMY3:
                     //todo make it configurable
                     if (isFiredByPlayer && obj.getBounds().intersects(getBounds())) {
-                        ((Healthy) obj).damageHealth(10);
+                        ((Healthy) obj).damageHealth(100);
                         model.getBullets().remove(this);
                     }
             }

@@ -31,7 +31,7 @@ public class Enemy2 extends GameObject implements FineGrainedCollider, Healthy {
 
     @Override
     public void update() {
-        // 1 in 10 chance.
+        // 1 in 250 chance to duck fire.
         //todo make configurable
         if (random.nextInt(250) == 1) {
             if (ducking) {

@@ -34,6 +34,7 @@ public final class Constants {
         public static final float ENEMY1_VELX = 4f;
         public static final int ENEMY1_LOS = 300;
         public static final int ENEMY2_LOS = 600;
+        public static final int ENEMY3_LOS = 600;
         public static final float ENEMY2_BULLET_FREQ_IN_SEC = 1.5f;
         public static final float ENEMY3_BULLET_FREQ_IN_SEC = 1.5f;
         public static final float BOSS1_BULLET_FREQ_IN_SEC = 1.5f;

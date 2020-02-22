@@ -5,6 +5,7 @@ import game.framework.controllers.KeyboardController;
 import game.objects.GameObject;
 import game.objects.GameObjectFactory;
 import game.objects.Player;
+import game.objects.weapons.Weapon;
 import game.physics.Boundary;
 import game.physics.Point3f;
 import game.physics.QuadTree;
@@ -168,12 +169,11 @@ public class Model {
 
     private void clean() {
         enemies.clear();
-        //As QuadTree can't be initialized until player is found so it can be null for the first time.
-        if (environmentQuadTree != null) {
-            environmentQuadTree.clear();
-        }
+        environmentQuadTree.clear();
         environment.clear();
         collectibles.clear();
+        bullets.clear();
+        movableEnvironment.clear();
         player1 = null;
     }
 
@@ -183,8 +183,17 @@ public class Model {
     public void gameLogic() {
         //Less than 0 for weird off by one error.
         if (player1.getHealth() <= 0) {
+            //todo saving state; collectibles(ex - bit bot found, weapons)
+            //todo remove
+            boolean bitBotFound = player1.isBitBotFound();
+            List<Weapon> weapons = player1.getWeapons();
+            int currentWeaponIndex = player1.getCurrentWeaponIndex();
             try {
                 loadLevel(currentLevel, lastCheckpoint);
+                //todo remove
+                player1.setBitBotFound(bitBotFound);
+                player1.setWeapons(weapons);
+                player1.setCurrentWeaponIndex(currentWeaponIndex);
             } catch (IOException e) {
                 throw new RuntimeException(String.format("Error while loading checkpoing: %s on level: %s", lastCheckpoint, currentLevel));
             }

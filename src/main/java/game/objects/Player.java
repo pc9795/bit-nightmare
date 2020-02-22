@@ -23,7 +23,7 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
     private List<Weapon> weapons;
     private int currentWeaponIndex;
     private boolean ducking;
-    private int health = 100;
+    private int health = 200;
     private boolean bitBotFound;
     private long lastFiredBullet = System.currentTimeMillis();
 
@@ -58,6 +58,26 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
 
     public boolean isBitBotFound() {
         return bitBotFound;
+    }
+
+    public List<Weapon> getWeapons() {
+        return weapons;
+    }
+
+    public void setWeapons(List<Weapon> weapons) {
+        this.weapons = weapons;
+    }
+
+    public void setBitBotFound(boolean bitBotFound) {
+        this.bitBotFound = bitBotFound;
+    }
+
+    public int getCurrentWeaponIndex() {
+        return currentWeaponIndex;
+    }
+
+    public void setCurrentWeaponIndex(int currentWeaponIndex) {
+        this.currentWeaponIndex = currentWeaponIndex;
     }
 
     public int getHealth() {
