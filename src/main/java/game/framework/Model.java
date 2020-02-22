@@ -61,6 +61,7 @@ public class Model {
     private List<String> levels;
     private Point3f lastCheckpoint;
     private Boundary levelBoundary;
+    private String currentLevel;
 
     public Model(int width, int height) throws IOException, URISyntaxException {
         this.enemies = new CopyOnWriteArrayList<>();
@@ -88,7 +89,7 @@ public class Model {
         if (levels.size() == 0) {
             throw new RuntimeException("No levels to load");
         }
-        switchLevel(levels.get(0));
+        loadLevel(levels.get(0));
     }
 
     public Player getPlayer1() {
@@ -131,13 +132,22 @@ public class Model {
         return levelBoundary;
     }
 
-    private void switchLevel(String levelName) throws IOException {
+    private void loadLevel(String levelName) throws IOException {
         clean();
         Level level = LevelLoader.getInstance().loadLevel(levelName);
-        createLevel(level);
+        loadLevelUtil(level);
+        currentLevel = levelName;
     }
 
-    private void createLevel(Level level) {
+    private void loadLevel(String levelName, Point3f lastCheckpoint) throws IOException {
+        clean();
+        Level level = LevelLoader.getInstance().loadLevel(levelName);
+        loadLevelUtil(level);
+        currentLevel = levelName;
+        player1.setCentre(lastCheckpoint.copy());
+    }
+
+    private void loadLevelUtil(Level level) {
         levelBoundary = new Boundary(level.getMaxX() * Constants.LEVEL_PIXEL_TO_WIDTH_RATIO,
                 level.getMaxY() * Constants.LEVEL_PIXEL_TO_WIDTH_RATIO);
         // QuadTree is to be initialized by the new boundaries.
@@ -171,6 +181,14 @@ public class Model {
      * This is the heart of the game , where the model takes in all the inputs ,decides the outcomes and then changes the model accordingly.
      */
     public void gameLogic() {
+        //Less than 0 for weird off by one error.
+        if (player1.getHealth() <= 0) {
+            try {
+                loadLevel(currentLevel, lastCheckpoint);
+            } catch (IOException e) {
+                throw new RuntimeException(String.format("Error while loading checkpoing: %s on level: %s", lastCheckpoint, currentLevel));
+            }
+        }
         processInput();
         //Player
         player1.update();
@@ -184,6 +202,9 @@ public class Model {
         //Movable environment
         movableEnvironment.forEach(GameObject::update);
         movableEnvironment.forEach(object -> object.collision(this));
+        //Enemies
+        enemies.forEach(GameObject::update);
+        enemies.forEach(object -> object.collision(this));
     }
 
     /**

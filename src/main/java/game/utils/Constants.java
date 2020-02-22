@@ -27,6 +27,14 @@ public final class Constants {
     public static final int HIDING_BLOCK_HIDING_TIME_IN_SEC = 2;
     public static final int GAMEPAD_CONTROLLER_POLLING_WAIT_TIME_IN_MILLIS = 100;
 
+    public static final class Enemies {
+        private Enemies() {
+        }
+
+        public static final float ENEMY1_VELX = 4f;
+        public static final int ENEMY1_LOS = 300;
+    }
+
     public static final class Bullet {
         private Bullet() {
         }

@@ -1,6 +1,5 @@
 package game.objects;
 
-import game.framework.Game;
 import game.framework.Model;
 import game.objects.colliders.FineGrainedCollider;
 import game.objects.environment.HidingBlock;
@@ -60,6 +59,10 @@ public class Player extends GameObject implements FineGrainedCollider {
         return bitBotFound;
     }
 
+    public int getHealth() {
+        return health;
+    }
+
     @Override
     public void update() {
         //Movement
@@ -95,7 +98,6 @@ public class Player extends GameObject implements FineGrainedCollider {
     private void collisionWithEnvironment(Model model) {
         boolean[] collisions;
         boolean bottomCollision = false;
-        //This is set currently by a block object.
         List<GameObject> willCollide = model.getEnvironmentQuadTree().retrieve(this);
         for (GameObject env : willCollide) {
             Rectangle bounds = env.getBounds();
@@ -116,10 +118,9 @@ public class Player extends GameObject implements FineGrainedCollider {
                     }
                     break;
                 case LAVA:
-                    // If you touch it you will burn.
+                    // If you touch it, you will burn.
                     if (bounds.intersects(getBounds())) {
-                        centre = model.getLastCheckpoint().copy();
-                        health = 100;
+                        health = 0;
                     }
                     break;
                 case BLOCK:
@@ -140,7 +141,7 @@ public class Player extends GameObject implements FineGrainedCollider {
                     break;
             }
         }
-        //Right now movable environments are oscilating blocks and movable blocks
+        //Right now movable environment have only  movable blocks
         for (GameObject obj : model.getMovableEnvironment()) {
             switch (obj.type) {
                 case MOVABLE_BLOCK:
@@ -182,14 +183,14 @@ public class Player extends GameObject implements FineGrainedCollider {
         for (GameObject obj : model.getEnemies()) {
             switch (obj.type) {
                 case BOSS1:
-                case ENEMY1:
                 case ENEMY2:
                 case ENEMY3:
+                    break;
+                case ENEMY1:
                     //Don't touch me
-                    //if (obj.getBounds().intersects(getBounds())) {
-                    //    centre = model.getLastCheckpoint().copy();
-                    //    health = 100;
-                    //}
+                    if (obj.getBounds().intersects(getBounds())) {
+                        health = 0;
+                    }
                     break;
             }
         }

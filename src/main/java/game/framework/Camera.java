@@ -25,6 +25,7 @@ public class Camera {
     }
 
     public void update(GameObject object) {
-        point.x = (int) -(object.getCentre().getX() - 100);
+        //todo make configurable
+        point.x = (int) -(object.getCentre().getX() - 400);
     }
 }
