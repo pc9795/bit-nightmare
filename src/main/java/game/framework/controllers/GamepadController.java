@@ -1,9 +1,9 @@
 package game.framework.controllers;
 
+import game.utils.Constants;
 import net.java.games.input.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created By: Prashant Chaubey
@@ -13,6 +13,7 @@ import java.util.Map;
 public class GamepadController implements Runnable {
     private static final GamepadController INSTANCE = new GamepadController();
     private Map<String, Boolean> keys = new HashMap<>();
+    private Map<String, Integer> pollCount = new HashMap<>();
     private float xAxis;
     private Controller gamepad;
     private boolean detecting;
@@ -32,15 +33,28 @@ public class GamepadController implements Runnable {
     }
 
     private void init() {
-        keys.put(GamepadEvent.BUTTON_0, false);
-        keys.put(GamepadEvent.BUTTON_1, false);
-        keys.put(GamepadEvent.BUTTON_2, false);
-        keys.put(GamepadEvent.BUTTON_3, false);
-        keys.put(GamepadEvent.BUTTON_7, false);
+        // All the keys supported by the class must be entered in the map for one time. Else it can result in
+        // NullPointerException if we trying to access a non-existing key.
+        List<String> configuredButtons = Arrays.asList(GamepadEvent.BUTTON_0, GamepadEvent.BUTTON_1, GamepadEvent.BUTTON_2,
+                GamepadEvent.BUTTON_3, GamepadEvent.BUTTON_7);
+        for (String button : configuredButtons) {
+            keys.put(button, false);
+            pollCount.put(button, 0);
+        }
     }
 
     public static GamepadController getInstance() {
         return INSTANCE;
+    }
+
+    public void poll() {
+        for (String key : pollCount.keySet()) {
+            if (keys.get(key)) {
+                pollCount.put(key, pollCount.get(key) + 1);
+            } else {
+                pollCount.put(key, 0);
+            }
+        }
     }
 
     public boolean isDetecting() {
@@ -69,6 +83,17 @@ public class GamepadController implements Runnable {
                 }
                 keys.put(comp.getName(), event.getValue() == 1.0f);
             }
+            //Hoping the event queue mechanism of the queue will not let events to miss out.
+            sleep();
+        }
+    }
+
+    private void sleep() {
+        try {
+            Thread.sleep(Constants.GAMEPAD_CONTROLLER_POLLING_WAIT_TIME_IN_MILLIS);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
@@ -95,20 +120,37 @@ public class GamepadController implements Runnable {
     }
 
     public boolean isAPressed() {
-        return keys.get(GamepadEvent.BUTTON_0);
+        return pollCount.get(GamepadEvent.BUTTON_0) > 0;
     }
 
     public boolean isXPressed() {
-        return keys.get(GamepadEvent.BUTTON_1);
+        return pollCount.get(GamepadEvent.BUTTON_1) > 0;
     }
 
     public boolean isYPressed() {
-        return keys.get(GamepadEvent.BUTTON_2);
+        return pollCount.get(GamepadEvent.BUTTON_2) > 0;
     }
 
     public boolean isBPressed() {
-        return keys.get(GamepadEvent.BUTTON_3);
+        return pollCount.get(GamepadEvent.BUTTON_3) > 0;
     }
+
+    public boolean isAPressedOnce() {
+        return pollCount.get(GamepadEvent.BUTTON_0) == 1;
+    }
+
+    public boolean isXPressedOnce() {
+        return pollCount.get(GamepadEvent.BUTTON_1) == 1;
+    }
+
+    public boolean isYPressedOnce() {
+        return pollCount.get(GamepadEvent.BUTTON_2) == 1;
+    }
+
+    public boolean isBPressedOnce() {
+        return pollCount.get(GamepadEvent.BUTTON_3) == 1;
+    }
+
 
     public boolean isStartPressed() {
         return keys.get(GamepadEvent.BUTTON_7);

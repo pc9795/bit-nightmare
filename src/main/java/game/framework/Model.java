@@ -1,5 +1,6 @@
 package game.framework;
 
+import game.framework.controllers.GamepadController;
 import game.framework.controllers.KeyboardController;
 import game.objects.GameObject;
 import game.objects.GameObjectFactory;
@@ -192,13 +193,15 @@ public class Model {
      */
     private void processInput() {
         KeyboardController keyboardController = KeyboardController.getInstance();
+        GamepadController gamepadController = GamepadController.getInstance();
         keyboardController.poll();
+        gamepadController.poll();
 
         //Left and right
-        if (keyboardController.isAPressed()) {
+        if (keyboardController.isAPressed() || gamepadController.isLeftPressed()) {
             player1.getVelocity().setX(-Constants.PLAYER_VELOCITY_X);
             player1.setFacingDirection(GameObject.FacingDirection.LEFT);
-        } else if (keyboardController.isDPressed()) {
+        } else if (keyboardController.isDPressed() || gamepadController.isRightPressed()) {
             player1.getVelocity().setX(Constants.PLAYER_VELOCITY_X);
             player1.setFacingDirection(GameObject.FacingDirection.RIGHT);
         } else {
@@ -211,12 +214,13 @@ public class Model {
             player1.getVelocity().setX(0);
         }
         //Jump
-        if (keyboardController.isWPressedOnce() && !player1.isJumping() && player1.isBitBotFound()) {
+        if ((keyboardController.isWPressedOnce() || gamepadController.isAPressedOnce())
+                && !player1.isJumping() && player1.isBitBotFound()) {
             player1.getVelocity().setY(-Constants.PLAYER_VELOCITY_Y);
             player1.setJumping(true);
         }
         //Duck
-        if (keyboardController.isSPressedOnce()) {
+        if (keyboardController.isSPressedOnce() || gamepadController.isXPressedOnce()) {
             if (player1.isDucking()) {
                 player1.setHeight(player1.getHeight() * 2);
                 player1.setDucking(false);
@@ -227,11 +231,11 @@ public class Model {
             }
         }
         //Cycle weapon
-        if (keyboardController.isQPressedOnce()) {
+        if (keyboardController.isQPressedOnce() || gamepadController.isYPressedOnce()) {
             player1.cycleWeapon();
         }
         //Fire weapon
-        if (keyboardController.isSpacePressedOnce()) {
+        if (keyboardController.isSpacePressedOnce() || gamepadController.isBPressedOnce()) {
             GameObject bullet = player1.fireWeapon();
             if (bullet != null) {
                 bullets.add(bullet);

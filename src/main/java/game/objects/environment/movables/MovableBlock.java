@@ -37,7 +37,11 @@ public class MovableBlock extends GameObject implements FineGrainedCollider {
         if (falling) {
             velocity.setY(velocity.getY() + gravity);
         }
-        velocity.setX(Math.max(0, velocity.getX() - (velocity.getX() > 0 ? 1 : -1) * Constants.MOVABLE_BLOCK_FRICTION));
+        if (velocity.getX() > 0) {
+            velocity.setX(Math.max(0, velocity.getX() - Constants.MOVABLE_BLOCK_FRICTION));
+        } else if (velocity.getX() < 0) {
+            velocity.setX(Math.max(0, velocity.getX() + Constants.MOVABLE_BLOCK_FRICTION));
+        }
     }
 
     @Override

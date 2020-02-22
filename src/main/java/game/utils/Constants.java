@@ -25,6 +25,7 @@ public final class Constants {
     public static final float MOVABLE_BLOCK_VELOCITY_X = 4f;
     public static final float MOVABLE_BLOCK_FRICTION = 0.1f;
     public static final int HIDING_BLOCK_HIDING_TIME_IN_SEC = 2;
+    public static final int GAMEPAD_CONTROLLER_POLLING_WAIT_TIME_IN_MILLIS = 100;
 
     public static final class Bullet {
         private Bullet() {

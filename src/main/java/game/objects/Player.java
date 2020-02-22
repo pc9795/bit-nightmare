@@ -31,7 +31,7 @@ public class Player extends GameObject implements FineGrainedCollider {
         super(width, height, centre, GameObjectType.PLAYER);
 
         //todo remove
-        //this.centre = new Point3f(9540, 545, centre.getBoundary());
+        //this.centre = new Point3f(7715, 577, centre.getBoundary());
         //bitBotFound = true;
 
         gravity = Constants.GRAVITY;
