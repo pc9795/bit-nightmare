@@ -47,7 +47,7 @@ public class EnemyPortal extends GameObject {
         }
         //Detect player and attack
         int playerX = (int) model.getPlayer1().getCentre().getX();
-        if (Math.abs(centre.getX() - playerX) <= Constants.Enemies.ENEMY2_LOS) {
+        if (Math.abs(centre.getX() - playerX) <= Constants.Enemies.ENEMY_PORTAL_LOS) {
             if (playerX < centre.getX()) {
                 facingDirection = FacingDirection.LEFT;
             } else {

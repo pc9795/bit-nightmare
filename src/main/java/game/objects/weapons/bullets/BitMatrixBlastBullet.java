@@ -3,6 +3,7 @@ package game.objects.weapons.bullets;
 import game.framework.Model;
 import game.objects.GameObject;
 import game.objects.colliders.BulletCollider;
+import game.objects.properties.Healthy;
 import game.physics.Point3f;
 import game.utils.Constants;
 
@@ -14,10 +15,11 @@ import java.awt.*;
  * Purpose: TODO:
  **/
 public class BitMatrixBlastBullet extends GameObject implements BulletCollider {
-    boolean isFiredByPlayer;
+    private boolean isFiredByPlayer;
 
     public BitMatrixBlastBullet(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.BIT_MATRIX_BLAST_BULLET);
+        this.isFiredByPlayer = true;
     }
 
     public BitMatrixBlastBullet(int width, int height, Point3f centre, boolean isFiredByPlayer) {
@@ -39,6 +41,28 @@ public class BitMatrixBlastBullet extends GameObject implements BulletCollider {
 
     @Override
     public void collision(Model model) {
-        bulletCollision(model, this);
+        if (bulletCollision(model, this)) {
+            return;
+        }
+        if (!isFiredByPlayer && model.getPlayer1().getBounds().intersects(getBounds())) {
+            //todo make it configurable
+            //todo remove 100 damage for testing only.
+            model.getPlayer1().damageHealth(40);
+            model.getBullets().remove(this);
+            return;
+        }
+        for (GameObject obj : model.getEnemies()) {
+            switch (obj.getType()) {
+                case ENEMY1:
+                case ENEMY2:
+                case ENEMY3:
+                case BOSS1:
+                    //todo make it configurable
+                    if (isFiredByPlayer && obj.getBounds().intersects(getBounds())) {
+                        ((Healthy) obj).damageHealth(100);
+                        model.getBullets().remove(this);
+                    }
+            }
+        }
     }
 }

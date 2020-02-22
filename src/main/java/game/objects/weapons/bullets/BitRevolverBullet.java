@@ -15,7 +15,7 @@ import java.awt.*;
  * Purpose: TODO:
  **/
 public class BitRevolverBullet extends GameObject implements BulletCollider {
-    boolean isFiredByPlayer;
+    private boolean isFiredByPlayer;
 
     public BitRevolverBullet(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.BIT_REVOLVER_BULLET);
@@ -56,6 +56,7 @@ public class BitRevolverBullet extends GameObject implements BulletCollider {
                 case ENEMY1:
                 case ENEMY2:
                 case ENEMY3:
+                case BOSS1:
                     //todo make it configurable
                     if (isFiredByPlayer && obj.getBounds().intersects(getBounds())) {
                         ((Healthy) obj).damageHealth(100);

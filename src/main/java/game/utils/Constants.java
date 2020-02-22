@@ -37,11 +37,13 @@ public final class Constants {
         public static final int ENEMY3_LOS = 600;
         public static final int ENEMY_PORTAL_LOS = 400;
         public static final int ENEMY_PORTAL_RANGE = 300;
+        public static final int BOSS1_LOS = 500;
         public static final float ENEMY_PORTAL_SPAWN_FREQ_IN_SEC = 1f;
         public static final float ENEMY2_BULLET_FREQ_IN_SEC = 1.5f;
         public static final float ENEMY3_BULLET_FREQ_IN_SEC = 1.5f;
         public static final float BOSS1_BULLET_FREQ_IN_SEC = 1.5f;
-        ;
+        public static final float BOSS1_VELX = 5f;
+        public static final float BOSS1_CHARGE_DURATION_IN_SEC = 2f;
     }
 
     public static final class Bullet {

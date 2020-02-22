@@ -15,8 +15,8 @@ import java.util.List;
  * Purpose: TODO:
  **/
 public class BitArrayGunBullet extends GameObject {
-    boolean isFiredByPlayer;
-    int count;
+    private boolean isFiredByPlayer;
+    private int count;
 
     public BitArrayGunBullet(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.BIT_ARRAY_GUN_BULLET);
@@ -92,6 +92,7 @@ public class BitArrayGunBullet extends GameObject {
                 case ENEMY1:
                 case ENEMY2:
                 case ENEMY3:
+                case BOSS1:
                     //todo make it configurable
                     if (isFiredByPlayer && obj.getBounds().intersects(getBounds())) {
                         ((Healthy) obj).damageHealth(100);
