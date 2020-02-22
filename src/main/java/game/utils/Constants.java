@@ -22,8 +22,9 @@ public final class Constants {
     public static final float GRAVITY = 0.1f;
     public static final float PLAYER_VELOCITY_X = 3f;
     public static final float PLAYER_VELOCITY_Y = 5f;
-    public static final float MOVABLE_BLOCK_VELOCITY_X = 3f;
-    public static final float MOVABLE_BLOCK_FRICTION = 0.2f;
+    public static final float MOVABLE_BLOCK_VELOCITY_X = 4f;
+    public static final float MOVABLE_BLOCK_FRICTION = 0.1f;
+    public static final int HIDING_BLOCK_HIDING_TIME_IN_SEC = 2;
 
     public static final class Bullet {
         private Bullet() {

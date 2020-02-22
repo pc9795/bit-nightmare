@@ -177,6 +177,9 @@ public class Model {
         //Bullets
         bullets.forEach(GameObject::update);
         bullets.forEach(object -> object.collision(this));
+        //Environment
+        environment.forEach(GameObject::update);
+        environment.forEach(object -> object.collision(this));
         //Movable environment
         movableEnvironment.forEach(GameObject::update);
         movableEnvironment.forEach(object -> object.collision(this));
@@ -254,11 +257,11 @@ public class Model {
             case LAVA:
             case CHANGE_LEVEL:
             case CHECKPOINT:
+            case HIDING_BLOCK:
                 environment.add(object);
                 environmentQuadTree.insert(object);
                 break;
             case MOVABLE_BLOCK:
-            case OSCILLATING_BLOCK:
                 movableEnvironment.add(object);
                 break;
             case BIT_ARRAY_GUN:

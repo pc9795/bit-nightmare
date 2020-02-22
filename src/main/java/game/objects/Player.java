@@ -1,7 +1,9 @@
 package game.objects;
 
+import game.framework.Game;
 import game.framework.Model;
 import game.objects.colliders.FineGrainedCollider;
+import game.objects.environment.HidingBlock;
 import game.objects.environment.movables.MovableBlock;
 import game.objects.weapons.Weapon;
 import game.physics.Point3f;
@@ -29,8 +31,8 @@ public class Player extends GameObject implements FineGrainedCollider {
         super(width, height, centre, GameObjectType.PLAYER);
 
         //todo remove
-        this.centre = new Point3f(8000, 577, centre.getBoundary());
-        bitBotFound = true;
+        //this.centre = new Point3f(9540, 545, centre.getBoundary());
+        //bitBotFound = true;
 
         gravity = Constants.GRAVITY;
         falling = true;
@@ -87,6 +89,7 @@ public class Player extends GameObject implements FineGrainedCollider {
     public void collision(Model model) {
         collisionWithEnvironment(model);
         collisionWithCollectibles(model);
+        collisionWithEnemies(model);
     }
 
     private void collisionWithEnvironment(Model model) {
@@ -96,47 +99,58 @@ public class Player extends GameObject implements FineGrainedCollider {
         List<GameObject> willCollide = model.getEnvironmentQuadTree().retrieve(this);
         for (GameObject env : willCollide) {
             Rectangle bounds = env.getBounds();
-            if (env.type != GameObjectType.BLOCK && !bounds.intersects(getBounds())) {
-                continue;
-            }
-            // Changing level
-            if (env.type == GameObjectType.CHANGE_LEVEL) {
-                //todo change level logic
-                continue;
-            }
-            //Ending the game
-            if (env.type == GameObjectType.END_GAME) {
-                //todo end game logic
-                continue;
-            }
-            // Saving last checkpoint
-            //todo can add additional equality check that same check point is not saved every time. not important though
-            if (env.type == GameObjectType.CHECKPOINT) {
-                model.setLastCheckpoint(env.getCentre().copy());
-                continue;
-            }
-            // If you touch it you will burn.
-            if (env.type == GameObjectType.LAVA) {
-                centre = model.getLastCheckpoint().copy();
-                health = 100;
-                continue;
-            }
-            if (env.type == GameObjectType.BLOCK) {
-                collisions = fineGrainedCollision(this, env);
-                if (collisions[FineGrainedCollider.BOTTOM]) {
-                    bottomCollision = true;
-                }
+            switch (env.type) {
+                case CHANGE_LEVEL:
+                    // Changing level
+                    //todo change level logic
+                    break;
+                case END_GAME:
+                    //Ending the game
+                    //todo end game logic
+                    break;
+                case CHECKPOINT:
+                    // Saving last checkpoint
+                    //todo can add additional equality check that same check point is not saved every time. not important though
+                    if (bounds.intersects(getBounds())) {
+                        model.setLastCheckpoint(env.getCentre().copy());
+                    }
+                    break;
+                case LAVA:
+                    // If you touch it you will burn.
+                    if (bounds.intersects(getBounds())) {
+                        centre = model.getLastCheckpoint().copy();
+                        health = 100;
+                    }
+                    break;
+                case BLOCK:
+                case ENEMY_PORTAL:
+                    collisions = fineGrainedCollision(this, env);
+                    if (collisions[FineGrainedCollider.BOTTOM]) {
+                        bottomCollision = true;
+                    }
+                    break;
+                case HIDING_BLOCK:
+                    collisions = fineGrainedCollision(this, env);
+                    if (collisions[FineGrainedCollider.BOTTOM]) {
+                        bottomCollision = true;
+                        ((HidingBlock) env).setTouchingPlayer(true);
+                    } else {
+                        ((HidingBlock) env).setTouchingPlayer(false);
+                    }
+                    break;
             }
         }
         //Right now movable environments are oscilating blocks and movable blocks
         for (GameObject obj : model.getMovableEnvironment()) {
-            collisions = fineGrainedCollision(this, obj);
-            if (obj.type == GameObjectType.MOVABLE_BLOCK) {
-                if (collisions[FineGrainedCollider.LEFT] || collisions[FineGrainedCollider.RIGHT]) {
-                    ((MovableBlock) obj).setTouchingPlayer(true);
-                } else {
-                    ((MovableBlock) obj).setTouchingPlayer(false);
-                }
+            switch (obj.type) {
+                case MOVABLE_BLOCK:
+                    collisions = fineGrainedCollision(this, obj);
+                    if (collisions[FineGrainedCollider.LEFT] || collisions[FineGrainedCollider.RIGHT]) {
+                        ((MovableBlock) obj).setTouchingPlayer(true);
+                    } else {
+                        ((MovableBlock) obj).setTouchingPlayer(false);
+                    }
+                    break;
             }
         }
         if (!bottomCollision) {
@@ -161,6 +175,23 @@ public class Player extends GameObject implements FineGrainedCollider {
             }
             //I am using object equality maybe can check this later.
             model.getCollectibles().remove(obj);
+        }
+    }
+
+    private void collisionWithEnemies(Model model) {
+        for (GameObject obj : model.getEnemies()) {
+            switch (obj.type) {
+                case BOSS1:
+                case ENEMY1:
+                case ENEMY2:
+                case ENEMY3:
+                    //Don't touch me
+                    //if (obj.getBounds().intersects(getBounds())) {
+                    //    centre = model.getLastCheckpoint().copy();
+                    //    health = 100;
+                    //}
+                    break;
+            }
         }
     }
 

@@ -3,7 +3,7 @@ package game.objects;
 import game.objects.enemies.*;
 import game.objects.environment.*;
 import game.objects.environment.movables.MovableBlock;
-import game.objects.environment.movables.OscillatingBlock;
+import game.objects.environment.HidingBlock;
 import game.objects.weapons.BitArrayGun;
 import game.objects.weapons.BitMatrixBlast;
 import game.objects.weapons.BitRevolver;
@@ -41,8 +41,8 @@ public final class GameObjectFactory {
                 return new Lava(width, height, centre);
             case MOVABLE_BLOCK:
                 return new MovableBlock(width, height, centre);
-            case OSCILLATING_BLOCK:
-                return new OscillatingBlock(width, height, centre);
+            case HIDING_BLOCK:
+                return new HidingBlock(width, height, centre);
             case BIT_ARRAY_GUN:
                 return new BitArrayGun(width, height, centre);
             case BIT_MATRIX_BLAST:
