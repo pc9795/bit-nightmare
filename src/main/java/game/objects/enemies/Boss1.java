@@ -21,16 +21,28 @@ import java.util.Random;
 public class Boss1 extends GameObject implements Healthy, FineGrainedCollider {
     private static final int DEFAULT_WIDTH = 32;
     private static final int DEFAULT_HEIGHT = 64;
+    private static final float DEFAULT_SPEED_X = 5f;
+    private static final float DEFAULT_CHARGE_DURATION_IN_SEC = 2f;
+    private static final float DEFAULT_BULLET_FREQ_IN_SEC = 1.5f;
+    private static final int DEFAULT_LOS = 500;
     private int health = 100;
     private Random random = new Random();
     private long lastFiredBullet = System.currentTimeMillis();
     private long lastCharged = System.currentTimeMillis();
     private boolean charging = true;
+    private int los;
+    private float chargeDurationInSec;
+    private float bulletFreqInSec;
+    private float speedX;
 
     public Boss1(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.BOSS1);
-        gravity = Constants.GRAVITY;
+        gravity = DEFAULT_GRAVITY;
         falling = true;
+        los = DEFAULT_LOS;
+        chargeDurationInSec = DEFAULT_CHARGE_DURATION_IN_SEC;
+        bulletFreqInSec = DEFAULT_BULLET_FREQ_IN_SEC;
+        speedX = DEFAULT_SPEED_X;
     }
 
     @Override
@@ -40,14 +52,14 @@ public class Boss1 extends GameObject implements Healthy, FineGrainedCollider {
         //todo make configurable
         if (!charging && random.nextInt(500) == 1) {
             if (facingDirection == FacingDirection.RIGHT) {
-                velocity.setX(Constants.Enemies.BOSS1_VELX);
+                velocity.setX(speedX);
             } else {
-                velocity.setX(-Constants.Enemies.BOSS1_VELX);
+                velocity.setX(-speedX);
             }
             charging = true;
             lastCharged = now;
         }
-        if (charging && now - lastCharged > Constants.Enemies.BOSS1_CHARGE_DURATION_IN_SEC * 1000) {
+        if (charging && now - lastCharged > chargeDurationInSec * 1000) {
             charging = false;
         }
         //Movement
@@ -74,7 +86,7 @@ public class Boss1 extends GameObject implements Healthy, FineGrainedCollider {
         }
         //Detect player and attack
         int playerX = (int) model.getPlayer1().getCentre().getX();
-        if (Math.abs(centre.getX() - playerX) <= Constants.Enemies.BOSS1_LOS) {
+        if (Math.abs(centre.getX() - playerX) <= los) {
             if (playerX < centre.getX()) {
                 facingDirection = FacingDirection.LEFT;
             } else {
@@ -84,7 +96,7 @@ public class Boss1 extends GameObject implements Healthy, FineGrainedCollider {
                 //Rate limiter; one bullet per second.
                 long now = System.currentTimeMillis();
                 long diff = now - lastFiredBullet;
-                if (diff > Constants.Enemies.BOSS1_BULLET_FREQ_IN_SEC * 1000) {
+                if (diff > bulletFreqInSec * 1000) {
                     if (random.nextBoolean()) {
                         BitMatrixBlastBullet bullet = new BitMatrixBlastBullet(Constants.Bullet.BIT_MATRIX_BLAST_WIDTH,
                                 Constants.Bullet.BIT_MATRIX_BLAST_HEIGHT, centre.copy(), false);

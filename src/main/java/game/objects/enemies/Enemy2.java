@@ -20,15 +20,21 @@ import java.util.Random;
 public class Enemy2 extends GameObject implements FineGrainedCollider, Healthy {
     private static final int DEFAULT_WIDTH = 32;
     private static final int DEFAULT_HEIGHT = 64;
+    private static final int DEFAULT_LOS = 600;
+    private static final float DEFAULT_BULLET_FREQ_IN_SEC = 1.5f;
     private int health = 100;
     private boolean ducking;
     private Random random = new Random();
     private long lastFiredBullet = System.currentTimeMillis();
+    private int los;
+    private float bulletFreqInSec;
 
     public Enemy2(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.ENEMY2);
-        gravity = Constants.GRAVITY;
+        gravity = DEFAULT_GRAVITY;
         falling = true;
+        los = DEFAULT_LOS;
+        bulletFreqInSec = DEFAULT_BULLET_FREQ_IN_SEC;
     }
 
     @Override
@@ -66,7 +72,7 @@ public class Enemy2 extends GameObject implements FineGrainedCollider, Healthy {
         }
         //Detect player and attack
         int playerX = (int) model.getPlayer1().getCentre().getX();
-        if (Math.abs(centre.getX() - playerX) <= Constants.Enemies.ENEMY2_LOS) {
+        if (Math.abs(centre.getX() - playerX) <= los) {
             if (playerX < centre.getX()) {
                 facingDirection = FacingDirection.LEFT;
             } else {
@@ -75,7 +81,7 @@ public class Enemy2 extends GameObject implements FineGrainedCollider, Healthy {
             //Rate limiter; one bullet per second.
             long now = System.currentTimeMillis();
             long diff = now - lastFiredBullet;
-            if (diff > Constants.Enemies.ENEMY2_BULLET_FREQ_IN_SEC * 1000) {
+            if (diff > bulletFreqInSec * 1000) {
                 BitRevolverBullet bullet = new BitRevolverBullet(Constants.Bullet.BIT_REVOLVER_WIDTH,
                         Constants.Bullet.BIT_REVOLVER_HEIGHT, centre.copy(), false);
                 bullet.setFacingDirection(facingDirection);

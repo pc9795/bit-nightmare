@@ -21,6 +21,9 @@ import java.util.List;
 public class Player extends GameObject implements FineGrainedCollider, Healthy {
     private static final int DEFAULT_WIDTH = 32;
     private static final int DEFAULT_HEIGHT = 64;
+    private static final float DEFAULT_SPEED_X = 3f;
+    private static final float DEFAULT_SPEED_Y = 5f;
+    private static final float DEFAULT_BULLET_FREQ_IN_SEC = 1f;
     //The weapon at the front is the primary weapon.
     private List<Weapon> weapons;
     private int currentWeaponIndex;
@@ -28,18 +31,15 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
     private int health = 200;
     private boolean bitBotFound;
     private long lastFiredBullet = System.currentTimeMillis();
+    private float bulletFreqInSec;
 
     public Player(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.PLAYER);
-
-        //todo remove
-        //this.centre = new Point3f(3200, 289, centre.getBoundary());
-        //bitBotFound = true;
-
-        gravity = Constants.GRAVITY;
+        gravity = DEFAULT_GRAVITY;
         falling = true;
         weapons = new ArrayList<>();
         currentWeaponIndex = -1;
+        bulletFreqInSec = DEFAULT_BULLET_FREQ_IN_SEC;
     }
 
     public int getHeight() {
@@ -251,7 +251,7 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
         //Rate limiter; one bullet per second.
         long now = System.currentTimeMillis();
         long diff = now - lastFiredBullet;
-        if (diff <= Constants.Bullet.PLAYER_BULLET_FREQ_IN_SEC * 1000) {
+        if (diff <= bulletFreqInSec * 1000) {
             return null;
         }
         lastFiredBullet = now;

@@ -15,13 +15,16 @@ import java.awt.*;
  * Purpose: TODO:
  **/
 public class BitMatrixBlastBullet extends GameObject implements BulletCollider {
-    private static final int DEFAULT_WIDTH = 32;
-    private static final int DEFAULT_HEIGHT = 64;
+    private static final int DEFAULT_WIDTH = 30;
+    private static final int DEFAULT_HEIGHT = 30;
+    private static final float DEFAULT_SPEED_X = 4f;
     private boolean isFiredByPlayer;
+    private float speedX;
 
     public BitMatrixBlastBullet(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.BIT_MATRIX_BLAST_BULLET);
         this.isFiredByPlayer = true;
+        speedX = DEFAULT_SPEED_X;
     }
 
     public BitMatrixBlastBullet(int width, int height, Point3f centre, boolean isFiredByPlayer) {
@@ -32,7 +35,7 @@ public class BitMatrixBlastBullet extends GameObject implements BulletCollider {
     @Override
     public void update() {
         //Movement
-        centre.setX(centre.getX() + (facingDirection == FacingDirection.RIGHT ? 1 : -1) * Constants.Bullet.BIT_MATRIX_BLAST_VELOCITY);
+        centre.setX(centre.getX() + (facingDirection == FacingDirection.RIGHT ? 1 : -1) * speedX);
     }
 
     @Override

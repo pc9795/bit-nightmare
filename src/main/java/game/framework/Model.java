@@ -80,7 +80,7 @@ public class Model {
     }
 
     private void init() throws URISyntaxException, IOException {
-        URI uri = Model.class.getResource(Constants.LEVEL_NAMES_FILE).toURI();
+        URI uri = Model.class.getResource(Constants.Level.INFO_FILE_NAME).toURI();
         try (BufferedReader br = Files.newBufferedReader(Paths.get(uri))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -149,15 +149,15 @@ public class Model {
     }
 
     private void loadLevelUtil(Level level) {
-        levelBoundary = new Boundary(level.getMaxX() * Constants.LEVEL_PIXEL_TO_WIDTH_RATIO,
-                level.getMaxY() * Constants.LEVEL_PIXEL_TO_WIDTH_RATIO);
+        levelBoundary = new Boundary(level.getMaxX() * Constants.Level.PIXEL_TO_WIDTH_RATIO,
+                level.getMaxY() * Constants.Level.PIXEL_TO_WIDTH_RATIO);
         // QuadTree is to be initialized by the new boundaries.
         environmentQuadTree = new QuadTree(0, new Rectangle(0, 0, (int) levelBoundary.getxMax(), (int) levelBoundary.getyMax()));
 
         for (LevelObject object : level.getLevelObjects()) {
             GameObject.GameObjectType type = GameObject.GameObjectType.valueOf(object.getType());
-            Point3f center = new Point3f(object.getCentre().getX() * Constants.LEVEL_PIXEL_TO_WIDTH_RATIO,
-                    object.getCentre().getY() * Constants.LEVEL_PIXEL_TO_WIDTH_RATIO, levelBoundary);
+            Point3f center = new Point3f(object.getCentre().getX() * Constants.Level.PIXEL_TO_WIDTH_RATIO,
+                    object.getCentre().getY() * Constants.Level.PIXEL_TO_WIDTH_RATIO, levelBoundary);
             GameObject gameObject = GameObjectFactory.getGameObject(type, object.getWidth(), object.getHeight(), center);
             addGameObject(gameObject);
         }

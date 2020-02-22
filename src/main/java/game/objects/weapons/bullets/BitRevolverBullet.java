@@ -15,13 +15,16 @@ import java.awt.*;
  * Purpose: TODO:
  **/
 public class BitRevolverBullet extends GameObject implements BulletCollider {
-    private static final int DEFAULT_WIDTH = 32;
-    private static final int DEFAULT_HEIGHT = 64;
+    private static final int DEFAULT_WIDTH = 10;
+    private static final int DEFAULT_HEIGHT = 10;
+    private static final float DEFAULT_SPEED_X = 5f;
+    private float speedX;
     private boolean isFiredByPlayer;
 
     public BitRevolverBullet(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.BIT_REVOLVER_BULLET);
         isFiredByPlayer = true;
+        speedX = DEFAULT_SPEED_X;
     }
 
     public BitRevolverBullet(int width, int height, Point3f centre, boolean isFiredByPlayer) {
@@ -32,7 +35,7 @@ public class BitRevolverBullet extends GameObject implements BulletCollider {
     @Override
     public void update() {
         //Movement
-        centre.setX(centre.getX() + (facingDirection == FacingDirection.RIGHT ? 1 : -1) * Constants.Bullet.BIT_REVOLVER_VELOCITY);
+        centre.setX(centre.getX() + (facingDirection == FacingDirection.RIGHT ? 1 : -1) * speedX);
     }
 
     @Override

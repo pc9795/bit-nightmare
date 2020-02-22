@@ -7,7 +7,7 @@ import java.io.IOException;
 /**
  * Created By: Prashant Chaubey
  * Created On: 18-02-2020 00:31
- * Purpose: TODO:
+ * Purpose: Helper to load images.
  **/
 public final class BufferedImageLoader {
     private static final BufferedImageLoader INSTANCE = new BufferedImageLoader();

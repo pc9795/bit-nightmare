@@ -17,13 +17,19 @@ import java.util.List;
 public class MovableBlock extends GameObject implements FineGrainedCollider {
     private static final int DEFAULT_WIDTH = 32;
     private static final int DEFAULT_HEIGHT = 32;
+    private static final float DEFAULT_SPEED_X = 4f;
+    private static final float DEFAULT_FRICTION = 0.1f;
     private boolean touchingPlayer;
     private Point3f lastPosition;
+    private float friction;
+    private float speedX;
 
     public MovableBlock(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.MOVABLE_BLOCK);
-        gravity = Constants.GRAVITY;
+        gravity = DEFAULT_GRAVITY;
         lastPosition = centre.copy();
+        friction = DEFAULT_FRICTION;
+        speedX = DEFAULT_SPEED_X;
     }
 
     public void setTouchingPlayer(boolean touchingPlayer) {
@@ -40,9 +46,9 @@ public class MovableBlock extends GameObject implements FineGrainedCollider {
             velocity.setY(velocity.getY() + gravity);
         }
         if (velocity.getX() > 0) {
-            velocity.setX(Math.max(0, velocity.getX() - Constants.MOVABLE_BLOCK_FRICTION));
+            velocity.setX(Math.max(0, velocity.getX() - friction));
         } else if (velocity.getX() < 0) {
-            velocity.setX(Math.max(0, velocity.getX() + Constants.MOVABLE_BLOCK_FRICTION));
+            velocity.setX(Math.max(0, velocity.getX() + friction));
         }
     }
 
@@ -65,7 +71,7 @@ public class MovableBlock extends GameObject implements FineGrainedCollider {
         boolean bottomCollision = false;
         //We can optimise by only frame rendering or checking that last position changed or not.
         if (touchingPlayer) {
-            velocity.setX(velocity.getX() + model.getPlayer1().getVelocity().getX() > 0 ? Constants.MOVABLE_BLOCK_VELOCITY_X : -Constants.MOVABLE_BLOCK_VELOCITY_X);
+            velocity.setX(velocity.getX() + model.getPlayer1().getVelocity().getX() > 0 ? speedX : -speedX);
         }
         for (GameObject object : model.getCollectibles()) {
             collisions = fineGrainedCollision(this, object);

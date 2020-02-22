@@ -15,27 +15,31 @@ import java.util.List;
  * Purpose: TODO:
  **/
 public class BitArrayGunBullet extends GameObject {
-    private static final int DEFAULT_WIDTH = 32;
-    private static final int DEFAULT_HEIGHT = 64;
+    private static final int DEFAULT_WIDTH = 10;
+    private static final int DEFAULT_HEIGHT = 10;
+    private static final int DEFAULT_COUNT = 10;
+    private static final float DEFAULT_SPEED_X = 5f;
     private boolean isFiredByPlayer;
     private int count;
+    private float speedX;
 
     public BitArrayGunBullet(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.BIT_ARRAY_GUN_BULLET);
         isFiredByPlayer = true;
-        count = Constants.Bullet.BIT_ARRAY_GUN_COUNT;
+        count = DEFAULT_COUNT;
+        speedX = DEFAULT_SPEED_X;
     }
 
     public BitArrayGunBullet(int width, int height, Point3f centre, boolean isFiredByPlayer) {
         super(width, height, centre, GameObjectType.BIT_REVOLVER_BULLET);
         this.isFiredByPlayer = isFiredByPlayer;
-        count = Constants.Bullet.BIT_ARRAY_GUN_COUNT;
+        count = DEFAULT_COUNT;
     }
 
     @Override
     public void update() {
         //Movement
-        centre.setX(centre.getX() + (facingDirection == FacingDirection.RIGHT ? 1 : -1) * Constants.Bullet.BIT_ARRAY_GUN_VELOCITY);
+        centre.setX(centre.getX() + (facingDirection == FacingDirection.RIGHT ? 1 : -1) * speedX);
     }
 
     @Override
@@ -109,6 +113,6 @@ public class BitArrayGunBullet extends GameObject {
 
     @Override
     public Rectangle getBounds() {
-        return new Rectangle((int) centre.getX(), (int) centre.getY(), width * (2 * Constants.Bullet.BIT_ARRAY_GUN_COUNT - 1), height);
+        return new Rectangle((int) centre.getX(), (int) centre.getY(), width * (2 * count - 1), height);
     }
 }

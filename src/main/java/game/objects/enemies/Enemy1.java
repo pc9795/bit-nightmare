@@ -5,7 +5,6 @@ import game.objects.GameObject;
 import game.objects.colliders.FineGrainedCollider;
 import game.objects.properties.Healthy;
 import game.physics.Point3f;
-import game.utils.Constants;
 
 import java.awt.*;
 import java.util.List;
@@ -18,13 +17,19 @@ import java.util.List;
 public class Enemy1 extends GameObject implements FineGrainedCollider, Healthy {
     private static final int DEFAULT_WIDTH = 32;
     private static final int DEFAULT_HEIGHT = 32;
+    private static final float DEFAULT_SPEED_X = 4f;
+    private static final int DEFAULT_LOS = 300;
     private boolean playerDetected;
     private int health = 100;
+    private int los;
+    private float speedX;
 
     public Enemy1(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.ENEMY1);
-        gravity = Constants.GRAVITY;
+        gravity = DEFAULT_GRAVITY;
         falling = true;
+        speedX = DEFAULT_SPEED_X;
+        los = DEFAULT_LOS;
     }
 
     @Override
@@ -54,13 +59,13 @@ public class Enemy1 extends GameObject implements FineGrainedCollider, Healthy {
         //Detect player and attack
         if (!playerDetected) {
             int playerX = (int) model.getPlayer1().getCentre().getX();
-            if (Math.abs(centre.getX() - playerX) <= Constants.Enemies.ENEMY1_LOS) {
+            if (Math.abs(centre.getX() - playerX) <= los) {
                 if (playerX < centre.getX()) {
                     facingDirection = FacingDirection.LEFT;
-                    velocity.setX(-Constants.Enemies.ENEMY1_VELX);
+                    velocity.setX(-speedX);
                 } else {
                     facingDirection = FacingDirection.RIGHT;
-                    velocity.setX(Constants.Enemies.ENEMY1_VELX);
+                    velocity.setX(speedX);
                 }
                 playerDetected = true;
             }
@@ -87,10 +92,10 @@ public class Enemy1 extends GameObject implements FineGrainedCollider, Healthy {
                         bottomCollision = true;
                     } else if (collisions[FineGrainedCollider.LEFT]) {
                         facingDirection = FacingDirection.RIGHT;
-                        velocity.setX(Constants.Enemies.ENEMY1_VELX);
+                        velocity.setX(speedX);
                     } else if (collisions[FineGrainedCollider.RIGHT]) {
                         facingDirection = FacingDirection.LEFT;
-                        velocity.setX(-Constants.Enemies.ENEMY1_VELX);
+                        velocity.setX(-speedX);
                     }
                     break;
             }

@@ -3,13 +3,10 @@ package game.objects.environment;
 import game.framework.Model;
 import game.objects.GameObject;
 import game.objects.GameObjectFactory;
-import game.objects.weapons.bullets.BitRevolverBullet;
 import game.physics.Point3f;
-import game.utils.Constants;
 
 import java.awt.*;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.List;
 import java.util.Random;
 
@@ -21,14 +18,23 @@ import java.util.Random;
 public class EnemyPortal extends GameObject {
     private static final int DEFAULT_WIDTH = 64;
     private static final int DEFAULT_HEIGHT = 64;
+    private static final int DEFAULT_LOS = 400;
+    private static final int DEFAULT_RANGE = 300;
+    private static final float DEFAULT_SPAWN_FREQ_IN_SEC = 1f;
     private List<GameObjectType> enemyTypes;
     private long lastBeingSpawned;
     private Random random = new Random();
     private int enemyCount = 5;
+    private int los;
+    private int range;
+    private float spawnFreqInSec;
 
     public EnemyPortal(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.ENEMY_PORTAL);
         enemyTypes = Arrays.asList(GameObjectType.ENEMY1, GameObjectType.ENEMY2, GameObjectType.ENEMY3);
+        los = DEFAULT_LOS;
+        range = DEFAULT_RANGE;
+        spawnFreqInSec = DEFAULT_SPAWN_FREQ_IN_SEC;
     }
 
     @Override
@@ -49,7 +55,7 @@ public class EnemyPortal extends GameObject {
         }
         //Detect player and attack
         int playerX = (int) model.getPlayer1().getCentre().getX();
-        if (Math.abs(centre.getX() - playerX) <= Constants.Enemies.ENEMY_PORTAL_LOS) {
+        if (Math.abs(centre.getX() - playerX) <= los) {
             if (playerX < centre.getX()) {
                 facingDirection = FacingDirection.LEFT;
             } else {
@@ -58,7 +64,7 @@ public class EnemyPortal extends GameObject {
             //Rate limiter; one bullet per second.
             long now = System.currentTimeMillis();
             long diff = now - lastBeingSpawned;
-            if (diff > Constants.Enemies.ENEMY_PORTAL_SPAWN_FREQ_IN_SEC * 1000) {
+            if (diff > spawnFreqInSec * 1000) {
                 GameObjectType type = enemyTypes.get(random.nextInt(enemyTypes.size()));
                 //todo fix this.
                 int width = 32, height = 0;
@@ -72,7 +78,7 @@ public class EnemyPortal extends GameObject {
                         break;
                 }
                 float x = centre.getX();
-                int position = random.nextInt(Constants.Enemies.ENEMY_PORTAL_RANGE);
+                int position = random.nextInt(range);
                 x -= facingDirection == FacingDirection.LEFT ? position : -position;
                 GameObject enemy = GameObjectFactory.getGameObject(type, width, height, new Point3f(x, centre.getY(), model.getLevelBoundary()));
                 model.getEnemies().add(enemy);

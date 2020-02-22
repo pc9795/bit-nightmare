@@ -90,7 +90,7 @@ public class GamepadController implements Runnable {
 
     private void sleep() {
         try {
-            Thread.sleep(Constants.GAMEPAD_CONTROLLER_POLLING_WAIT_TIME_IN_MILLIS);
+            Thread.sleep(Constants.GAMEPAD_POLLING_WAIT_TIME_IN_SEC);
 
         } catch (InterruptedException e) {
             e.printStackTrace();

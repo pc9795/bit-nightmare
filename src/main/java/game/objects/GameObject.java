@@ -6,7 +6,6 @@ import game.physics.Vector3f;
 import game.utils.Constants;
 
 import java.awt.*;
-import java.util.List;
 
 /*
  * Created by Abraham Campbell on 15/01/2020.
@@ -43,6 +42,7 @@ public abstract class GameObject {
         RIGHT, LEFT
     }
 
+    public static final float DEFAULT_GRAVITY = 0.1f;
     //Centre of object, using 3D as objects may be scaled
     protected Point3f centre;
     protected int width, height;

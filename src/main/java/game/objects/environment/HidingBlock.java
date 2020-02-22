@@ -6,7 +6,6 @@ import game.physics.Point3f;
 
 import java.awt.*;
 
-import static game.utils.Constants.HIDING_BLOCK_HIDING_TIME_IN_SEC;
 
 /**
  * Created By: Prashant Chaubey
@@ -16,12 +15,15 @@ import static game.utils.Constants.HIDING_BLOCK_HIDING_TIME_IN_SEC;
 public class HidingBlock extends GameObject {
     private static final int DEFAULT_WIDTH = 32;
     private static final int DEFAULT_HEIGHT = 32;
+    private static final int DEFAULT_HIDING_TIME_IN_SEC = 2;
     private boolean touchingPlayer;
     private long lastHiddenTime;
     private boolean hidden;
+    private int hidingTimeInSec;
 
     public HidingBlock(int width, int height, Point3f centre) {
         super(width, height, centre, GameObjectType.HIDING_BLOCK);
+        hidingTimeInSec = DEFAULT_HIDING_TIME_IN_SEC;
     }
 
     public void setTouchingPlayer(boolean touchingPlayer) {
@@ -35,7 +37,7 @@ public class HidingBlock extends GameObject {
             lastHiddenTime = System.currentTimeMillis();
         }
         long now = System.currentTimeMillis();
-        if (hidden && (now - lastHiddenTime > HIDING_BLOCK_HIDING_TIME_IN_SEC * 1000)) {
+        if (hidden && (now - lastHiddenTime > hidingTimeInSec * 1000)) {
             hidden = false;
         }
     }
