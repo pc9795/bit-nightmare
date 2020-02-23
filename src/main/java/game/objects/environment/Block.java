@@ -9,14 +9,14 @@ import java.awt.*;
 /**
  * Created By: Prashant Chaubey
  * Created On: 18-02-2020 00:00
- * Purpose: TODO:
+ * Purpose: A simple block.
  **/
 public class Block extends GameObject {
     private static final int DEFAULT_WIDTH = 32;
     private static final int DEFAULT_HEIGHT = 32;
 
-    public Block(int width, int height, Point2f centre) {
-        super(width, height, centre, GameObjectType.BLOCK);
+    public Block(Point2f centre) {
+        super(DEFAULT_WIDTH, DEFAULT_HEIGHT, centre, GameObjectType.BLOCK);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class Block extends GameObject {
     }
 
     @Override
-    public void collision(Model model) {
+    public void perceiveEnv(Model model) {
 
     }
 }

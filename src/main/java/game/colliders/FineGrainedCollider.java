@@ -1,4 +1,4 @@
-package game.objects.colliders;
+package game.colliders;
 
 import game.objects.GameObject;
 
@@ -7,10 +7,9 @@ import java.awt.*;
 /**
  * Created By: Prashant Chaubey
  * Created On: 21-02-2020 22:17
- * Purpose: TODO:
+ * Purpose: Detect collision in specific direction.
  **/
 public interface FineGrainedCollider {
-    int TOP = 0;
     int BOTTOM = 1;
     int LEFT = 2;
     int RIGHT = 3;
@@ -28,25 +27,19 @@ public interface FineGrainedCollider {
         Rectangle bounds = o2.getBounds();
 
         if (bounds.intersects(getBoundsBottom())) {
-            //Bottom collision
-            //todo make hardcoded value configurable
             o1.getCentre().setY(o2.getCentre().getY() - o1.getHeight() + 1);
             o1.getVelocity().setY(0);
             o1.setFalling(false);
             o1.setJumping(false);
             collisions[1] = true;
         } else if (bounds.intersects(getBoundsTop())) {
-            //Top collision
-            //todo make hardcoded value configurable
-            o1.getCentre().setY(o2.getCentre().getY() + o2.getWidth() + 5);
+            o1.getCentre().setY(o2.getCentre().getY() + o2.getWidth() + 1);
             o1.getVelocity().setY(0);
             collisions[0] = true;
         } else if (bounds.intersects(getBoundsLeft())) {
-            //Left collision
             o1.getCentre().setX(o2.getCentre().getX() + o2.getWidth());
             collisions[2] = true;
         } else if (bounds.intersects(getBoundsRight())) {
-            //Right collision
             o1.getCentre().setX(o2.getCentre().getX() - o1.getWidth());
             collisions[3] = true;
         }

@@ -1,12 +1,10 @@
 package game.objects;
 
+import game.colliders.FineGrainedCollider;
 import game.framework.Model;
-import game.objects.colliders.FineGrainedCollider;
-import game.objects.environment.HidingBlock;
-import game.objects.environment.movables.MovableBlock;
-import game.objects.properties.Healthy;
 import game.objects.weapons.Weapon;
 import game.physics.Point2f;
+import game.properties.Healthy;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -15,30 +13,35 @@ import java.util.List;
 /**
  * Created By: Prashant Chaubey
  * Created On: 17-02-2020 23:07
- * Purpose: TODO:
+ * Purpose: Player of the game
  **/
 public class Player extends GameObject implements FineGrainedCollider, Healthy {
+    //Constants
     private static final int DEFAULT_WIDTH = 32;
     private static final int DEFAULT_HEIGHT = 64;
     private static final float DEFAULT_SPEED_X = 3f;
     private static final float DEFAULT_SPEED_Y = 5f;
     private static final float DEFAULT_BULLET_FREQ_IN_SEC = 1f;
-    //The weapon at the front is the primary weapon.
+    private static final int DEFAULT_HEALTH = 200;
+    //Variables
     private List<Weapon> weapons;
     private int currentWeaponIndex;
     private boolean ducking;
-    private int health = 200;
+    private int health;
     private boolean bitBotFound;
     private long lastFiredBullet = System.currentTimeMillis();
     private float bulletFreqInSec;
+    private int maxHealth;
 
-    public Player(int width, int height, Point2f centre) {
-        super(width, height, centre, GameObjectType.PLAYER);
+    Player(Point2f centre) {
+        super(DEFAULT_WIDTH, DEFAULT_HEIGHT, centre, GameObjectType.PLAYER);
         gravity = DEFAULT_GRAVITY;
         falling = true;
         weapons = new ArrayList<>();
         currentWeaponIndex = -1;
         bulletFreqInSec = DEFAULT_BULLET_FREQ_IN_SEC;
+        health = DEFAULT_HEALTH;
+        maxHealth = DEFAULT_HEALTH;
     }
 
     public int getHeight() {
@@ -89,8 +92,8 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
     public void update() {
         //Movement
         centre.setX(centre.getX() + velocity.getX());
-        //Gravity
         centre.setY(centre.getY() + velocity.getY());
+        //Gravity
         if (falling || jumping) {
             velocity.setY(velocity.getY() + gravity);
         }
@@ -100,6 +103,7 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
     public void render(Graphics g) {
         g.setColor(new Color(0, 0, 255));
         g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
+
         //todo remove
         Graphics2D g2d = (Graphics2D) g;
         g.setColor(Color.RED);
@@ -108,16 +112,22 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
         g2d.draw(getBoundsRight());
         g2d.draw(getBoundsTop());
         g.drawString(String.format("X:%s,Y:%s", (int) centre.getX(), (int) centre.getY()), (int) centre.getX(), (int) centre.getY() - 20);
-        showHealth(centre, health, g);
+
+        showHealth(centre, health, maxHealth, g);
     }
 
     @Override
-    public void collision(Model model) {
+    public void perceiveEnv(Model model) {
         collisionWithEnvironment(model);
         collisionWithCollectibles(model);
         collisionWithEnemies(model);
     }
 
+    /**
+     * Check collision with environment
+     *
+     * @param model game world
+     */
     private void collisionWithEnvironment(Model model) {
         boolean[] collisions;
         boolean bottomCollision = false;
@@ -125,17 +135,7 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
         for (GameObject env : willCollide) {
             Rectangle bounds = env.getBounds();
             switch (env.type) {
-                case CHANGE_LEVEL:
-                    // Changing level
-                    //todo change level logic
-                    break;
-                case END_GAME:
-                    //Ending the game
-                    //todo end game logic
-                    break;
                 case CHECKPOINT:
-                    // Saving last checkpoint
-                    //todo can add additional equality check that same check point is not saved every time. not important though
                     if (bounds.intersects(getBounds())) {
                         model.setLastCheckpoint(env.getCentre().copy());
                     }
@@ -153,28 +153,6 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
                         bottomCollision = true;
                     }
                     break;
-                case HIDING_BLOCK:
-                    collisions = fineGrainedCollision(this, env);
-                    if (collisions[FineGrainedCollider.BOTTOM]) {
-                        bottomCollision = true;
-                        ((HidingBlock) env).setTouchingPlayer(true);
-                    } else {
-                        ((HidingBlock) env).setTouchingPlayer(false);
-                    }
-                    break;
-            }
-        }
-        //Right now movable environment have only  movable blocks
-        for (GameObject obj : model.getMovableEnvironment()) {
-            switch (obj.type) {
-                case MOVABLE_BLOCK:
-                    collisions = fineGrainedCollision(this, obj);
-                    if (collisions[FineGrainedCollider.LEFT] || collisions[FineGrainedCollider.RIGHT]) {
-                        ((MovableBlock) obj).setTouchingPlayer(true);
-                    } else {
-                        ((MovableBlock) obj).setTouchingPlayer(false);
-                    }
-                    break;
             }
         }
         if (!bottomCollision) {
@@ -182,6 +160,11 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
         }
     }
 
+    /**
+     * Collision with collectibles
+     *
+     * @param model game world
+     */
     private void collisionWithCollectibles(Model model) {
         for (GameObject obj : model.getCollectibles()) {
             if (!obj.getBounds().intersects(getBounds())) {
@@ -197,18 +180,22 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
                     addWeapon((Weapon) obj);
                     break;
             }
-            //I am using object equality maybe can check this later.
             model.getCollectibles().remove(obj);
         }
     }
 
+    /**
+     * Collision with enemies
+     *
+     * @param model game world
+     */
     private void collisionWithEnemies(Model model) {
         for (GameObject obj : model.getEnemies()) {
             switch (obj.type) {
-                case BOSS1:
-                case ENEMY2:
-                case ENEMY3:
-                case ENEMY1:
+                case GUARDIAN:
+                case SOLDIER:
+                case SUPER_SOLDIER:
+                case CHARGER:
                     //Don't touch me
                     if (obj.getBounds().intersects(getBounds())) {
                         health = 0;
@@ -218,20 +205,22 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
         }
     }
 
-    //todo look for a way to make these hardcoded values configurable
+    @Override
     public Rectangle getBoundsLeft() {
-        return new Rectangle((int) centre.getX(), (int) centre.getY() + 10, 5, height - 20);
+        return new Rectangle((int) centre.getX(), (int) centre.getY() + height / 8, width / 4, 3 * (height / 4));
     }
 
-    //todo look for a way to make these hardcoded values configurable
+    @Override
     public Rectangle getBoundsRight() {
-        return new Rectangle((int) (centre.getX() + width - 5), (int) (centre.getY() + 10), 5, height - 20);
+        return new Rectangle((int) (centre.getX() + 3 * (width / 4)), (int) (centre.getY() + height / 8), width / 4, 3 * (height / 4));
     }
 
+    @Override
     public Rectangle getBoundsTop() {
         return new Rectangle((int) (centre.getX() + (width / 2) - (width / 4)), (int) centre.getY(), width / 2, height / 2);
     }
 
+    @Override
     public Rectangle getBoundsBottom() {
         return new Rectangle((int) (centre.getX() + (width / 2) - (width / 4)), (int) (centre.getY() + height / 2), width / 2, height / 2);
     }
@@ -247,7 +236,7 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
         if (currentWeaponIndex == -1) {
             return null;
         }
-        //Rate limiter; one bullet per second.
+        //Rate limiter
         long now = System.currentTimeMillis();
         long diff = now - lastFiredBullet;
         if (diff <= bulletFreqInSec * 1000) {
@@ -257,7 +246,7 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
         return weapons.get(currentWeaponIndex).fire(centre, facingDirection);
     }
 
-    public void addWeapon(Weapon weapon) {
+    private void addWeapon(Weapon weapon) {
         weapons.add(weapon);
         currentWeaponIndex = weapons.size() - 1;
     }

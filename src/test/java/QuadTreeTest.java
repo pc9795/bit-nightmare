@@ -91,7 +91,7 @@ public class QuadTreeTest {
         }
 
         @Override
-        public void collision(Model model) {
+        public void perceiveEnv(Model model) {
         }
 
         @Override

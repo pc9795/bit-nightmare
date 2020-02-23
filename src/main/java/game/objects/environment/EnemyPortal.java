@@ -3,6 +3,7 @@ package game.objects.environment;
 import game.framework.Model;
 import game.objects.GameObject;
 import game.objects.GameObjectFactory;
+import game.objects.enemies.Enemy;
 import game.physics.Point2f;
 
 import java.awt.*;
@@ -13,28 +14,32 @@ import java.util.Random;
 /**
  * Created By: Prashant Chaubey
  * Created On: 18-02-2020 00:02
- * Purpose: TODO:
+ * Purpose: A portal which can spawn different enemies
  **/
-public class EnemyPortal extends GameObject {
+public class EnemyPortal extends GameObject implements Enemy {
+    //Constants
     private static final int DEFAULT_WIDTH = 64;
     private static final int DEFAULT_HEIGHT = 64;
-    private static final int DEFAULT_LOS = 400;
+    private static final int DEFAULT_LOS = 500;
     private static final int DEFAULT_RANGE = 300;
     private static final float DEFAULT_SPAWN_FREQ_IN_SEC = 1f;
+    private static final int DEFAULT_ENEMY_COUNT = 10;
+    //Variables
     private List<GameObjectType> enemyTypes;
     private long lastBeingSpawned;
     private Random random = new Random();
-    private int enemyCount = 5;
+    private int enemyCount;
     private int los;
     private int range;
     private float spawnFreqInSec;
 
-    public EnemyPortal(int width, int height, Point2f centre) {
-        super(width, height, centre, GameObjectType.ENEMY_PORTAL);
-        enemyTypes = Arrays.asList(GameObjectType.ENEMY1, GameObjectType.ENEMY2, GameObjectType.ENEMY3);
+    public EnemyPortal(Point2f centre) {
+        super(DEFAULT_WIDTH, DEFAULT_HEIGHT, centre, GameObjectType.ENEMY_PORTAL);
+        enemyTypes = Arrays.asList(GameObjectType.CHARGER, GameObjectType.SOLDIER, GameObjectType.SUPER_SOLDIER);
         los = DEFAULT_LOS;
         range = DEFAULT_RANGE;
         spawnFreqInSec = DEFAULT_SPAWN_FREQ_IN_SEC;
+        enemyCount = DEFAULT_ENEMY_COUNT;
     }
 
     @Override
@@ -49,42 +54,43 @@ public class EnemyPortal extends GameObject {
     }
 
     @Override
-    public void collision(Model model) {
+    public void perceiveEnv(Model model) {
+        //This portal can't spawn any more enemies
         if (enemyCount == 0) {
             return;
         }
         //Detect player and attack
+        attackPlayer(model);
+    }
+
+    @Override
+    public void attackPlayer(Model model) {
         int playerX = (int) model.getPlayer1().getCentre().getX();
-        if (Math.abs(centre.getX() - playerX) <= los) {
-            if (playerX < centre.getX()) {
-                facingDirection = FacingDirection.LEFT;
-            } else {
-                facingDirection = FacingDirection.RIGHT;
-            }
-            //Rate limiter; one bullet per second.
-            long now = System.currentTimeMillis();
-            long diff = now - lastBeingSpawned;
-            if (diff > spawnFreqInSec * 1000) {
-                GameObjectType type = enemyTypes.get(random.nextInt(enemyTypes.size()));
-                //todo fix this.
-                int width = 32, height = 0;
-                switch (type) {
-                    case ENEMY1:
-                        height = 32;
-                        break;
-                    case ENEMY2:
-                    case ENEMY3:
-                        height = 64;
-                        break;
-                }
-                float x = centre.getX();
-                int position = random.nextInt(range);
-                x -= facingDirection == FacingDirection.LEFT ? position : -position;
-                GameObject enemy = GameObjectFactory.getGameObject(type, width, height, new Point2f(x, centre.getY(), model.getLevelBoundary()));
-                model.getEnemies().add(enemy);
-                lastBeingSpawned = now;
-                enemyCount--;
-            }
+        //Player is out of line of sight.
+        if (Math.abs(centre.getX() - playerX) > los) {
+            return;
         }
+        //Turn to the player's direction
+        if (playerX < centre.getX()) {
+            facingDirection = FacingDirection.LEFT;
+        } else {
+            facingDirection = FacingDirection.RIGHT;
+        }
+        long now = System.currentTimeMillis();
+        long diff = now - lastBeingSpawned;
+        //Rate limiter
+        if (diff <= spawnFreqInSec * 1000) {
+            return;
+        }
+        //Select an enemy to spawn
+        GameObjectType type = enemyTypes.get(random.nextInt(enemyTypes.size()));
+        //Decide a spawn location
+        float x = centre.getX();
+        x -= facingDirection == FacingDirection.LEFT ? random.nextInt(range) : -random.nextInt(range);
+        //Create enemy
+        GameObject enemy = GameObjectFactory.getGameObject(type, new Point2f(x, centre.getY(), model.getLevelBoundary()));
+        model.getEnemies().add(enemy);
+        lastBeingSpawned = now;
+        enemyCount--;
     }
 }

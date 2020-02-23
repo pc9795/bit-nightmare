@@ -10,36 +10,23 @@ import java.awt.*;
 /**
  * Created By: Prashant Chaubey
  * Created On: 18-02-2020 00:03
- * Purpose: TODO:
+ * Purpose: A block which disappears if player set his foot on it.
  **/
 public class HidingBlock extends GameObject {
     private static final int DEFAULT_WIDTH = 32;
     private static final int DEFAULT_HEIGHT = 32;
     private static final int DEFAULT_HIDING_TIME_IN_SEC = 2;
-    private boolean touchingPlayer;
     private long lastHiddenTime;
     private boolean hidden;
     private int hidingTimeInSec;
 
-    public HidingBlock(int width, int height, Point2f centre) {
-        super(width, height, centre, GameObjectType.HIDING_BLOCK);
+    public HidingBlock(Point2f centre) {
+        super(DEFAULT_WIDTH, DEFAULT_HEIGHT, centre, GameObjectType.HIDING_BLOCK);
         hidingTimeInSec = DEFAULT_HIDING_TIME_IN_SEC;
-    }
-
-    public void setTouchingPlayer(boolean touchingPlayer) {
-        this.touchingPlayer = touchingPlayer;
     }
 
     @Override
     public void update() {
-        if (touchingPlayer) {
-            hidden = true;
-            lastHiddenTime = System.currentTimeMillis();
-        }
-        long now = System.currentTimeMillis();
-        if (hidden && (now - lastHiddenTime > hidingTimeInSec * 1000)) {
-            hidden = false;
-        }
     }
 
     @Override
@@ -53,8 +40,13 @@ public class HidingBlock extends GameObject {
     }
 
     @Override
-    public void collision(Model model) {
-
+    public void perceiveEnv(Model model) {
+        if (getBounds().intersects(model.getPlayer1().getBounds())) {
+            hidden = true;
+            lastHiddenTime = System.currentTimeMillis();
+        } else if (hidden && (System.currentTimeMillis() - lastHiddenTime > hidingTimeInSec * 1000)) {
+            hidden = false;
+        }
     }
 
     @Override

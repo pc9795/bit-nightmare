@@ -201,19 +201,19 @@ public class Model {
         processInput();
         //Player
         player1.update();
-        player1.collision(this);
+        player1.perceiveEnv(this);
         //Bullets
         bullets.forEach(GameObject::update);
-        bullets.forEach(object -> object.collision(this));
+        bullets.forEach(object -> object.perceiveEnv(this));
         //Environment
         environment.forEach(GameObject::update);
-        environment.forEach(object -> object.collision(this));
+        environment.forEach(object -> object.perceiveEnv(this));
         //Movable environment
         movableEnvironment.forEach(GameObject::update);
-        movableEnvironment.forEach(object -> object.collision(this));
+        movableEnvironment.forEach(object -> object.perceiveEnv(this));
         //Enemies
         enemies.forEach(GameObject::update);
-        enemies.forEach(object -> object.collision(this));
+        enemies.forEach(object -> object.perceiveEnv(this));
     }
 
     /**
@@ -279,10 +279,10 @@ public class Model {
             case PLAYER:
                 player1 = (Player) object;
                 break;
-            case BOSS1:
-            case ENEMY1:
-            case ENEMY2:
-            case ENEMY3:
+            case GUARDIAN:
+            case CHARGER:
+            case SOLDIER:
+            case SUPER_SOLDIER:
                 enemies.add(object);
                 break;
             case BLOCK:

@@ -4,21 +4,20 @@ import game.framework.Model;
 import game.objects.GameObject;
 import game.objects.weapons.bullets.BitRevolverBullet;
 import game.physics.Point2f;
-import game.utils.Constants;
 
 import java.awt.*;
 
 /**
  * Created By: Prashant Chaubey
  * Created On: 18-02-2020 00:01
- * Purpose: TODO:
+ * Purpose: Bit revolver
  **/
 public class BitRevolver extends GameObject implements Weapon {
     private static final int DEFAULT_WIDTH = 32;
     private static final int DEFAULT_HEIGHT = 32;
 
-    public BitRevolver(int width, int height, Point2f centre) {
-        super(width, height, centre, GameObjectType.BIT_REVOLVER);
+    public BitRevolver(Point2f centre) {
+        super(DEFAULT_WIDTH, DEFAULT_HEIGHT, centre, GameObjectType.BIT_REVOLVER);
     }
 
     @Override
@@ -33,14 +32,12 @@ public class BitRevolver extends GameObject implements Weapon {
     }
 
     @Override
-    public void collision(Model model) {
+    public void perceiveEnv(Model model) {
 
     }
 
     @Override
     public GameObject fire(Point2f centre, FacingDirection direction) {
-        BitRevolverBullet bullet = new BitRevolverBullet(Constants.Bullet.BIT_REVOLVER_WIDTH, Constants.Bullet.BIT_REVOLVER_HEIGHT, centre.copy());
-        bullet.setFacingDirection(direction);
-        return bullet;
+        return new BitRevolverBullet(centre, true, direction);
     }
 }

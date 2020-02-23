@@ -1,38 +1,41 @@
 package game.objects.weapons.bullets;
 
+import game.colliders.BulletCollider;
 import game.framework.Model;
 import game.objects.GameObject;
-import game.objects.properties.Healthy;
 import game.physics.Point2f;
 
 import java.awt.*;
-import java.util.List;
 
 /**
  * Created By: Prashant Chaubey
  * Created On: 21-02-2020 18:06
- * Purpose: TODO:
+ * Purpose: Bit Array gun' bullet
  **/
-public class BitArrayGunBullet extends GameObject {
+public class BitArrayGunBullet extends GameObject implements BulletCollider {
+    //Constants
     private static final int DEFAULT_WIDTH = 10;
     private static final int DEFAULT_HEIGHT = 10;
-    private static final int DEFAULT_COUNT = 10;
+    private static final int DEFAULT_COUNT = 5;
     private static final float DEFAULT_SPEED_X = 5f;
+    private static final int DEFAULT_DAMAGE = 8;
+    //Variables
     private boolean isFiredByPlayer;
     private int count;
     private float speedX;
+    private int damage;
 
-    public BitArrayGunBullet(int width, int height, Point2f centre) {
-        super(width, height, centre, GameObjectType.BIT_ARRAY_GUN_BULLET);
-        isFiredByPlayer = true;
-        count = DEFAULT_COUNT;
-        speedX = DEFAULT_SPEED_X;
-    }
-
-    public BitArrayGunBullet(int width, int height, Point2f centre, boolean isFiredByPlayer) {
-        super(width, height, centre, GameObjectType.BIT_REVOLVER_BULLET);
+    public BitArrayGunBullet(Point2f centre, boolean isFiredByPlayer, FacingDirection facingDirection) {
+        super(DEFAULT_WIDTH, DEFAULT_HEIGHT, centre, GameObjectType.BIT_ARRAY_GUN_BULLET);
+        //Shift when fired in left direction
+        if (facingDirection == FacingDirection.LEFT) {
+            this.centre.setX(this.centre.getX() - (2 * DEFAULT_COUNT - 1) * DEFAULT_WIDTH);
+        }
         this.isFiredByPlayer = isFiredByPlayer;
-        count = DEFAULT_COUNT;
+        this.count = DEFAULT_COUNT;
+        this.speedX = DEFAULT_SPEED_X;
+        this.facingDirection = facingDirection;
+        this.damage = DEFAULT_DAMAGE;
     }
 
     @Override
@@ -51,62 +54,17 @@ public class BitArrayGunBullet extends GameObject {
     }
 
     @Override
-    public void collision(Model model) {
+    public void perceiveEnv(Model model) {
         if (count == 0) {
             model.getBullets().remove(this);
+            return;
         }
-        //Out of the frame
-        if (getCentre().getX() < model.getLevelBoundary().getxMin()) {
-            count--;
-        }
-        if (getCentre().getX() > model.getLevelBoundary().getxMax()) {
-            centre.setX(centre.getX() + width);
-            count--;
-        }
-        //Currently Block, Movable Blocks and Oscillating Blocks will remove the bullet
-        List<GameObject> willCollide = model.getEnvironmentQuadTree().retrieve(this);
-        //Merging lists as same behavior
-        willCollide.addAll(model.getMovableEnvironment());
-        for (GameObject env : willCollide) {
-            switch (env.getType()) {
-                case BLOCK:
-                case GATE:
-                case LAVA:
-                case HIDING_BLOCK:
-                case MOVABLE_BLOCK:
-                    if (env.getBounds().intersects(getBounds())) {
-                        if (facingDirection == FacingDirection.RIGHT) {
-                            centre.setX(centre.getX() + width);
-                        }
-                        count--;
-                    }
-            }
-        }
-        if (!isFiredByPlayer && model.getPlayer1().getBounds().intersects(getBounds())) {
-            //todo make it configurable
-            //todo remove 100 damage for testing only.
-            model.getPlayer1().damageHealth(10);
+
+        if (bulletEnvCollision(model, this) || bulletPlayerOrEnemyCollision(model, this, isFiredByPlayer, damage)) {
             if (facingDirection == FacingDirection.RIGHT) {
                 centre.setX(centre.getX() + width);
             }
             count--;
-            return;
-        }
-        for (GameObject obj : model.getEnemies()) {
-            switch (obj.getType()) {
-                case ENEMY1:
-                case ENEMY2:
-                case ENEMY3:
-                case BOSS1:
-                    //todo make it configurable
-                    if (isFiredByPlayer && obj.getBounds().intersects(getBounds())) {
-                        ((Healthy) obj).damageHealth(100);
-                        if (facingDirection == FacingDirection.RIGHT) {
-                            centre.setX(centre.getX() + width);
-                        }
-                        count--;
-                    }
-            }
         }
     }
 

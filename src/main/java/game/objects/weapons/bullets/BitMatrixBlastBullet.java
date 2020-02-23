@@ -1,9 +1,8 @@
 package game.objects.weapons.bullets;
 
+import game.colliders.BulletCollider;
 import game.framework.Model;
 import game.objects.GameObject;
-import game.objects.colliders.BulletCollider;
-import game.objects.properties.Healthy;
 import game.physics.Point2f;
 
 import java.awt.*;
@@ -11,24 +10,25 @@ import java.awt.*;
 /**
  * Created By: Prashant Chaubey
  * Created On: 21-02-2020 18:07
- * Purpose: TODO:
+ * Purpose: Bit Matrix blast's bullet
  **/
 public class BitMatrixBlastBullet extends GameObject implements BulletCollider {
+    //Constants
     private static final int DEFAULT_WIDTH = 30;
     private static final int DEFAULT_HEIGHT = 30;
     private static final float DEFAULT_SPEED_X = 4f;
+    private static final int DEFAULT_DAMAGE = 50;
+    //Variables
     private boolean isFiredByPlayer;
     private float speedX;
+    private int damage;
 
-    public BitMatrixBlastBullet(int width, int height, Point2f centre) {
-        super(width, height, centre, GameObjectType.BIT_MATRIX_BLAST_BULLET);
-        this.isFiredByPlayer = true;
-        speedX = DEFAULT_SPEED_X;
-    }
-
-    public BitMatrixBlastBullet(int width, int height, Point2f centre, boolean isFiredByPlayer) {
-        super(width, height, centre, GameObjectType.BIT_REVOLVER_BULLET);
+    public BitMatrixBlastBullet(Point2f centre, boolean isFiredByPlayer, FacingDirection facingDirection) {
+        super(DEFAULT_WIDTH, DEFAULT_HEIGHT, centre, GameObjectType.BIT_MATRIX_BLAST_BULLET);
         this.isFiredByPlayer = isFiredByPlayer;
+        this.speedX = DEFAULT_SPEED_X;
+        this.facingDirection = facingDirection;
+        this.damage = DEFAULT_DAMAGE;
     }
 
     @Override
@@ -44,29 +44,9 @@ public class BitMatrixBlastBullet extends GameObject implements BulletCollider {
     }
 
     @Override
-    public void collision(Model model) {
-        if (bulletCollision(model, this)) {
-            return;
-        }
-        if (!isFiredByPlayer && model.getPlayer1().getBounds().intersects(getBounds())) {
-            //todo make it configurable
-            //todo remove 100 damage for testing only.
-            model.getPlayer1().damageHealth(40);
+    public void perceiveEnv(Model model) {
+        if (bulletEnvCollision(model, this) || bulletPlayerOrEnemyCollision(model, this, isFiredByPlayer, damage)) {
             model.getBullets().remove(this);
-            return;
-        }
-        for (GameObject obj : model.getEnemies()) {
-            switch (obj.getType()) {
-                case ENEMY1:
-                case ENEMY2:
-                case ENEMY3:
-                case BOSS1:
-                    //todo make it configurable
-                    if (isFiredByPlayer && obj.getBounds().intersects(getBounds())) {
-                        ((Healthy) obj).damageHealth(100);
-                        model.getBullets().remove(this);
-                    }
-            }
         }
     }
 }

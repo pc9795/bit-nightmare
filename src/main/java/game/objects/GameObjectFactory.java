@@ -1,9 +1,11 @@
 package game.objects;
 
-import game.objects.enemies.*;
+import game.objects.enemies.Charger;
+import game.objects.enemies.Guardian;
+import game.objects.enemies.Soldier;
+import game.objects.enemies.SuperSoldier;
 import game.objects.environment.*;
 import game.objects.environment.movables.MovableBlock;
-import game.objects.environment.HidingBlock;
 import game.objects.weapons.BitArrayGun;
 import game.objects.weapons.BitMatrixBlast;
 import game.objects.weapons.BitRevolver;
@@ -12,47 +14,47 @@ import game.physics.Point2f;
 /**
  * Created By: Prashant Chaubey
  * Created On: 18-02-2020 00:20
- * Purpose: TODO:
+ * Purpose: Factory to generate game objects
  **/
 public final class GameObjectFactory {
-    public static GameObject getGameObject(GameObject.GameObjectType type, int width, int height, Point2f centre) {
+    public static GameObject getGameObject(GameObject.GameObjectType type, Point2f centre) {
         switch (type) {
-            case BOSS1:
-                return new Boss1(width, height, centre);
-            case ENEMY1:
-                return new Enemy1(width, height, centre);
-            case ENEMY2:
-                return new Enemy2(width, height, centre);
-            case ENEMY3:
-                return new Enemy3(width, height, centre);
+            case GUARDIAN:
+                return new Guardian(centre);
+            case CHARGER:
+                return new Charger(centre);
+            case SOLDIER:
+                return new Soldier(centre);
+            case SUPER_SOLDIER:
+                return new SuperSoldier(centre);
             case ENEMY_PORTAL:
-                return new EnemyPortal(width, height, centre);
+                return new EnemyPortal(centre);
             case BLOCK:
-                return new Block(width, height, centre);
+                return new Block(centre);
             case END_GAME:
-                return new EndGame(width, height, centre);
+                return new EndGame(centre);
             case CHANGE_LEVEL:
-                return new ChangeLevel(width, height, centre);
+                return new ChangeLevel(centre);
             case CHECKPOINT:
-                return new Checkpoint(width, height, centre);
+                return new Checkpoint(centre);
             case GATE:
-                return new Gate(width, height, centre);
+                return new Gate(centre);
             case LAVA:
-                return new Lava(width, height, centre);
+                return new Lava(centre);
             case MOVABLE_BLOCK:
-                return new MovableBlock(width, height, centre);
+                return new MovableBlock(centre);
             case HIDING_BLOCK:
-                return new HidingBlock(width, height, centre);
+                return new HidingBlock(centre);
             case BIT_ARRAY_GUN:
-                return new BitArrayGun(width, height, centre);
+                return new BitArrayGun(centre);
             case BIT_MATRIX_BLAST:
-                return new BitMatrixBlast(width, height, centre);
+                return new BitMatrixBlast(centre);
             case BIT_REVOLVER:
-                return new BitRevolver(width, height, centre);
+                return new BitRevolver(centre);
             case BIT_BOT:
-                return new BitBot(width, height, centre);
+                return new BitBot(centre);
             case PLAYER:
-                return new Player(width, height, centre);
+                return new Player(centre);
         }
         throw new RuntimeException(String.format("%s is not configured in factory", type));
     }

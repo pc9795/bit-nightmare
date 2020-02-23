@@ -33,8 +33,8 @@ SOFTWARE.
  */
 public abstract class GameObject {
     public enum GameObjectType {
-        BLOCK, LAVA, PLAYER, BIT_BOT, ENEMY1, ENEMY2, ENEMY3, ENEMY_PORTAL, BIT_REVOLVER, BIT_ARRAY_GUN,
-        GATE, MOVABLE_BLOCK, BOSS1, BIT_MATRIX_BLAST, HIDING_BLOCK, END_GAME, CHECKPOINT, CHANGE_LEVEL,
+        BLOCK, LAVA, PLAYER, BIT_BOT, CHARGER, SOLDIER, SUPER_SOLDIER, ENEMY_PORTAL, BIT_REVOLVER, BIT_ARRAY_GUN,
+        GATE, MOVABLE_BLOCK, GUARDIAN, BIT_MATRIX_BLAST, HIDING_BLOCK, END_GAME, CHECKPOINT, CHANGE_LEVEL,
         BIT_REVOLVER_BULLET, BIT_ARRAY_GUN_BULLET, BIT_MATRIX_BLAST_BULLET
     }
 
@@ -42,15 +42,16 @@ public abstract class GameObject {
         RIGHT, LEFT
     }
 
-    public static final float DEFAULT_GRAVITY = 0.1f;
+    protected static final float DEFAULT_GRAVITY = 0.1f;
     //Centre of object, using 3D as objects may be scaled
     protected Point2f centre;
     protected int width, height;
     protected boolean hasTextured;
     protected String textureLocation;
-    protected Vector2f velocity = new Vector2f(0, 0, 0);
+    protected Vector2f velocity = new Vector2f(0, 0);
     protected GameObjectType type;
-    protected boolean jumping, falling;
+    boolean jumping;
+    protected boolean falling;
     protected FacingDirection facingDirection = FacingDirection.RIGHT;
     protected float gravity = 0f;
 
@@ -94,16 +95,8 @@ public abstract class GameObject {
         this.jumping = jumping;
     }
 
-    public boolean isFalling() {
-        return falling;
-    }
-
     public void setFalling(boolean falling) {
         this.falling = falling;
-    }
-
-    public FacingDirection getFacingDirection() {
-        return facingDirection;
     }
 
     public void setFacingDirection(FacingDirection facingDirection) {
@@ -125,16 +118,24 @@ public abstract class GameObject {
         return velocity;
     }
 
-    public void setVelocity(Vector2f velocity) {
-        this.velocity = velocity;
-    }
-
+    /**
+     * Updates it self
+     */
     public abstract void update();
 
+    /**
+     * It renders itself
+     *
+     * @param g graphics object
+     */
     public abstract void render(Graphics g);
 
-    //todo rename this method; like - sense()
-    public abstract void collision(Model model);
+    /**
+     * Game object perceive the game world to take action accordingly.
+     *
+     * @param model game world
+     */
+    public abstract void perceiveEnv(Model model);
 
     /**
      * Get bounds for collision detection
