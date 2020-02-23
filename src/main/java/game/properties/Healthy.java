@@ -25,7 +25,7 @@ public interface Healthy {
      */
     default void showHealth(Point2f centre, int health, int maxHealth, Graphics g) {
         //Converting to 100 based health
-        health = (health / maxHealth) * HEALTH_BAR_RANGE;
+        health = (int) (((float) health / maxHealth) * HEALTH_BAR_RANGE);
         g.setColor(Color.GREEN);
         int lifeLeft = (int) (health * HEALTH_BAR_WIDTH_MULTIPLIER);
         g.fillRect((int) centre.getX(), (int) centre.getY() - HEALTH_BAR_OFFSET_ABOVE_HEAD, lifeLeft, HEALTH_BAR_HEIGHT);

@@ -22,12 +22,18 @@ public class MovableBlock extends GameObject implements FineGrainedCollider {
     //Variables
     private float friction;
     private float speedX;
+    private boolean touchingPlayer;
 
     public MovableBlock(Point2f centre) {
         super(DEFAULT_WIDTH, DEFAULT_HEIGHT, centre, GameObjectType.MOVABLE_BLOCK);
         gravity = DEFAULT_GRAVITY;
         friction = DEFAULT_FRICTION;
         speedX = DEFAULT_SPEED_X;
+    }
+
+
+    public void setTouchingPlayer(boolean touchingPlayer) {
+        this.touchingPlayer = touchingPlayer;
     }
 
     @Override
@@ -43,7 +49,7 @@ public class MovableBlock extends GameObject implements FineGrainedCollider {
         if (velocity.getX() > 0) {
             velocity.setX(Math.max(0, velocity.getX() - friction));
         } else if (velocity.getX() < 0) {
-            velocity.setX(Math.max(0, velocity.getX() + friction));
+            velocity.setX(Math.min(0, velocity.getX() + friction));
         }
     }
 
@@ -56,10 +62,8 @@ public class MovableBlock extends GameObject implements FineGrainedCollider {
     @Override
     public void perceiveEnv(Model model) {
         //If touching player then move according to the player
-        if (getBoundsLeft().intersects(model.getPlayer1().getBounds()) || getBoundsRight().intersects(model.getPlayer1().getBounds())) {
+        if (touchingPlayer) {
             velocity.setX(velocity.getX() + model.getPlayer1().getVelocity().getX() > 0 ? speedX : -speedX);
-        } else {
-            velocity.setX(0);
         }
 
         //todo implement LOS because when player is around only then this object may be moving.
@@ -72,6 +76,9 @@ public class MovableBlock extends GameObject implements FineGrainedCollider {
         willCollide.addAll(model.getEnemies());
         //Not taking account that this block can fall on a player.
         for (GameObject object : willCollide) {
+            if (object == this) {
+                continue;
+            }
             switch (object.getType()) {
                 case CHARGER:
                 case GUARDIAN:

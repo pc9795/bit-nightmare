@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
 public class QuadTreeTest {
     @Test
     public void testChop_ObjectLiesIn2ndAnd3rdQuadrant() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        QuadTree tree = new QuadTree(0, new Rectangle(100, 100));
+        QuadTree tree = new QuadTree( new Rectangle(100, 100));
         TestGameObject obj = new TestGameObject(10, 50, new Point2f(10, 10), null);
         Method method = tree.getClass().getDeclaredMethod("chop", GameObject.class);
         method.setAccessible(true);
@@ -41,7 +41,7 @@ public class QuadTreeTest {
 
     @Test
     public void testChop_ObjectInCentre() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        QuadTree tree = new QuadTree(0, new Rectangle(100, 100));
+        QuadTree tree = new QuadTree( new Rectangle(100, 100));
         TestGameObject obj = new TestGameObject(50, 50, new Point2f(10, 10), null);
         Method method = tree.getClass().getDeclaredMethod("chop", GameObject.class);
         method.setAccessible(true);

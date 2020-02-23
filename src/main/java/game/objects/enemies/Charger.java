@@ -20,7 +20,7 @@ public class Charger extends GameObject implements FineGrainedCollider, Healthy,
     private static final int DEFAULT_HEIGHT = 32;
     private static final float DEFAULT_SPEED_X = 4f;
     private static final int DEFAULT_LOS = 300;
-    private static final int DEFAULT_HEALTH = 100;
+    private static final int DEFAULT_HEALTH = 30;
     //Variables
     private boolean playerDetected;
     private int health;

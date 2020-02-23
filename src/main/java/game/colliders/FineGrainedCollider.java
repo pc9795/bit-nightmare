@@ -33,7 +33,7 @@ public interface FineGrainedCollider {
             o1.setJumping(false);
             collisions[1] = true;
         } else if (bounds.intersects(getBoundsTop())) {
-            o1.getCentre().setY(o2.getCentre().getY() + o2.getWidth() + 1);
+            o1.getCentre().setY(o2.getCentre().getY() + o2.getWidth() + 2);
             o1.getVelocity().setY(0);
             collisions[0] = true;
         } else if (bounds.intersects(getBoundsLeft())) {

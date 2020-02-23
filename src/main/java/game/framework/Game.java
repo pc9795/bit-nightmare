@@ -76,8 +76,8 @@ public class Game extends JFrame implements Runnable {
         canvas.addMouseMotionListener(MouseController.getInstance());
         canvas.addMouseWheelListener(MouseController.getInstance());
         GamepadController.getInstance().setDetecting(true);
-        gamepadControllerThread = new Thread(GamepadController.getInstance());
-        gamepadControllerThread.start();
+        //gamepadControllerThread = new Thread(GamepadController.getInstance());
+        //gamepadControllerThread.start();
 
         //Configuring game window
         getContentPane().add(canvas);

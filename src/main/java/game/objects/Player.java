@@ -2,6 +2,8 @@ package game.objects;
 
 import game.colliders.FineGrainedCollider;
 import game.framework.Model;
+import game.objects.environment.HidingBlock;
+import game.objects.environment.movables.MovableBlock;
 import game.objects.weapons.Weapon;
 import game.physics.Point2f;
 import game.properties.Healthy;
@@ -46,6 +48,11 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
         maxHealth = DEFAULT_HEALTH;
         speedX = DEFAULT_SPEED_X;
         speedY = DEFAULT_SPEED_Y;
+
+        //todo remove
+        this.centre.setX(9647);
+        this.centre.setY(577);
+        bitBotFound = true;
 
     }
 
@@ -97,7 +104,8 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
     }
 
     @Override
-    public void render(Graphics g) {
+    public void
+    render(Graphics g) {
         g.setColor(new Color(0, 0, 255));
         g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
 
@@ -129,9 +137,10 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
         boolean[] collisions;
         boolean bottomCollision = false;
         List<GameObject> willCollide = model.getEnvironmentQuadTree().retrieve(this);
+        willCollide.addAll(model.getMovableEnvironment());
         for (GameObject env : willCollide) {
             Rectangle bounds = env.getBounds();
-            switch (env.type) {
+            switch (env.getType()) {
                 case CHECKPOINT:
                     if (bounds.intersects(getBounds())) {
                         model.setLastCheckpoint(env.getCentre().copy());
@@ -148,6 +157,26 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
                     collisions = fineGrainedCollision(this, env);
                     if (collisions[FineGrainedCollider.BOTTOM]) {
                         bottomCollision = true;
+                    }
+                    break;
+                case MOVABLE_BLOCK:
+                    collisions = fineGrainedCollision(this, env);
+                    if (collisions[FineGrainedCollider.LEFT] || collisions[FineGrainedCollider.RIGHT]) {
+                        ((MovableBlock) env).setTouchingPlayer(true);
+                    } else {
+                        ((MovableBlock) env).setTouchingPlayer(false);
+                    }
+                    if (collisions[FineGrainedCollider.BOTTOM]) {
+                        bottomCollision = true;
+                    }
+                    break;
+                case HIDING_BLOCK:
+                    collisions = fineGrainedCollision(this, env);
+                    if (collisions[FineGrainedCollider.BOTTOM]) {
+                        bottomCollision = true;
+                        ((HidingBlock) env).setTouchingPlayer(true);
+                    } else {
+                        ((HidingBlock) env).setTouchingPlayer(false);
                     }
                     break;
             }
@@ -240,7 +269,11 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
             return null;
         }
         lastFiredBullet = now;
-        return weapons.get(currentWeaponIndex).fire(centre, facingDirection);
+        Point2f bulletPos = centre.copy();
+        if (facingDirection == FacingDirection.RIGHT) {
+            bulletPos.setX(bulletPos.getX() + width);
+        }
+        return weapons.get(currentWeaponIndex).fire(bulletPos, facingDirection);
     }
 
     private void addWeapon(Weapon weapon) {

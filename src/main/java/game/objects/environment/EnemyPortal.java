@@ -23,7 +23,7 @@ public class EnemyPortal extends GameObject implements Enemy {
     private static final int DEFAULT_LOS = 500;
     private static final int DEFAULT_RANGE = 300;
     private static final float DEFAULT_SPAWN_FREQ_IN_SEC = 1f;
-    private static final int DEFAULT_ENEMY_COUNT = 10;
+    private static final int DEFAULT_ENEMY_COUNT = 5;
     //Variables
     private List<GameObjectType> enemyTypes;
     private long lastBeingSpawned;

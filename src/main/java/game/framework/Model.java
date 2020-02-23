@@ -188,12 +188,15 @@ public class Model {
      * Load a last checkpoint
      */
     private void loadLastCheckPoint() {
+        //todo improve
         boolean bitBotFound = player1.isBitBotFound();
         List<Weapon> weapons = player1.getWeapons();
         int currentWeaponIndex = player1.getCurrentWeaponIndex();
         try {
             loadLevel(currentLevel);
-            player1.setCentre(lastCheckpoint.copy());
+            if (lastCheckpoint != null) {
+                player1.setCentre(lastCheckpoint.copy());
+            }
             player1.setBitBotFound(bitBotFound);
             player1.setWeapons(weapons);
             player1.setCurrentWeaponIndex(currentWeaponIndex);

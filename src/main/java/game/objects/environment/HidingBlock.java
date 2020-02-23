@@ -19,14 +19,28 @@ public class HidingBlock extends GameObject {
     private long lastHiddenTime;
     private boolean hidden;
     private int hidingTimeInSec;
+    private boolean touchingPlayer;
+
 
     public HidingBlock(Point2f centre) {
         super(DEFAULT_WIDTH, DEFAULT_HEIGHT, centre, GameObjectType.HIDING_BLOCK);
         hidingTimeInSec = DEFAULT_HIDING_TIME_IN_SEC;
     }
 
+    public void setTouchingPlayer(boolean touchingPlayer) {
+        this.touchingPlayer = touchingPlayer;
+    }
+
     @Override
     public void update() {
+        if (touchingPlayer) {
+            hidden = true;
+            lastHiddenTime = System.currentTimeMillis();
+        }
+        long now = System.currentTimeMillis();
+        if (hidden && (now - lastHiddenTime > hidingTimeInSec * 1000)) {
+            hidden = false;
+        }
     }
 
     @Override
@@ -41,12 +55,6 @@ public class HidingBlock extends GameObject {
 
     @Override
     public void perceiveEnv(Model model) {
-        if (getBounds().intersects(model.getPlayer1().getBounds())) {
-            hidden = true;
-            lastHiddenTime = System.currentTimeMillis();
-        } else if (hidden && (System.currentTimeMillis() - lastHiddenTime > hidingTimeInSec * 1000)) {
-            hidden = false;
-        }
     }
 
     @Override

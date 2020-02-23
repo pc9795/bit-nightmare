@@ -28,7 +28,7 @@ public class Guardian extends GameObject implements Healthy, EnemyCollider, Enem
     private static final float DEFAULT_BULLET_FREQ_IN_SEC = 1.5f;
     private static final int DEFAULT_LOS = 500;
     private static final float DEFAULT_CHARGING_PROB = 0.002f;
-    private static final int DEFAULT_HEALTH = 100;
+    private static final int DEFAULT_HEALTH = 500;
     //Variables
     private int health;
     private Random random = new Random();
