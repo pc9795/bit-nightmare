@@ -2,7 +2,6 @@ package game.framework.controllers;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.security.Key;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +33,7 @@ SOFTWARE.
  */
 
 /**
- * Singleton class
+ * Controller to access keyboard
  */
 public final class KeyboardController implements KeyListener {
     private static final KeyboardController instance = new KeyboardController();
@@ -47,11 +46,14 @@ public final class KeyboardController implements KeyListener {
     }
 
 
+    /**
+     * Initialization
+     */
     private void init() {
         // All the keys supported by the class must be entered in the map for one time. Else it can result in
         // NullPointerException if we trying to access a non-existing key.
         List<Integer> configuredKeys = Arrays.asList(KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_S,
-                KeyEvent.VK_Q, KeyEvent.VK_SPACE, KeyEvent.VK_ESCAPE, KeyEvent.VK_E);
+                KeyEvent.VK_Q, KeyEvent.VK_SPACE, KeyEvent.VK_ESCAPE);
         for (Integer key : configuredKeys) {
             keys.put(key, false);
             pollCount.put(key, 0);
@@ -62,6 +64,10 @@ public final class KeyboardController implements KeyListener {
         return instance;
     }
 
+    /**
+     * It must be called per frame. This method implements a functionality to check whether a button is pressed once
+     * or not. As when button is pressed for multiple frames it can cause unexpected behavior
+     */
     public void poll() {
         for (Integer key : pollCount.keySet()) {
             if (keys.get(key)) {
@@ -127,16 +133,7 @@ public final class KeyboardController implements KeyListener {
         return pollCount.get(KeyEvent.VK_SPACE) > 0;
     }
 
-    public boolean isEscPressedOnce() {
-        return pollCount.get(KeyEvent.VK_ESCAPE) == 1;
-    }
-
     public boolean isEscPressed() {
         return pollCount.get(KeyEvent.VK_ESCAPE) > 0;
     }
-
-    public boolean isEPressed() {
-        return pollCount.get(KeyEvent.VK_E) > 0;
-    }
-
 }

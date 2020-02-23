@@ -65,11 +65,10 @@ public class Model {
     private String currentLevel;
 
     public Model(int width, int height) throws IOException, URISyntaxException {
+        //Things which will be added and removed are stored in ArrayList.
         this.enemies = new CopyOnWriteArrayList<>();
-        //It will not be modified therefore ArrayList
         this.environment = new ArrayList<>();
         this.collectibles = new CopyOnWriteArrayList<>();
-        //It will not be modified therefore ArrayList
         this.levels = new ArrayList<>();
         this.environmentQuadTree = new QuadTree(new Rectangle(width, height));
         this.movableEnvironment = new ArrayList<>();
@@ -79,6 +78,12 @@ public class Model {
 
     }
 
+    /**
+     * Initialization
+     *
+     * @throws URISyntaxException if the file location containing level info is not in a correct format
+     * @throws IOException        not able to load level files
+     */
     private void init() throws URISyntaxException, IOException {
         URI uri = Model.class.getResource(Constants.Level.INFO_FILE_NAME).toURI();
         try (BufferedReader br = Files.newBufferedReader(Paths.get(uri))) {
@@ -113,10 +118,6 @@ public class Model {
         return collectibles;
     }
 
-    public Point2f getLastCheckpoint() {
-        return lastCheckpoint;
-    }
-
     public void setLastCheckpoint(Point2f lastCheckpoint) {
         this.lastCheckpoint = lastCheckpoint;
     }
@@ -133,6 +134,12 @@ public class Model {
         return levelBoundary;
     }
 
+    /**
+     * Load a level
+     *
+     * @param levelName name of the level
+     * @throws IOException not able to load level files
+     */
     private void loadLevel(String levelName) throws IOException {
         clean();
         Level level = LevelLoader.getInstance().loadLevel(levelName);
@@ -140,33 +147,33 @@ public class Model {
         currentLevel = levelName;
     }
 
-    private void loadLevel(String levelName, Point2f lastCheckpoint) throws IOException {
-        clean();
-        Level level = LevelLoader.getInstance().loadLevel(levelName);
-        loadLevelUtil(level);
-        currentLevel = levelName;
-        player1.setCentre(lastCheckpoint.copy());
-    }
-
+    /**
+     * Convert level object into game objects
+     *
+     * @param level level object
+     */
     private void loadLevelUtil(Level level) {
         levelBoundary = new Boundary(level.getMaxX() * Constants.Level.PIXEL_TO_WIDTH_RATIO,
                 level.getMaxY() * Constants.Level.PIXEL_TO_WIDTH_RATIO);
         // QuadTree is to be initialized by the new boundaries.
-        environmentQuadTree = new QuadTree(0, new Rectangle(0, 0, (int) levelBoundary.getxMax(), (int) levelBoundary.getyMax()));
+        environmentQuadTree = new QuadTree(new Rectangle(0, 0, (int) levelBoundary.getxMax(), (int) levelBoundary.getyMax()));
 
+        //Convert level objects to game object
         for (LevelObject object : level.getLevelObjects()) {
             GameObject.GameObjectType type = GameObject.GameObjectType.valueOf(object.getType());
             Point2f center = new Point2f(object.getCentre().getX() * Constants.Level.PIXEL_TO_WIDTH_RATIO,
                     object.getCentre().getY() * Constants.Level.PIXEL_TO_WIDTH_RATIO, levelBoundary);
-            GameObject gameObject = GameObjectFactory.getGameObject(type, object.getWidth(), object.getHeight(), center);
+            GameObject gameObject = GameObjectFactory.getGameObject(type, center);
             addGameObject(gameObject);
         }
         if (player1 == null) {
             throw new RuntimeException("No player found in the level.");
         }
-        lastCheckpoint = player1.getCentre().copy();
     }
 
+    /**
+     * Clean game world
+     */
     private void clean() {
         enemies.clear();
         environmentQuadTree.clear();
@@ -178,25 +185,30 @@ public class Model {
     }
 
     /**
+     * Load a last checkpoint
+     */
+    private void loadLastCheckPoint() {
+        boolean bitBotFound = player1.isBitBotFound();
+        List<Weapon> weapons = player1.getWeapons();
+        int currentWeaponIndex = player1.getCurrentWeaponIndex();
+        try {
+            loadLevel(currentLevel);
+            player1.setCentre(lastCheckpoint.copy());
+            player1.setBitBotFound(bitBotFound);
+            player1.setWeapons(weapons);
+            player1.setCurrentWeaponIndex(currentWeaponIndex);
+
+        } catch (IOException e) {
+            throw new RuntimeException(String.format("Error while loading checkpoing: %s on level: %s", lastCheckpoint, currentLevel));
+        }
+    }
+
+    /**
      * This is the heart of the game , where the model takes in all the inputs ,decides the outcomes and then changes the model accordingly.
      */
-    public void gameLogic() {
-        //Less than 0 for weird off by one error.
+    void gameLogic() {
         if (player1.getHealth() <= 0) {
-            //todo saving state; collectibles(ex - bit bot found, weapons)
-            //todo remove
-            boolean bitBotFound = player1.isBitBotFound();
-            List<Weapon> weapons = player1.getWeapons();
-            int currentWeaponIndex = player1.getCurrentWeaponIndex();
-            try {
-                loadLevel(currentLevel, lastCheckpoint);
-                //todo remove
-                player1.setBitBotFound(bitBotFound);
-                player1.setWeapons(weapons);
-                player1.setCurrentWeaponIndex(currentWeaponIndex);
-            } catch (IOException e) {
-                throw new RuntimeException(String.format("Error while loading checkpoing: %s on level: %s", lastCheckpoint, currentLevel));
-            }
+            loadLastCheckPoint();
         }
         processInput();
         //Player
@@ -229,37 +241,19 @@ public class Model {
 
         //Left and right
         if (keyboardController.isAPressed() || gamepadController.isLeftPressed()) {
-            player1.getVelocity().setX(-Constants.PLAYER_VELOCITY_X);
-            player1.setFacingDirection(GameObject.FacingDirection.LEFT);
+            player1.moveLeft();
         } else if (keyboardController.isDPressed() || gamepadController.isRightPressed()) {
-            player1.getVelocity().setX(Constants.PLAYER_VELOCITY_X);
-            player1.setFacingDirection(GameObject.FacingDirection.RIGHT);
+            player1.moveRight();
         } else {
-            float velX = player1.getVelocity().getX();
-            if (velX > 0) {
-                player1.setFacingDirection(GameObject.FacingDirection.RIGHT);
-            } else if (velX < 0) {
-                player1.setFacingDirection(GameObject.FacingDirection.LEFT);
-            }
-            player1.getVelocity().setX(0);
+            player1.makeIdle();
         }
         //Jump
-        if ((keyboardController.isWPressedOnce() || gamepadController.isAPressedOnce())
-                && !player1.isJumping() && player1.isBitBotFound()) {
-            player1.getVelocity().setY(-Constants.PLAYER_VELOCITY_Y);
-            player1.setJumping(true);
+        if ((keyboardController.isWPressedOnce() || gamepadController.isAPressedOnce())) {
+            player1.jump();
         }
         //Duck
         if (keyboardController.isSPressedOnce() || gamepadController.isXPressedOnce()) {
-            if (player1.isDucking()) {
-                //todo check that here I am not resetting y-axis. I think code is working fine because of bottom collision.
-                player1.setHeight(player1.getHeight() * 2);
-                player1.setDucking(false);
-            } else {
-                player1.getCentre().setY(player1.getCentre().getY() + player1.getHeight() / 2);
-                player1.setHeight(player1.getHeight() / 2);
-                player1.setDucking(true);
-            }
+            player1.toggleDuck();
         }
         //Cycle weapon
         if (keyboardController.isQPressedOnce() || gamepadController.isYPressedOnce()) {

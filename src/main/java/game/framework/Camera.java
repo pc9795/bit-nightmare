@@ -7,12 +7,13 @@ import java.awt.*;
 /**
  * Created By: Prashant Chaubey
  * Created On: 19-02-2020 00:48
- * Purpose: TODO:
+ * Purpose: Camera object which follows a object
  **/
 public class Camera {
+    private static final int CAMERA_OFFSET = 400;
     private Point point;
 
-    public Camera(float x, float y) {
+    Camera(float x, float y) {
         this.point = new Point((int) x, (int) y);
     }
 
@@ -25,7 +26,6 @@ public class Camera {
     }
 
     public void update(GameObject object) {
-        //todo make configurable
-        point.x = (int) -(object.getCentre().getX() - 400);
+        point.x = (int) -(object.getCentre().getX() - CAMERA_OFFSET);
     }
 }

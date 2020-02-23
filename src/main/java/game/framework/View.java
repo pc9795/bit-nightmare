@@ -31,23 +31,26 @@ SOFTWARE.
    
    (MIT LICENSE ) e.g do what you want with this :-) 
  */
-public class View extends Canvas {
+class View extends Canvas {
     private Model gameWorld;
     private BufferStrategy bs;
     private Camera camera;
 
-    public View(Model world) {
+    View(Model world) {
         this.gameWorld = world;
         this.camera = new Camera(0, 0);
     }
 
     void updateView() {
+        //Creating buffers for one time. We cannot create early as it throws an exception
         if (bs == null) {
             createBufferStrategy(Constants.BUFFER_COUNT);
             bs = getBufferStrategy();
         }
+        //Update camera
         camera.update(gameWorld.getPlayer1());
         Graphics g = bs.getDrawGraphics();
+        //Clear scenery
         g.clearRect(0, 0, getWidth(), getHeight());
         Graphics2D g2d = (Graphics2D) g;
         g2d.translate(camera.getX(), camera.getY());
@@ -60,7 +63,7 @@ public class View extends Canvas {
         gameWorld.getPlayer1().render(g);
         g2d.translate(-camera.getX(), -camera.getY());
 
-        //todo remove; only for debugd
+        //todo remove; only for debug
         Point mousePos = MouseController.getInstance().getCurrentPos();
         g.drawString(String.format("X=%s,Y=%s", mousePos.getX(), mousePos.getY()), mousePos.x, mousePos.y);
 

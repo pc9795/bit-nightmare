@@ -32,6 +32,8 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
     private long lastFiredBullet = System.currentTimeMillis();
     private float bulletFreqInSec;
     private int maxHealth;
+    private float speedX;
+    private float speedY;
 
     Player(Point2f centre) {
         super(DEFAULT_WIDTH, DEFAULT_HEIGHT, centre, GameObjectType.PLAYER);
@@ -42,6 +44,9 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
         bulletFreqInSec = DEFAULT_BULLET_FREQ_IN_SEC;
         health = DEFAULT_HEALTH;
         maxHealth = DEFAULT_HEALTH;
+        speedX = DEFAULT_SPEED_X;
+        speedY = DEFAULT_SPEED_Y;
+
     }
 
     public int getHeight() {
@@ -50,14 +55,6 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
 
     public void setHeight(int height) {
         this.height = height;
-    }
-
-    public boolean isDucking() {
-        return ducking;
-    }
-
-    public void setDucking(boolean ducking) {
-        this.ducking = ducking;
     }
 
     public boolean isBitBotFound() {
@@ -249,6 +246,44 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
     private void addWeapon(Weapon weapon) {
         weapons.add(weapon);
         currentWeaponIndex = weapons.size() - 1;
+    }
+
+    public void moveRight() {
+        velocity.setX(speedX);
+        facingDirection = FacingDirection.RIGHT;
+    }
+
+    public void moveLeft() {
+        velocity.setX(-speedX);
+        facingDirection = FacingDirection.LEFT;
+    }
+
+    public void makeIdle() {
+        if (velocity.getX() > 0) {
+            facingDirection = FacingDirection.RIGHT;
+        } else if (velocity.getX() < 0) {
+            facingDirection = FacingDirection.LEFT;
+        }
+        velocity.setX(0);
+    }
+
+    public void toggleDuck() {
+        if (ducking) {
+            centre.setY(centre.getY() - height / 2);
+            height *= 2;
+            ducking = false;
+        } else {
+            centre.setY(centre.getY() + height / 2);
+            height /= 2;
+            ducking = true;
+        }
+    }
+
+    public void jump() {
+        if (!jumping && isBitBotFound()) {
+            velocity.setY(-speedY);
+            jumping = true;
+        }
     }
 
     @Override

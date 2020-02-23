@@ -9,7 +9,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 /*
  * Created by Abraham Campbell on 15/01/2020.
@@ -66,7 +65,6 @@ public class Game extends JFrame implements Runnable {
         // It is important that the preferred size is set on the GamePanel and not on the JFrame. If the application
         // size is set on the JFrame, some of the drawing area will be taken up by the frame and the drawing area will
         // be little smaller.
-        //todo setPreferredSize vs setSize
         canvas.setPreferredSize(new Dimension(width, height));
         canvas.setBackground(Color.BLACK);
         // We are handling repaint on our own.
@@ -82,7 +80,6 @@ public class Game extends JFrame implements Runnable {
         gamepadControllerThread.start();
 
         //Configuring game window
-        //todo getContentPane().add(..) vs add(..)
         getContentPane().add(canvas);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         // We are handling repaint on our own.
@@ -106,7 +103,7 @@ public class Game extends JFrame implements Runnable {
     @Override
     public void run() {
         canvas.requestFocus();
-        // Can shift to nano seconds if need more juice with frames.
+        // Can shift to nano seconds if need more accuracy with frames.
         long lastTime = System.currentTimeMillis();
         double timeBetweenFrames = 1000 / Constants.TARGET_FPS;
         double delta = 0;

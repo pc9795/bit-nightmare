@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * Created By: Prashant Chaubey
  * Created On: 17-02-2020 21:00
- * Purpose: TODO:
+ * Purpose: Controller to access game pad
  **/
 public class GamepadController implements Runnable {
     private static final GamepadController INSTANCE = new GamepadController();
@@ -18,13 +18,13 @@ public class GamepadController implements Runnable {
     private Controller gamepad;
     private boolean detecting;
 
-    public static class GamepadEvent {
-        public static final String BUTTON_0 = "Button 0";
-        public static final String BUTTON_1 = "Button 1";
-        public static final String BUTTON_2 = "Button 2";
-        public static final String BUTTON_3 = "Button 3";
-        public static final String BUTTON_7 = "Button 7";
-        public static final String X_AXIS = "X Axis";
+    private static class GamepadEvent {
+        static final String BUTTON_0 = "Button 0";
+        static final String BUTTON_1 = "Button 1";
+        static final String BUTTON_2 = "Button 2";
+        static final String BUTTON_3 = "Button 3";
+        static final String BUTTON_7 = "Button 7";
+        static final String X_AXIS = "X Axis";
 
     }
 
@@ -32,6 +32,9 @@ public class GamepadController implements Runnable {
         init();
     }
 
+    /**
+     * Initialization
+     */
     private void init() {
         // All the keys supported by the class must be entered in the map for one time. Else it can result in
         // NullPointerException if we trying to access a non-existing key.
@@ -47,6 +50,10 @@ public class GamepadController implements Runnable {
         return INSTANCE;
     }
 
+    /**
+     * It must be called per frame. This method implements a functionality to check whether a button is pressed once
+     * or not. As when button is pressed for multiple frames it can cause unexpected behavior
+     */
     public void poll() {
         for (String key : pollCount.keySet()) {
             if (keys.get(key)) {
@@ -55,10 +62,6 @@ public class GamepadController implements Runnable {
                 pollCount.put(key, 0);
             }
         }
-    }
-
-    public boolean isDetecting() {
-        return detecting;
     }
 
     public void setDetecting(boolean detecting) {
@@ -75,7 +78,6 @@ public class GamepadController implements Runnable {
             EventQueue queue = gamepad.getEventQueue();
             Event event = new Event();
             while (queue.getNextEvent(event)) {
-
                 Component comp = event.getComponent();
                 if (comp.getName().equals(GamepadEvent.X_AXIS)) {
                     xAxis = event.getValue();
@@ -84,19 +86,20 @@ public class GamepadController implements Runnable {
                 keys.put(comp.getName(), event.getValue() == 1.0f);
             }
             //Hoping the event queue mechanism of the queue will not let events to miss out.
-            sleep();
+            try {
+                Thread.sleep(Constants.GAMEPAD_POLLING_WAIT_TIME_IN_SEC);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    private void sleep() {
-        try {
-            Thread.sleep(Constants.GAMEPAD_POLLING_WAIT_TIME_IN_SEC);
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * Try to identify a controller and connect.
+     *
+     * @return true if able to find a controller and connect to it.
+     */
     private boolean connect() {
         Controller[] controllers;
         DirectAndRawInputEnvironmentPlugin directEnv = new DirectAndRawInputEnvironmentPlugin();
@@ -150,7 +153,6 @@ public class GamepadController implements Runnable {
     public boolean isBPressedOnce() {
         return pollCount.get(GamepadEvent.BUTTON_3) == 1;
     }
-
 
     public boolean isStartPressed() {
         return keys.get(GamepadEvent.BUTTON_7);
