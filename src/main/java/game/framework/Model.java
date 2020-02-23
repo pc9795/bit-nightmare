@@ -160,7 +160,15 @@ public class Model {
 
         //Convert level objects to game object
         for (LevelObject object : level.getLevelObjects()) {
-            GameObject.GameObjectType type = GameObject.GameObjectType.valueOf(object.getType());
+            GameObject.GameObjectType type;
+            //Skipping in case of invalid configuration.
+            try {
+                type = GameObject.GameObjectType.valueOf(object.getType());
+
+            } catch (Exception e) {
+                System.out.println(String.format("Invalid configuration found while loading level with type: %s", object.getType()));
+                continue;
+            }
             Point2f center = new Point2f(object.getCentre().getX() * Constants.Level.PIXEL_TO_WIDTH_RATIO,
                     object.getCentre().getY() * Constants.Level.PIXEL_TO_WIDTH_RATIO, levelBoundary);
             GameObject gameObject = GameObjectFactory.getGameObject(type, center);

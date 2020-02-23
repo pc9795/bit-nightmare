@@ -60,8 +60,12 @@ public class SuperSoldier extends GameObject implements FineGrainedCollider, Hea
 
     @Override
     public void render(Graphics g) {
-        g.setColor(new Color(255, 127, 39));
-        g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
+        if (texture != null && texture.getIdle().length != 0) {
+            g.drawImage(texture.getIdle()[0], (int) centre.getX(), (int) centre.getY(), width, height, null);
+        } else {
+            g.setColor(new Color(255, 127, 39));
+            g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
+        }
         showHealth(centre, health, maxHealth, g);
     }
 

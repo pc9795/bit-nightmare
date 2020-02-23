@@ -45,10 +45,13 @@ public class HidingBlock extends GameObject {
 
     @Override
     public void render(Graphics g) {
-        g.setColor(new Color(185, 122, 86));
         if (hidden) {
-            g.fillRect((int) centre.getX(), (int) centre.getY(), 0, 0);
+            return;
+        }
+        if (texture != null && texture.getIdle().length != 0) {
+            g.drawImage(texture.getIdle()[0], (int) centre.getX(), (int) centre.getY(), width, height, null);
         } else {
+            g.setColor(new Color(185, 122, 86));
             g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
         }
     }

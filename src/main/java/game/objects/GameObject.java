@@ -1,9 +1,10 @@
 package game.objects;
 
 import game.framework.Model;
+import game.framework.visual.Texture;
+import game.framework.visual.TextureLoader;
 import game.physics.Point2f;
 import game.physics.Vector2f;
-import game.utils.Constants;
 
 import java.awt.*;
 
@@ -46,29 +47,20 @@ public abstract class GameObject {
     //Centre of object, using 3D as objects may be scaled
     protected Point2f centre;
     protected int width, height;
-    protected boolean hasTextured;
-    protected String textureLocation;
     protected Vector2f velocity = new Vector2f(0, 0);
     protected GameObjectType type;
     boolean jumping;
     protected boolean falling;
     protected FacingDirection facingDirection = FacingDirection.RIGHT;
     protected float gravity = 0f;
+    protected Texture texture;
 
     public GameObject(int width, int height, Point2f centre, GameObjectType type) {
         this.width = width;
         this.height = height;
         this.centre = centre;
         this.type = type;
-    }
-
-    public GameObject(String textureLocation, int width, int height, Point2f centre, GameObjectType type) {
-        this.hasTextured = true;
-        this.textureLocation = textureLocation;
-        this.width = width;
-        this.height = height;
-        this.centre = centre;
-        this.type = type;
+        this.texture = TextureLoader.getInstance().getTexture(type);
     }
 
     public Point2f getCentre() {
@@ -87,10 +79,6 @@ public abstract class GameObject {
         return height;
     }
 
-    public boolean isJumping() {
-        return jumping;
-    }
-
     public void setJumping(boolean jumping) {
         this.jumping = jumping;
     }
@@ -99,19 +87,8 @@ public abstract class GameObject {
         this.falling = falling;
     }
 
-    public void setFacingDirection(FacingDirection facingDirection) {
-        this.facingDirection = facingDirection;
-    }
-
     public GameObjectType getType() {
         return type;
-    }
-
-    public String getTexture() {
-        if (hasTextured) {
-            return textureLocation;
-        }
-        return Constants.Sprite.BLANK;
     }
 
     public Vector2f getVelocity() {

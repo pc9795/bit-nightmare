@@ -16,6 +16,14 @@ public final class Constants {
     public static final int SCREEN_HEIGHT = 768;
     public static final int BUFFER_COUNT = 3;
     public static final int GAMEPAD_POLLING_WAIT_TIME_IN_SEC = 100;
+    public static final String TEXTURE_CONFIG_FILE_NAME = "/texture_config.json";
+
+    public static final class SoundPaths {
+        private SoundPaths() {
+        }
+
+        public static final String MAIN_THEME = "/sound/theme.ogg";
+    }
 
     public static final class Level {
         private Level() {
@@ -25,13 +33,6 @@ public final class Constants {
         public static final String INFO_FILE_NAME = "/level_names.txt";
         public static final String PROPERTIES_FILE_FORMAT = "/levels/%s.properties";
         public static final String PNG_FILE_FORMAT = "/levels/%s.png";
-    }
-
-    public static final class Sprite {
-        private Sprite() {
-        }
-
-        public static final String BLANK = "blank_sprite.png";
     }
 
     public static final class ErrorMessages {

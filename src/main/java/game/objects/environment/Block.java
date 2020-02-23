@@ -26,8 +26,12 @@ public class Block extends GameObject {
 
     @Override
     public void render(Graphics g) {
-        g.setColor(Color.WHITE);
-        g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
+        if (texture != null && texture.getIdle().length != 0) {
+            g.drawImage(texture.getIdle()[0], (int) centre.getX(), (int) centre.getY(), width, height, null);
+        } else {
+            g.setColor(Color.WHITE);
+            g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
+        }
     }
 
     @Override

@@ -59,8 +59,12 @@ public class Soldier extends GameObject implements EnemyCollider, Healthy, Enemy
 
     @Override
     public void render(Graphics g) {
-        g.setColor(new Color(236, 28, 36));
-        g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
+        if (texture != null && texture.getIdle().length != 0) {
+            g.drawImage(texture.getIdle()[0], (int) centre.getX(), (int) centre.getY(), width, height, null);
+        } else {
+            g.setColor(new Color(236, 28, 36));
+            g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
+        }
         showHealth(centre, health, maxHealth, g);
     }
 

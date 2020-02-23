@@ -50,9 +50,9 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
         speedY = DEFAULT_SPEED_Y;
 
         //todo remove
-        this.centre.setX(9647);
-        this.centre.setY(577);
-        bitBotFound = true;
+        //this.centre.setX(9647);
+        //this.centre.setY(577);
+        //bitBotFound = true;
 
     }
 
@@ -106,18 +106,21 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
     @Override
     public void
     render(Graphics g) {
-        g.setColor(new Color(0, 0, 255));
-        g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
-
+        if (texture != null && texture.getIdle().length != 0) {
+            g.drawImage(texture.getIdle()[0], (int) centre.getX(), (int) centre.getY(), width, height, null);
+        } else {
+            g.setColor(new Color(0, 0, 255));
+            g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
+            //todo remove
+            Graphics2D g2d = (Graphics2D) g;
+            g.setColor(Color.RED);
+            g2d.draw(getBoundsBottom());
+            g2d.draw(getBoundsLeft());
+            g2d.draw(getBoundsRight());
+            g2d.draw(getBoundsTop());
+        }
         //todo remove
-        Graphics2D g2d = (Graphics2D) g;
-        g.setColor(Color.RED);
-        g2d.draw(getBoundsBottom());
-        g2d.draw(getBoundsLeft());
-        g2d.draw(getBoundsRight());
-        g2d.draw(getBoundsTop());
         g.drawString(String.format("X:%s,Y:%s", (int) centre.getX(), (int) centre.getY()), (int) centre.getX(), (int) centre.getY() - 20);
-
         showHealth(centre, health, maxHealth, g);
     }
 

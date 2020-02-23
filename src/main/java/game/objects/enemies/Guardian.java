@@ -84,8 +84,12 @@ public class Guardian extends GameObject implements Healthy, EnemyCollider, Enem
 
     @Override
     public void render(Graphics g) {
-        g.setColor(new Color(0, 168, 243));
-        g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
+        if (texture != null && texture.getIdle().length != 0) {
+            g.drawImage(texture.getIdle()[0], (int) centre.getX(), (int) centre.getY(), width, height, null);
+        } else {
+            g.setColor(new Color(0, 168, 243));
+            g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
+        }
         showHealth(centre, health, maxHealth, g);
     }
 
