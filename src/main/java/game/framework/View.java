@@ -1,10 +1,13 @@
 package game.framework;
 
 import game.framework.controllers.MouseController;
+import game.utils.BufferedImageLoader;
 import game.utils.Constants;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 
 /*
@@ -35,10 +38,18 @@ class View extends Canvas {
     private Model gameWorld;
     private BufferStrategy bs;
     private Camera camera;
+    private BufferedImage bg;
 
     View(Model world) {
         this.gameWorld = world;
         this.camera = new Camera(0, 0);
+        try {
+            this.bg = BufferedImageLoader.getInstance().loadImage(Constants.BACKGROUND_IMG_LOC);
+
+        } catch (IOException e) {
+            System.out.println(String.format("Unable to load background image:%s", Constants.BACKGROUND_IMG_LOC));
+            e.printStackTrace();
+        }
     }
 
     void updateView() {
@@ -52,6 +63,7 @@ class View extends Canvas {
         Graphics g = bs.getDrawGraphics();
         //Clear scenery
         g.clearRect(0, 0, getWidth(), getHeight());
+        g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
         Graphics2D g2d = (Graphics2D) g;
         g2d.translate(camera.getX(), camera.getY());
         //Drawing stuff

@@ -1419,5 +1419,83 @@
         "imgLoc": "/sprites/enemies/guardian/attack/right/Attack_017.png"
       }
     ]
+  },
+  {
+    "type": "BIT_REVOLVER",
+    "spriteSheets": [],
+    "idleRight": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bit_revolver.png"
+      }
+    ]
+  },
+  {
+    "type": "BIT_ARRAY_GUN",
+    "spriteSheets": [],
+    "idleRight": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bit_array_gun.png"
+      }
+    ]
+  },
+  {
+    "type": "BIT_MATRIX_BLAST",
+    "spriteSheets": [],
+    "idleRight": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bit_matrix_blast.png"
+      }
+    ]
+  },
+  {
+    "type": "BLOCK",
+    "spriteSheets": [
+      "/sprites/techno_bricks.png"
+    ],
+    "idleRight": [
+      {
+        "imageType": "SPRITE_SHEET",
+        "index": 0,
+        "x": 13,
+        "y": 1,
+        "width": 16,
+        "height": 32
+      }
+    ]
+  },
+  {
+    "type": "MOVABLE_BLOCK",
+    "spriteSheets": [
+      "/sprites/techno_bricks.png"
+    ],
+    "idleRight": [
+      {
+        "imageType": "SPRITE_SHEET",
+        "index": 0,
+        "x": 3,
+        "y": 1,
+        "width": 16,
+        "height": 32
+      }
+    ]
+  },
+  {
+    "type": "HIDING_BLOCK",
+    "spriteSheets": [
+      "/sprites/techno_bricks.png"
+    ],
+    "idleRight": [
+      {
+        "imageType": "SPRITE_SHEET",
+        "index": 0,
+        "x": 1,
+        "y": 1,
+        "width": 16,
+        "height": 32
+      }
+    ]
   }
 ]

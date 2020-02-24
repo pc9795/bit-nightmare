@@ -35,7 +35,7 @@ public class TextureLoader {
 
     private void init() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        try (InputStream in = TextureLoader.class.getResourceAsStream(Constants.TEXTURE_CONFIG_FILE_NAME)) {
+        try (InputStream in = TextureLoader.class.getResourceAsStream(Constants.TEXTURE_CONFIG_FILE_LOC)) {
             //Loading data from json
             TextureConfig[] configs = mapper.readValue(in, TextureConfig[].class);
 

@@ -85,7 +85,7 @@ public class Model {
      * @throws IOException        not able to load level files
      */
     private void init() throws URISyntaxException, IOException {
-        URI uri = Model.class.getResource(Constants.Level.INFO_FILE_NAME).toURI();
+        URI uri = Model.class.getResource(Constants.Level.INFO_FILE_LOC).toURI();
         try (BufferedReader br = Files.newBufferedReader(Paths.get(uri))) {
             String line;
             while ((line = br.readLine()) != null) {

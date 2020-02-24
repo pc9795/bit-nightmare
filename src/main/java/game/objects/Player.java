@@ -50,9 +50,9 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
         speedY = DEFAULT_SPEED_Y;
 
         //todo remove
-        this.centre.setX(10774);
-        this.centre.setY(500);
-        bitBotFound = true;
+        //this.centre.setX(10774);
+        //this.centre.setY(500);
+        //bitBotFound = true;
 
     }
 

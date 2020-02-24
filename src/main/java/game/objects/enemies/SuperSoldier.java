@@ -59,8 +59,6 @@ public class SuperSoldier extends ShootingAndDuckingEnemyAdapter {
         if (!renderTexture(g)) {
             renderDefault(g);
         }
-        //todo remove
-        g.drawRect((int) centre.getX(), (int) centre.getY(), width, height);
     }
 
     private boolean renderTexture(Graphics g) {

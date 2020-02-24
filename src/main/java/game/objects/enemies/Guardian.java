@@ -103,9 +103,7 @@ public class Guardian extends ShootingEnemyAdapter {
         if (!renderTexture(g)) {
             renderDefault(g);
         }
-        //todo remove
         showHealth(centre, health, maxHealth, g);
-        g.drawRect((int) centre.getX(), (int) centre.getY(), width, height);
     }
 
     private boolean renderTexture(Graphics g) {
