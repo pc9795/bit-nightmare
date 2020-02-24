@@ -44,6 +44,7 @@ public abstract class GameObject {
     }
 
     protected static final float DEFAULT_GRAVITY = 0.1f;
+    protected static final float CORPSE_REMOVAL_PERIOD_IN_SEC = 2f;
     //Centre of object, using 3D as objects may be scaled
     protected Point2f centre;
     protected int width, height;

@@ -50,9 +50,9 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
         speedY = DEFAULT_SPEED_Y;
 
         //todo remove
-        //this.centre.setX(9647);
-        //this.centre.setY(577);
-        //bitBotFound = true;
+        this.centre.setX(10774);
+        this.centre.setY(500);
+        bitBotFound = true;
 
     }
 
@@ -106,8 +106,8 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
     @Override
     public void
     render(Graphics g) {
-        if (texture != null && texture.getIdle().length != 0) {
-            g.drawImage(texture.getIdle()[0], (int) centre.getX(), (int) centre.getY(), width, height, null);
+        if (texture != null && texture.getIdleRight().length != 0) {
+            g.drawImage(texture.getIdleRight()[0], (int) centre.getX(), (int) centre.getY(), width, height, null);
         } else {
             g.setColor(new Color(0, 0, 255));
             g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);

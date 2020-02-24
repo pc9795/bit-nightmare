@@ -1,16 +1,24 @@
 package game.framework.visual;
 
-import game.objects.GameObject;
-
 /**
  * Created By: Prashant Chaubey
  * Created On: 23-02-2020 18:25
  * Purpose: An object representing texture configuration
  **/
+@SuppressWarnings({"WeakerAccess", "unused"}) //Public access is needed by jackson. Fields are assigned by jackson
 public class TextureConfig {
     private String type;
     private String[] spriteSheets;
-    private ImageConfig[] idle;
+    private ImageConfig[] idleRight;
+    private ImageConfig[] idleLeft;
+    private ImageConfig[] duckRight;
+    private ImageConfig[] duckLeft;
+    private ImageConfig[] deathLeft;
+    private ImageConfig[] deathRight;
+    private ImageConfig[] attackLeft;
+    private ImageConfig[] attackRight;
+    private ImageConfig[] runningLeft;
+    private ImageConfig[] runningRight;
 
     public String getType() {
         return type;
@@ -20,8 +28,44 @@ public class TextureConfig {
         return spriteSheets;
     }
 
-    public ImageConfig[] getIdle() {
-        return idle;
+    public ImageConfig[] getIdleRight() {
+        return idleRight;
+    }
+
+    public ImageConfig[] getIdleLeft() {
+        return idleLeft;
+    }
+
+    public ImageConfig[] getDuckRight() {
+        return duckRight;
+    }
+
+    public ImageConfig[] getDuckLeft() {
+        return duckLeft;
+    }
+
+    public ImageConfig[] getDeathLeft() {
+        return deathLeft;
+    }
+
+    public ImageConfig[] getDeathRight() {
+        return deathRight;
+    }
+
+    public ImageConfig[] getAttackLeft() {
+        return attackLeft;
+    }
+
+    public ImageConfig[] getAttackRight() {
+        return attackRight;
+    }
+
+    public ImageConfig[] getRunningLeft() {
+        return runningLeft;
+    }
+
+    public ImageConfig[] getRunningRight() {
+        return runningRight;
     }
 
     public enum ImageType {

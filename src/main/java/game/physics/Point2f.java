@@ -79,10 +79,6 @@ public class Point2f {
         this.y = y;
     }
 
-    public Boundary getBoundary() {
-        return boundary;
-    }
-
     public Point2f copy() {
         return new Point2f(x, y, boundary);
     }

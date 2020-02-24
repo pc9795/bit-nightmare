@@ -3,6 +3,7 @@ package game.utils;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * Created By: Prashant Chaubey
@@ -20,7 +21,11 @@ public final class BufferedImageLoader {
     }
 
     public BufferedImage loadImage(String path) throws IOException {
-        return ImageIO.read(BufferedImageLoader.class.getResource(path));
+        URL url = BufferedImageLoader.class.getResource(path);
+        if (url == null) {
+            throw new RuntimeException(String.format("Image not found:%s", path));
+        }
+        return ImageIO.read(url);
     }
 
 }

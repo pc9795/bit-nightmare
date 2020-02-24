@@ -1,11 +1,10 @@
 package game.objects.enemies;
 
-import game.colliders.EnemyCollider;
 import game.framework.Model;
-import game.objects.GameObject;
+import game.framework.visual.Animator;
+import game.objects.enemies.adapters.ShootingAndDuckingEnemyAdapter;
 import game.objects.weapons.bullets.BitRevolverBullet;
 import game.physics.Point2f;
-import game.properties.Healthy;
 
 import java.awt.*;
 import java.util.Random;
@@ -15,28 +14,23 @@ import java.util.Random;
  * Created On: 18-02-2020 00:01
  * Purpose: Attack player using bit revolver
  **/
-public class Soldier extends GameObject implements EnemyCollider, Healthy, Enemy {
+public class Soldier extends ShootingAndDuckingEnemyAdapter {
     //Constants
-    private static final int DEFAULT_WIDTH = 32;
+    private static final int DEFAULT_WIDTH = 64;
     private static final int DEFAULT_HEIGHT = 64;
     private static final int DEFAULT_LOS = 600;
     private static final float DEFAULT_BULLET_FREQ_IN_SEC = 1.5f;
     private static final int DEFAULT_HEALTH = 100;
     private static final float DEFAULT_DUCKING_PROB = 0.002f;
     //Variables
-    private int health;
-    private boolean ducking;
     private Random random = new Random();
     private long lastFiredBullet = System.currentTimeMillis();
     private int los;
     private float bulletFreqInSec;
-    private int maxHealth;
     private float duckingProb;
 
     public Soldier(Point2f centre) {
         super(DEFAULT_WIDTH, DEFAULT_HEIGHT, centre, GameObjectType.SOLDIER);
-        gravity = DEFAULT_GRAVITY;
-        falling = true;
         los = DEFAULT_LOS;
         bulletFreqInSec = DEFAULT_BULLET_FREQ_IN_SEC;
         health = DEFAULT_HEALTH;
@@ -46,6 +40,9 @@ public class Soldier extends GameObject implements EnemyCollider, Healthy, Enemy
 
     @Override
     public void update() {
+        if (dead) {
+            return;
+        }
         if (random.nextInt((int) (1 / duckingProb)) == 1) {
             toggleDuck();
         }
@@ -59,25 +56,42 @@ public class Soldier extends GameObject implements EnemyCollider, Healthy, Enemy
 
     @Override
     public void render(Graphics g) {
-        if (texture != null && texture.getIdle().length != 0) {
-            g.drawImage(texture.getIdle()[0], (int) centre.getX(), (int) centre.getY(), width, height, null);
-        } else {
-            g.setColor(new Color(236, 28, 36));
-            g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
+        if (!renderTexture(g)) {
+            renderDefault(g);
         }
-        showHealth(centre, health, maxHealth, g);
+        //todo remove
+        g.drawRect((int) centre.getX(), (int) centre.getY(), width, height);
     }
 
-    @Override
-    public void perceiveEnv(Model model) {
-        if (health <= 0) {
-            model.getEnemies().remove(this);
+    private boolean renderTexture(Graphics g) {
+        Animator animator = getAnimatorAccordingToState();
+        if (animator == null) {
+            return false;
         }
-        //Detect player and attack
-        attackPlayer(model);
+        if (lastAnimator != null && lastAnimator != animator) {
+            //Reset the last animator
+            lastAnimator.reset();
+            lastAnimator = animator;
+        }
+        //THIS PORTION IS TOO MUCH DEPENDENT ON TEXTURE USED.
+        if (ducking) {
+            animator.draw(g, (int) centre.getX(), (int) centre.getY() - height, width, height * 2);
+            showHealth((int) centre.getX(), (int) centre.getY() - height, health, maxHealth, g);
+        } else if (attacking) {
+            animator.draw(g, (int) (centre.getX() - .5 * width), (int) (centre.getY() - .3 * height), (int) (1.5 * width), (int) (1.3 * height));
+            showHealth(centre, health, maxHealth, g);
+        } else {
+            animator.draw(g, (int) centre.getX(), (int) centre.getY(), width, height);
+            showHealth(centre, health, maxHealth, g);
+        }
+        return true;
+    }
 
-        //Check collision
-        falling = enemyCollision(this, model);
+
+    private void renderDefault(Graphics g) {
+        g.setColor(new Color(236, 28, 36));
+        g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
+        showHealth(centre, health, maxHealth, g);
     }
 
     @Override
@@ -85,8 +99,10 @@ public class Soldier extends GameObject implements EnemyCollider, Healthy, Enemy
         int playerX = (int) model.getPlayer1().getCentre().getX();
         //Player is out of line of sight.
         if (Math.abs(centre.getX() - playerX) > los) {
+            attacking = false;
             return;
         }
+        attacking = true;
         //Turn toward the player
         if (playerX < centre.getX()) {
             facingDirection = FacingDirection.LEFT;
@@ -107,45 +123,5 @@ public class Soldier extends GameObject implements EnemyCollider, Healthy, Enemy
         BitRevolverBullet bullet = new BitRevolverBullet(bulletPos, false, facingDirection);
         model.getBullets().add(bullet);
         lastFiredBullet = now;
-    }
-
-    /**
-     * toogle ducking state
-     */
-    private void toggleDuck() {
-        if (ducking) {
-            centre.setY(centre.getY() - (height / 2));
-            height *= 2;
-            ducking = false;
-        } else {
-            centre.setY(centre.getY() + (height / 2));
-            height /= 2;
-            ducking = true;
-        }
-    }
-
-    @Override
-    public Rectangle getBoundsLeft() {
-        return new Rectangle((int) centre.getX(), (int) centre.getY() + height / 8, width / 4, 3 * (height / 4));
-    }
-
-    @Override
-    public Rectangle getBoundsRight() {
-        return new Rectangle((int) (centre.getX() + 3 * (width / 4)), (int) (centre.getY() + height / 8), width / 4, 3 * (height / 4));
-    }
-
-    @Override
-    public Rectangle getBoundsTop() {
-        return new Rectangle((int) (centre.getX() + (width / 2) - (width / 4)), (int) centre.getY(), width / 2, height / 2);
-    }
-
-    @Override
-    public Rectangle getBoundsBottom() {
-        return new Rectangle((int) (centre.getX() + (width / 2) - (width / 4)), (int) (centre.getY() + height / 2), width / 2, height / 2);
-    }
-
-    @Override
-    public void damageHealth(int damage) {
-        health -= damage;
     }
 }

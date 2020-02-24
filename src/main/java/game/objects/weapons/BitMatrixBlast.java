@@ -27,8 +27,8 @@ public class BitMatrixBlast extends GameObject implements Weapon {
 
     @Override
     public void render(Graphics g) {
-        if (texture != null && texture.getIdle().length != 0) {
-            g.drawImage(texture.getIdle()[0], (int) centre.getX(), (int) centre.getY(), width, height, null);
+        if (texture != null && texture.getIdleRight().length != 0) {
+            g.drawImage(texture.getIdleRight()[0], (int) centre.getX(), (int) centre.getY(), width, height, null);
         } else {
             g.setColor(new Color(14, 209, 69));
             g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);

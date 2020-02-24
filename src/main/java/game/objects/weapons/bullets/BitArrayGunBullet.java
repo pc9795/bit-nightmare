@@ -47,9 +47,9 @@ public class BitArrayGunBullet extends GameObject implements BulletCollider {
     @Override
     public void render(Graphics g) {
         //2*width to leave some space after bullets
-        if (texture != null && texture.getIdle().length != 0) {
+        if (texture != null && texture.getIdleRight().length != 0) {
             for (int i = 0, x = (int) centre.getX(); i < count; i++, x += 2 * width) {
-                g.drawImage(texture.getIdle()[0], (int) centre.getX(), (int) centre.getY(), width, height, null);
+                g.drawImage(texture.getIdleRight()[0], (int) centre.getX(), (int) centre.getY(), width, height, null);
             }
         } else {
             g.setColor(new Color(182, 3, 253));

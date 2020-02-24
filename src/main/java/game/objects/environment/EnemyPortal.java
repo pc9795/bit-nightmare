@@ -49,8 +49,8 @@ public class EnemyPortal extends GameObject implements Enemy {
 
     @Override
     public void render(Graphics g) {
-        if (texture != null && texture.getIdle().length != 0) {
-            g.drawImage(texture.getIdle()[0], (int) centre.getX(), (int) centre.getY(), width, height, null);
+        if (texture != null && texture.getIdleRight().length != 0) {
+            g.drawImage(texture.getIdleRight()[0], (int) centre.getX(), (int) centre.getY(), width, height, null);
         } else {
             g.setColor(new Color(196, 255, 14));
             g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);

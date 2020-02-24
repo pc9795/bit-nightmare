@@ -35,6 +35,26 @@ public interface Healthy {
     }
 
     /**
+     * Show health bar over a object
+     *
+     * @param x         x position
+     * @param y         y position
+     * @param health    health of the object
+     * @param maxHealth maximum health to convert to a uniform scale
+     * @param g         graphics object
+     */
+    default void showHealth(int x, int y, int health, int maxHealth, Graphics g) {
+        //Converting to 100 based health
+        health = (int) (((float) health / maxHealth) * HEALTH_BAR_RANGE);
+        g.setColor(Color.GREEN);
+        int lifeLeft = (int) (health * HEALTH_BAR_WIDTH_MULTIPLIER);
+        g.fillRect(x, y - HEALTH_BAR_OFFSET_ABOVE_HEAD, lifeLeft, HEALTH_BAR_HEIGHT);
+        g.setColor(Color.RED);
+        g.fillRect(x + lifeLeft, y - HEALTH_BAR_OFFSET_ABOVE_HEAD,
+                (int) ((HEALTH_BAR_RANGE - health) * HEALTH_BAR_WIDTH_MULTIPLIER), HEALTH_BAR_HEIGHT);
+    }
+
+    /**
      * Affect when a damage is received
      *
      * @param damage received damage

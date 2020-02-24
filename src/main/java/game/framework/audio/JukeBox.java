@@ -2,9 +2,7 @@ package game.framework.audio;
 
 import game.utils.Constants;
 import org.newdawn.slick.Music;
-import org.newdawn.slick.SlickException;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 /**

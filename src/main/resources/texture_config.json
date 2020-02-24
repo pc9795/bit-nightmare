@@ -4,7 +4,8 @@
     "spriteSheets": [
       "/sprites/player.png"
     ],
-    "idle": [
+    "idleLeft": [],
+    "idleRight": [
       {
         "imageType": "SPRITE_SHEET",
         "index": 0,
@@ -12,6 +13,1410 @@
         "y": 1,
         "width": 100,
         "height": 180
+      }
+    ]
+  },
+  {
+    "type": "SOLDIER",
+    "spriteSheets": [],
+    "idleLeft": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/idle/left/idle_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/idle/left/idle_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/idle/left/idle_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/idle/left/idle_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/idle/left/idle_004.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/idle/left/idle_005.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/idle/left/idle_006.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/idle/left/idle_007.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/idle/left/idle_008.png"
+      }
+    ],
+    "idleRight": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/idle/right/idle_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/idle/right/idle_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/idle/right/idle_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/idle/right/idle_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/idle/right/idle_004.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/idle/right/idle_005.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/idle/right/idle_006.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/idle/right/idle_007.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/idle/right/idle_008.png"
+      }
+    ],
+    "duckLeft": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/left/Sit_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/left/Sit_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/left/Sit_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/left/Sit_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/left/Sit_004.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/left/Sit_005.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/left/Sit_006.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/left/Sit_007.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/left/Sit_008.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/left/Sit_009.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/left/Sit_010.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/left/Sit_011.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/left/Sit_012.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/left/Sit_013.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/left/Sit_014.png"
+      }
+    ],
+    "duckRight": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/right/Sit_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/right/Sit_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/right/Sit_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/right/Sit_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/right/Sit_004.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/right/Sit_005.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/right/Sit_006.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/right/Sit_007.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/right/Sit_008.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/right/Sit_009.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/right/Sit_010.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/right/Sit_011.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/right/Sit_012.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/right/Sit_013.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/duck/right/Sit_014.png"
+      }
+    ],
+    "deathLeft": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/left/Death_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/left/Death_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/left/Death_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/left/Death_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/left/Death_004.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/left/Death_005.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/left/Death_006.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/left/Death_007.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/left/Death_008.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/left/Death_009.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/left/Death_010.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/left/Death_011.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/left/Death_012.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/left/Death_013.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/left/Death_014.png"
+      }
+    ],
+    "deathRight": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/right/Death_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/right/Death_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/right/Death_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/right/Death_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/right/Death_004.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/right/Death_005.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/right/Death_006.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/right/Death_007.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/right/Death_008.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/right/Death_009.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/right/Death_010.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/right/Death_011.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/right/Death_012.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/right/Death_013.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/death/right/Death_014.png"
+      }
+    ],
+    "attackLeft": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/left/Attack_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/left/Attack_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/left/Attack_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/left/Attack_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/left/Attack_004.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/left/Attack_005.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/left/Attack_006.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/left/Attack_007.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/left/Attack_008.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/left/Attack_009.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/left/Attack_010.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/left/Attack_011.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/left/Attack_012.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/left/Attack_013.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/left/Attack_014.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/left/Attack_015.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/left/Attack_016.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/left/Attack_017.png"
+      }
+    ],
+    "attackRight": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/right/Attack_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/right/Attack_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/right/Attack_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/right/Attack_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/right/Attack_004.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/right/Attack_005.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/right/Attack_006.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/right/Attack_007.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/right/Attack_008.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/right/Attack_009.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/right/Attack_010.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/right/Attack_011.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/right/Attack_012.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/right/Attack_013.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/right/Attack_014.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/right/Attack_015.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/right/Attack_016.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/soldier/attack/right/Attack_017.png"
+      }
+    ]
+  },
+  {
+    "type": "SUPER_SOLDIER",
+    "spriteSheets": [],
+    "idleLeft": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/idle/left/idle_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/idle/left/idle_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/idle/left/idle_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/idle/left/idle_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/idle/left/idle_004.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/idle/left/idle_005.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/idle/left/idle_006.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/idle/left/idle_007.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/idle/left/idle_008.png"
+      }
+    ],
+    "idleRight": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/idle/right/idle_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/idle/right/idle_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/idle/right/idle_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/idle/right/idle_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/idle/right/idle_004.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/idle/right/idle_005.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/idle/right/idle_006.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/idle/right/idle_007.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/idle/right/idle_008.png"
+      }
+    ],
+    "duckLeft": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/left/Sit_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/left/Sit_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/left/Sit_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/left/Sit_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/left/Sit_004.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/left/Sit_005.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/left/Sit_006.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/left/Sit_007.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/left/Sit_008.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/left/Sit_009.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/left/Sit_010.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/left/Sit_011.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/left/Sit_012.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/left/Sit_013.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/left/Sit_014.png"
+      }
+    ],
+    "duckRight": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/right/Sit_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/right/Sit_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/right/Sit_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/right/Sit_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/right/Sit_004.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/right/Sit_005.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/right/Sit_006.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/right/Sit_007.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/right/Sit_008.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/right/Sit_009.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/right/Sit_010.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/right/Sit_011.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/right/Sit_012.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/right/Sit_013.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/duck/right/Sit_014.png"
+      }
+    ],
+    "deathLeft": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/left/Death_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/left/Death_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/left/Death_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/left/Death_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/left/Death_004.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/left/Death_005.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/left/Death_006.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/left/Death_007.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/left/Death_008.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/left/Death_009.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/left/Death_010.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/left/Death_011.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/left/Death_012.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/left/Death_013.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/left/Death_014.png"
+      }
+    ],
+    "deathRight": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/right/Death_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/right/Death_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/right/Death_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/right/Death_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/right/Death_004.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/right/Death_005.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/right/Death_006.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/right/Death_007.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/right/Death_008.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/right/Death_009.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/right/Death_010.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/right/Death_011.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/right/Death_012.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/right/Death_013.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/death/right/Death_014.png"
+      }
+    ],
+    "attackLeft": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/left/Attack_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/left/Attack_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/left/Attack_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/left/Attack_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/left/Attack_004.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/left/Attack_005.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/left/Attack_006.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/left/Attack_007.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/left/Attack_008.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/left/Attack_009.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/left/Attack_010.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/left/Attack_011.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/left/Attack_012.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/left/Attack_013.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/left/Attack_014.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/left/Attack_015.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/left/Attack_016.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/left/Attack_017.png"
+      }
+    ],
+    "attackRight": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/right/Attack_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/right/Attack_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/right/Attack_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/right/Attack_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/right/Attack_004.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/right/Attack_005.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/right/Attack_006.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/right/Attack_007.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/right/Attack_008.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/right/Attack_009.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/right/Attack_010.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/right/Attack_011.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/right/Attack_012.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/right/Attack_013.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/right/Attack_014.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/right/Attack_015.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/right/Attack_016.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/super_soldier/attack/right/Attack_017.png"
+      }
+    ]
+  },
+  {
+    "type": "GUARDIAN",
+    "spriteSheets": [],
+    "idleLeft": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/idle/left/idle_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/idle/left/idle_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/idle/left/idle_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/idle/left/idle_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/idle/left/idle_004.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/idle/left/idle_005.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/idle/left/idle_006.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/idle/left/idle_007.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/idle/left/idle_008.png"
+      }
+    ],
+    "idleRight": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/idle/right/idle_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/idle/right/idle_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/idle/right/idle_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/idle/right/idle_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/idle/right/idle_004.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/idle/right/idle_005.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/idle/right/idle_006.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/idle/right/idle_007.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/idle/right/idle_008.png"
+      }
+    ],
+    "runningLeft": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/run/left/Run_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/run/left/Run_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/run/left/Run_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/run/left/Run_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/run/left/Run_004.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/run/left/Run_005.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/run/left/Run_006.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/run/left/Run_007.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/run/left/Run_008.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/run/left/Run_009.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/run/left/Run_010.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/run/left/Run_011.png"
+      }
+    ],
+    "runningRight": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/run/right/Run_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/run/right/Run_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/run/right/Run_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/run/right/Run_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/run/right/Run_004.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/run/right/Run_005.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/run/right/Run_006.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/run/right/Run_007.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/run/right/Run_008.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/run/right/Run_009.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/run/right/Run_010.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/run/right/Run_011.png"
+      }
+    ],
+    "deathLeft": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/left/Death_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/left/Death_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/left/Death_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/left/Death_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/left/Death_004.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/left/Death_005.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/left/Death_006.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/left/Death_007.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/left/Death_008.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/left/Death_009.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/left/Death_010.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/left/Death_011.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/left/Death_012.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/left/Death_013.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/left/Death_014.png"
+      }
+    ],
+    "deathRight": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/right/Death_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/right/Death_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/right/Death_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/right/Death_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/right/Death_004.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/right/Death_005.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/right/Death_006.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/right/Death_007.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/right/Death_008.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/right/Death_009.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/right/Death_010.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/right/Death_011.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/right/Death_012.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/right/Death_013.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/death/right/Death_014.png"
+      }
+    ],
+    "attackLeft": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/left/Attack_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/left/Attack_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/left/Attack_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/left/Attack_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/left/Attack_004.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/left/Attack_005.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/left/Attack_006.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/left/Attack_007.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/left/Attack_008.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/left/Attack_009.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/left/Attack_010.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/left/Attack_011.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/left/Attack_012.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/left/Attack_013.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/left/Attack_014.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/left/Attack_015.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/left/Attack_016.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/left/Attack_017.png"
+      }
+    ],
+    "attackRight": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/right/Attack_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/right/Attack_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/right/Attack_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/right/Attack_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/right/Attack_004.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/right/Attack_005.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/right/Attack_006.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/right/Attack_007.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/right/Attack_008.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/right/Attack_009.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/right/Attack_010.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/right/Attack_011.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/right/Attack_012.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/right/Attack_013.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/right/Attack_014.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/right/Attack_015.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/right/Attack_016.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/guardian/attack/right/Attack_017.png"
       }
     ]
   }
