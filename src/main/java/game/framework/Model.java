@@ -137,6 +137,14 @@ public class Model {
         pause = false;
     }
 
+    public void togglePause() {
+        if (pause) {
+            resume();
+        } else {
+            pause();
+        }
+    }
+
     /**
      * Load a level
      *

@@ -6,7 +6,7 @@
   "sequences": [
     {
       "id": "sequence1",
-      "pos": 0,
+      "pos": 1490,
       "stories": [
         {
           "imageLink": 0,
@@ -22,7 +22,13 @@
           "imageLink": 0,
           "actor": "Aedan",
           "text": "Aedan, keep your calm don't freak out. Let's explore a bit"
-        },
+        }
+      ]
+    },
+    {
+      "id": "sequence1.5",
+      "pos": 1580,
+      "stories": [
         {
           "imageLink": 0,
           "actor": "Aedan",
@@ -97,7 +103,7 @@
     },
     {
       "id": "sequence2",
-      "pos": 0,
+      "pos": 1750,
       "stories": [
         {
           "imageLink": 0,
@@ -113,7 +119,7 @@
     },
     {
       "id": "sequence3",
-      "pos": 0,
+      "pos": 2700,
       "stories": [
         {
           "imageLink": 0,
@@ -129,7 +135,7 @@
     },
     {
       "id": "sequence4",
-      "pos": 0,
+      "pos": 2872,
       "stories": [
         {
           "imageLink": 1,
@@ -140,7 +146,7 @@
     },
     {
       "id": "sequence5",
-      "pos": 0,
+      "pos": 6412,
       "stories": [
         {
           "imageLink": 0,
@@ -161,7 +167,7 @@
     },
     {
       "id": "sequence6",
-      "pos": 0,
+      "pos": 10800,
       "stories": [
         {
           "imageLink": 0,

@@ -25,6 +25,14 @@ public class Story {
         return actor;
     }
 
+    public void setActor(String actor) {
+        this.actor = actor;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
     public String getText() {
         return text;
     }

@@ -15,7 +15,7 @@ import java.awt.*;
  **/
 public class BitBot extends GameObject implements Animated {
     private static final int DEFAULT_WIDTH = 32;
-    private static final int DEFAULT_HEIGHT = 64;
+    private static final int DEFAULT_HEIGHT = 32;
     private Animator idleRight;
 
     public BitBot(Point2f centre) {

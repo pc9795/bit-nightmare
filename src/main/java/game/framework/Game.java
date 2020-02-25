@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 
 /*
  * Created by Abraham Campbell on 15/01/2020.
@@ -60,7 +61,13 @@ public class Game extends JFrame implements Runnable {
             e.printStackTrace();
             System.exit(1);
         }
+        try {
+            registerFonts();
 
+        } catch (Exception e) {
+            System.out.println("Not able to register fonts");
+            e.printStackTrace();
+        }
         //Loading and configuring view
         canvas = new View(gameWorld);
         // It is important that the preferred size is set on the GamePanel and not on the JFrame. If the application
@@ -77,8 +84,8 @@ public class Game extends JFrame implements Runnable {
         canvas.addMouseMotionListener(MouseController.getInstance());
         canvas.addMouseWheelListener(MouseController.getInstance());
         GamepadController.getInstance().setDetecting(true);
-        gamepadControllerThread = new Thread(GamepadController.getInstance());
-        gamepadControllerThread.start();
+        //gamepadControllerThread = new Thread(GamepadController.getInstance());
+        //gamepadControllerThread.start();
 
         //Configuring game window
         getContentPane().add(canvas);
@@ -104,7 +111,7 @@ public class Game extends JFrame implements Runnable {
     @Override
     public void run() {
         canvas.requestFocus();
-        JukeBox.getInstance().playTheme();
+        //JukeBox.getInstance().playTheme();
         // Can shift to nano seconds if need more accuracy with frames.
         long lastTime = System.currentTimeMillis();
         double timeBetweenFrames = 1000 / Constants.TARGET_FPS;
@@ -154,5 +161,10 @@ public class Game extends JFrame implements Runnable {
             e.printStackTrace();
         }
         System.exit(0);
+    }
+
+    private void registerFonts() throws IOException, FontFormatException {
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, Game.class.getResourceAsStream("/fonts/ARCADECLASSIC.TTF")));
     }
 }
