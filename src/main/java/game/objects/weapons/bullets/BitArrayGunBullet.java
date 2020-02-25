@@ -2,6 +2,8 @@ package game.objects.weapons.bullets;
 
 import game.colliders.BulletCollider;
 import game.framework.Model;
+import game.framework.visual.Animator;
+import game.objects.Animated;
 import game.objects.GameObject;
 import game.physics.Point2f;
 
@@ -12,7 +14,7 @@ import java.awt.*;
  * Created On: 21-02-2020 18:06
  * Purpose: Bit Array gun' bullet
  **/
-public class BitArrayGunBullet extends GameObject implements BulletCollider {
+public class BitArrayGunBullet extends GameObject implements BulletCollider, Animated {
     //Constants
     private static final int DEFAULT_WIDTH = 10;
     private static final int DEFAULT_HEIGHT = 10;
@@ -21,9 +23,9 @@ public class BitArrayGunBullet extends GameObject implements BulletCollider {
     private static final int DEFAULT_DAMAGE = 8;
     //Variables
     private boolean isFiredByPlayer;
-    private int count;
+    private int count, damage;
     private float speedX;
-    private int damage;
+    private Animator idleRight, idleLeft;
 
     public BitArrayGunBullet(Point2f centre, boolean isFiredByPlayer, FacingDirection facingDirection) {
         super(DEFAULT_WIDTH, DEFAULT_HEIGHT, centre, GameObjectType.BIT_ARRAY_GUN_BULLET);
@@ -36,6 +38,7 @@ public class BitArrayGunBullet extends GameObject implements BulletCollider {
         this.speedX = DEFAULT_SPEED_X;
         this.facingDirection = facingDirection;
         this.damage = DEFAULT_DAMAGE;
+        setupAnimator();
     }
 
     @Override
@@ -46,17 +49,36 @@ public class BitArrayGunBullet extends GameObject implements BulletCollider {
 
     @Override
     public void render(Graphics g) {
+        if (isTextured()) {
+            renderTexture(g);
+        } else {
+            renderDefault(g);
+        }
+    }
+
+    private void renderTexture(Graphics g) {
+        Animator animator = null;
+        switch (facingDirection) {
+            case LEFT:
+                animator = idleLeft;
+                break;
+            case RIGHT:
+                animator = idleRight;
+                break;
+        }
+        //THIS PORTION IS TOO MUCH DEPENDENT ON IMAGES USED.
         //2*width to leave some space after bullets
         if (texture != null && texture.getIdleRight().length != 0) {
             for (int i = 0, x = (int) centre.getX(); i < count; i++, x += 2 * width) {
-                g.drawImage(texture.getIdleRight()[0], (int) centre.getX(), (int) centre.getY(), width, height, null);
+                animator.draw(g, x, (int) centre.getY(), width, height);
             }
-        } else {
-            g.setColor(new Color(182, 3, 253));
+        }
+    }
 
-            for (int i = 0, x = (int) centre.getX(); i < count; i++, x += 2 * width) {
-                g.fillRect(x, (int) centre.getY(), width, height);
-            }
+    private void renderDefault(Graphics g) {
+        g.setColor(new Color(182, 3, 253));
+        for (int i = 0, x = (int) centre.getX(); i < count; i++, x += 2 * width) {
+            g.fillRect(x, (int) centre.getY(), width, height);
         }
     }
 
@@ -78,5 +100,14 @@ public class BitArrayGunBullet extends GameObject implements BulletCollider {
     @Override
     public Rectangle getBounds() {
         return new Rectangle((int) centre.getX(), (int) centre.getY(), width * (2 * count - 1), height);
+    }
+
+    @Override
+    public void setupAnimator() {
+        if (!isTextured()) {
+            return;
+        }
+        idleRight = new Animator(10, true, texture.getIdleRight());
+        idleLeft = new Animator(10, true, texture.getIdleLeft());
     }
 }

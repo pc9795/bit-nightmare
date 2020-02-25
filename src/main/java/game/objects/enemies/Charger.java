@@ -2,6 +2,8 @@ package game.objects.enemies;
 
 import game.colliders.FineGrainedCollider;
 import game.framework.Model;
+import game.framework.visual.Animator;
+import game.objects.Animated;
 import game.objects.GameObject;
 import game.physics.Point2f;
 import game.properties.Healthy;
@@ -14,7 +16,7 @@ import java.util.List;
  * Created On: 18-02-2020 00:01
  * Purpose: Charges at player.
  **/
-public class Charger extends GameObject implements FineGrainedCollider, Healthy, Enemy {
+public class Charger extends GameObject implements FineGrainedCollider, Healthy, Enemy, Animated {
     //Constants
     private static final int DEFAULT_WIDTH = 32;
     private static final int DEFAULT_HEIGHT = 32;
@@ -23,10 +25,9 @@ public class Charger extends GameObject implements FineGrainedCollider, Healthy,
     private static final int DEFAULT_HEALTH = 30;
     //Variables
     private boolean playerDetected;
-    private int health;
-    private int los;
+    private int health, los, maxHealth;
     private float speedX;
-    private int maxHealth;
+    private Animator idleRight, idleLeft;
 
     public Charger(Point2f centre) {
         super(DEFAULT_WIDTH, DEFAULT_HEIGHT, centre, GameObjectType.CHARGER);
@@ -36,6 +37,17 @@ public class Charger extends GameObject implements FineGrainedCollider, Healthy,
         this.los = DEFAULT_LOS;
         this.health = DEFAULT_HEALTH;
         this.maxHealth = DEFAULT_HEALTH;
+        setupAnimator();
+    }
+
+    @Override
+    public void setupAnimator() {
+        if (!isTextured()) {
+            return;
+        }
+        //FRAME GAP IS DEPENDENT ON THE IMAGES USED
+        idleRight = new Animator(10, true, texture.getIdleRight());
+        idleLeft = new Animator(10, true, texture.getIdleLeft());
     }
 
     @Override
@@ -51,13 +63,31 @@ public class Charger extends GameObject implements FineGrainedCollider, Healthy,
 
     @Override
     public void render(Graphics g) {
-        if (texture != null && texture.getIdleRight().length != 0) {
-            g.drawImage(texture.getIdleRight()[0], (int) centre.getX(), (int) centre.getY(), width, height, null);
+        if (isTextured()) {
+            renderTexture(g);
         } else {
-            g.setColor(new Color(136, 9, 27));
-            g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
+            renderDefault(g);
         }
         showHealth(centre, health, maxHealth, g);
+    }
+
+    private void renderTexture(Graphics g) {
+        Animator animator = null;
+        switch (facingDirection) {
+            case LEFT:
+                animator = idleLeft;
+                break;
+            case RIGHT:
+                animator = idleRight;
+                break;
+        }
+        //THIS PORTION IS TOO MUCH DEPENDENT ON IMAGES USED.
+        animator.draw(g, (int) centre.getX(), (int) centre.getY(), width, height);
+    }
+
+    private void renderDefault(Graphics g) {
+        g.setColor(new Color(136, 9, 27));
+        g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
     }
 
     @Override

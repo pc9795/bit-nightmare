@@ -12,7 +12,7 @@ import java.awt.*;
  * Purpose: A game object representing end of the game
  **/
 public class EndGame extends GameObject {
-    private static final int DEFAULT_WIDTH = 16;
+    private static final int DEFAULT_WIDTH = 64;
     private static final int DEFAULT_HEIGHT = 64;
 
     public EndGame(Point2f centre) {

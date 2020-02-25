@@ -124,6 +124,10 @@ public abstract class GameObject {
         return new Rectangle((int) centre.getX(), (int) centre.getY(), width, height);
     }
 
+    public boolean isTextured() {
+        return texture != null;
+    }
+
     @Override
     public String toString() {
         return "GameObject{" +

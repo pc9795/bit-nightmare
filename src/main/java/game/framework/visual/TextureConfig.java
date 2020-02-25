@@ -19,6 +19,8 @@ public class TextureConfig {
     private ImageConfig[] attackRight;
     private ImageConfig[] runningLeft;
     private ImageConfig[] runningRight;
+    private ImageConfig[] jumpLeft;
+    private ImageConfig[] jumpRight;
 
     public String getType() {
         return type;
@@ -66,6 +68,14 @@ public class TextureConfig {
 
     public ImageConfig[] getRunningRight() {
         return runningRight;
+    }
+
+    public ImageConfig[] getJumpLeft() {
+        return jumpLeft;
+    }
+
+    public ImageConfig[] getJumpRight() {
+        return jumpRight;
     }
 
     public enum ImageType {

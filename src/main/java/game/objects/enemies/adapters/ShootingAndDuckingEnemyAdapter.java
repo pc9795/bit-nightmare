@@ -2,36 +2,32 @@ package game.objects.enemies.adapters;
 
 import game.framework.Model;
 import game.framework.visual.Animator;
+import game.objects.Animated;
 import game.physics.Point2f;
-
-import java.awt.*;
 
 /**
  * Created By: Prashant Chaubey
  * Created On: 24-02-2020 01:59
  * Purpose: TODO:
  **/
-public class ShootingAndDuckingEnemyAdapter extends ShootingEnemyAdapter {
+public class ShootingAndDuckingEnemyAdapter extends ShootingEnemyAdapter implements Animated {
     protected boolean ducking;
-    private Animator leftDuck, rightDuck;
+    private Animator duckLeft, duckRight;
 
     public ShootingAndDuckingEnemyAdapter(int width, int height, Point2f centre, GameObjectType type) {
         super(width, height, centre, type);
     }
 
     @Override
-    protected void setupAnimator() {
-        if (texture == null) {
+    public void setupAnimator() {
+        if (!isTextured()) {
             return;
         }
         //Setup animators provided by parent.
         super.setupAnimator();
-        if (texture.getDuckRight().length != 0) {
-            rightDuck = new Animator(10, false, texture.getDuckRight());
-        }
-        if (texture.getDuckLeft().length != 0) {
-            leftDuck = new Animator(10, false, texture.getDuckLeft());
-        }
+        //FRAME GAP IS DEPENDENT ON THE IMAGES USED
+        duckRight = new Animator(10, false, texture.getDuckRight());
+        duckLeft = new Animator(10, false, texture.getDuckLeft());
     }
 
     @SuppressWarnings("Duplicates")
@@ -41,12 +37,12 @@ public class ShootingAndDuckingEnemyAdapter extends ShootingEnemyAdapter {
         switch (facingDirection) {
             case LEFT:
                 if (!dead && ducking) {
-                    animator = leftDuck;
+                    animator = duckLeft;
                 }
                 break;
             case RIGHT:
                 if (!dead && ducking) {
-                    animator = rightDuck;
+                    animator = duckRight;
                 }
                 break;
         }

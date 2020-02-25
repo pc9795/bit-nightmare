@@ -2,6 +2,8 @@ package game.objects.weapons.bullets;
 
 import game.colliders.BulletCollider;
 import game.framework.Model;
+import game.framework.visual.Animator;
+import game.objects.Animated;
 import game.objects.GameObject;
 import game.physics.Point2f;
 
@@ -12,7 +14,7 @@ import java.awt.*;
  * Created On: 21-02-2020 18:06
  * Purpose: Bit revolver's bullet
  **/
-public class BitRevolverBullet extends GameObject implements BulletCollider {
+public class BitRevolverBullet extends GameObject implements BulletCollider, Animated {
     //Constants
     private static final int DEFAULT_WIDTH = 10;
     private static final int DEFAULT_HEIGHT = 10;
@@ -22,6 +24,7 @@ public class BitRevolverBullet extends GameObject implements BulletCollider {
     private float speedX;
     private boolean isFiredByPlayer;
     private int damage;
+    private Animator idleRight, idleLeft;
 
     public BitRevolverBullet(Point2f centre, boolean isFiredByPlayer, FacingDirection facingDirection) {
         super(DEFAULT_WIDTH, DEFAULT_HEIGHT, centre, GameObjectType.BIT_REVOLVER_BULLET);
@@ -29,6 +32,7 @@ public class BitRevolverBullet extends GameObject implements BulletCollider {
         this.speedX = DEFAULT_SPEED_X;
         this.facingDirection = facingDirection;
         this.damage = DEFAULT_DAMAGE;
+        setupAnimator();
     }
 
     @Override
@@ -39,18 +43,46 @@ public class BitRevolverBullet extends GameObject implements BulletCollider {
 
     @Override
     public void render(Graphics g) {
-        if (texture != null && texture.getIdleRight().length != 0) {
-            g.drawImage(texture.getIdleRight()[0], (int) centre.getX(), (int) centre.getY(), width, height, null);
+        if (isTextured()) {
+            renderTexture(g);
         } else {
-            g.setColor(new Color(182, 3, 253));
-            g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
+            renderDefault(g);
         }
     }
+
+    private void renderTexture(Graphics g) {
+        Animator animator = null;
+        switch (facingDirection) {
+            case LEFT:
+                animator = idleLeft;
+                break;
+            case RIGHT:
+                animator = idleRight;
+                break;
+        }
+        //THIS PORTION IS TOO MUCH DEPENDENT ON IMAGES USED.
+        animator.draw(g, (int) centre.getX(), (int) centre.getY(), width, height);
+    }
+
+    private void renderDefault(Graphics g) {
+        g.setColor(new Color(182, 3, 253));
+        g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
+    }
+
 
     @Override
     public void perceiveEnv(Model model) {
         if (bulletEnvCollision(model, this) || bulletPlayerOrEnemyCollision(model, this, isFiredByPlayer, damage)) {
             model.getBullets().remove(this);
         }
+    }
+
+    @Override
+    public void setupAnimator() {
+        if (!isTextured()) {
+            return;
+        }
+        idleRight = new Animator(10, true, texture.getIdleRight());
+        idleLeft = new Animator(10, true, texture.getIdleLeft());
     }
 }

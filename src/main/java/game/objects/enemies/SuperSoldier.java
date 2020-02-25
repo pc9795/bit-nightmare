@@ -23,11 +23,11 @@ public class SuperSoldier extends ShootingAndDuckingEnemyAdapter {
     private static final int DEFAULT_HEALTH = 100;
     private static final float DEFAULT_DUCKING_PROB = 0.002f;
     //Variables
-    private Random random = new Random();
-    private long lastFiredBullet = System.currentTimeMillis();
+    private Random random;
+    private long lastFiredBullet;
     private int los;
-    private float bulletFreqInSec;
-    private float duckingProb;
+    private float bulletFreqInSec, duckingProb;
+    private Animator lastAnimator;
 
     public SuperSoldier(Point2f centre) {
         super(DEFAULT_WIDTH, DEFAULT_HEIGHT, centre, GameObjectType.SUPER_SOLDIER);
@@ -36,6 +36,8 @@ public class SuperSoldier extends ShootingAndDuckingEnemyAdapter {
         health = DEFAULT_HEALTH;
         maxHealth = DEFAULT_HEALTH;
         duckingProb = DEFAULT_DUCKING_PROB;
+        random = new Random();
+        lastFiredBullet = System.currentTimeMillis();
     }
 
     @Override
@@ -56,16 +58,15 @@ public class SuperSoldier extends ShootingAndDuckingEnemyAdapter {
 
     @Override
     public void render(Graphics g) {
-        if (!renderTexture(g)) {
+        if (isTextured()) {
+            renderTexture(g);
+        } else {
             renderDefault(g);
         }
     }
 
-    private boolean renderTexture(Graphics g) {
+    private void renderTexture(Graphics g) {
         Animator animator = getAnimatorAccordingToState();
-        if (animator == null) {
-            return false;
-        }
         if (lastAnimator != null && lastAnimator != animator) {
             //Reset the last animator
             lastAnimator.reset();
@@ -82,7 +83,6 @@ public class SuperSoldier extends ShootingAndDuckingEnemyAdapter {
             animator.draw(g, (int) centre.getX(), (int) centre.getY(), width, height);
             showHealth(centre, health, maxHealth, g);
         }
-        return true;
     }
 
     private void renderDefault(Graphics g) {
@@ -97,6 +97,7 @@ public class SuperSoldier extends ShootingAndDuckingEnemyAdapter {
         if (Math.abs(centre.getX() - playerX) > los) {
             return;
         }
+        attacking = true;
         //Turn toward player
         if (playerX < centre.getX()) {
             facingDirection = FacingDirection.LEFT;

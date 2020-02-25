@@ -23,6 +23,9 @@ public class Texture {
     private BufferedImage[] attackRight;
     private BufferedImage[] runningLeft;
     private BufferedImage[] runningRight;
+    private BufferedImage[] jumpLeft;
+    private BufferedImage[] jumpRight;
+
 
     //Only Texture loader will create it.
     private Texture() {
@@ -37,6 +40,8 @@ public class Texture {
         attackRight = new BufferedImage[0];
         runningLeft = new BufferedImage[0];
         runningRight = new BufferedImage[0];
+        jumpLeft = new BufferedImage[0];
+        jumpRight = new BufferedImage[0];
     }
 
     public GameObject.GameObjectType getType() {
@@ -81,6 +86,14 @@ public class Texture {
 
     public BufferedImage[] getRunningRight() {
         return runningRight;
+    }
+
+    public BufferedImage[] getJumpLeft() {
+        return jumpLeft;
+    }
+
+    public BufferedImage[] getJumpRight() {
+        return jumpRight;
     }
 
     static Texture fromTextureConfig(TextureConfig config) throws IOException {
@@ -129,7 +142,13 @@ public class Texture {
         if (config.getRunningRight() != null) {
             texture.runningRight = getBufferedImagesFromImageConfig(config.getRunningRight(), spriteSheets);
         }
-
+        //Load jumping images
+        if (config.getJumpLeft() != null) {
+            texture.jumpLeft = getBufferedImagesFromImageConfig(config.getJumpLeft(), spriteSheets);
+        }
+        if (config.getJumpRight() != null) {
+            texture.jumpRight = getBufferedImagesFromImageConfig(config.getJumpRight(), spriteSheets);
+        }
         return texture;
     }
 

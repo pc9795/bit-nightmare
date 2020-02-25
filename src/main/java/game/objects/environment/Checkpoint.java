@@ -12,7 +12,7 @@ import java.awt.*;
  * Purpose: Game object representing a point where player can save its progress
  **/
 public class Checkpoint extends GameObject {
-    private static final int DEFAULT_WIDTH = 16;
+    private static final int DEFAULT_WIDTH = 64;
     private static final int DEFAULT_HEIGHT = 64;
 
     public Checkpoint(Point2f centre) {

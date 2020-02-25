@@ -27,6 +27,7 @@ public class Block extends GameObject {
     @Override
     public void render(Graphics g) {
         if (texture != null && texture.getIdleRight().length != 0) {
+            //THIS PORTION IS TOO MUCH DEPENDENT ON IMAGES USED.
             g.drawImage(texture.getIdleRight()[0], (int) centre.getX(), (int) centre.getY(), width, height, null);
         } else {
             g.setColor(Color.WHITE);

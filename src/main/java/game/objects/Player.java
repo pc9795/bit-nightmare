@@ -2,6 +2,7 @@ package game.objects;
 
 import game.colliders.FineGrainedCollider;
 import game.framework.Model;
+import game.framework.visual.Animator;
 import game.objects.environment.HidingBlock;
 import game.objects.environment.movables.MovableBlock;
 import game.objects.weapons.Weapon;
@@ -17,9 +18,9 @@ import java.util.List;
  * Created On: 17-02-2020 23:07
  * Purpose: Player of the game
  **/
-public class Player extends GameObject implements FineGrainedCollider, Healthy {
+public class Player extends GameObject implements FineGrainedCollider, Healthy, Animated {
     //Constants
-    private static final int DEFAULT_WIDTH = 32;
+    private static final int DEFAULT_WIDTH = 48;
     private static final int DEFAULT_HEIGHT = 64;
     private static final float DEFAULT_SPEED_X = 3f;
     private static final float DEFAULT_SPEED_Y = 5f;
@@ -27,15 +28,12 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
     private static final int DEFAULT_HEALTH = 200;
     //Variables
     private List<Weapon> weapons;
-    private int currentWeaponIndex;
-    private boolean ducking;
-    private int health;
-    private boolean bitBotFound;
-    private long lastFiredBullet = System.currentTimeMillis();
-    private float bulletFreqInSec;
-    private int maxHealth;
-    private float speedX;
-    private float speedY;
+    private boolean ducking, bitBotFound, attacking;
+    private int health, maxHealth, currentWeaponIndex;
+    private long lastFiredBullet;
+    private float speedX, speedY, bulletFreqInSec;
+    private Animator idleLeft, idleRight, jumpLeft, jumpRight, runningLeft, runningRight, duckLeft, duckRight,
+            attackLeft, attackRight;
 
     Player(Point2f centre) {
         super(DEFAULT_WIDTH, DEFAULT_HEIGHT, centre, GameObjectType.PLAYER);
@@ -48,12 +46,16 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
         maxHealth = DEFAULT_HEALTH;
         speedX = DEFAULT_SPEED_X;
         speedY = DEFAULT_SPEED_Y;
+        lastFiredBullet = System.currentTimeMillis();
 
         //todo remove
-        //this.centre.setX(10774);
-        //this.centre.setY(500);
+        //10839 513
+        //5798 513
+        //this.centre.setX(10839);
+        //this.centre.setY(513);
         //bitBotFound = true;
 
+        setupAnimator();
     }
 
     public int getHeight() {
@@ -104,24 +106,67 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
     }
 
     @Override
-    public void
-    render(Graphics g) {
-        if (texture != null && texture.getIdleRight().length != 0) {
-            g.drawImage(texture.getIdleRight()[0], (int) centre.getX(), (int) centre.getY(), width, height, null);
+    public void render(Graphics g) {
+        if (isTextured()) {
+            renderTexture(g);
         } else {
-            g.setColor(new Color(0, 0, 255));
-            g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
-            //todo remove
-            Graphics2D g2d = (Graphics2D) g;
-            g.setColor(Color.RED);
-            g2d.draw(getBoundsBottom());
-            g2d.draw(getBoundsLeft());
-            g2d.draw(getBoundsRight());
-            g2d.draw(getBoundsTop());
+            renderDefault(g);
         }
         //todo remove
         g.drawString(String.format("X:%s,Y:%s", (int) centre.getX(), (int) centre.getY()), (int) centre.getX(), (int) centre.getY() - 20);
-        showHealth(centre, health, maxHealth, g);
+    }
+
+    private void renderTexture(Graphics g) {
+        Animator animator = null;
+        switch (facingDirection) {
+            case LEFT:
+                if (ducking) {
+                    animator = duckLeft;
+                } else if (attacking) {
+                    animator = attackLeft;
+                } else if (velocity.getX() < 0) {
+                    animator = runningLeft;
+                } else if (jumping) {
+                    animator = jumpLeft;
+                } else {
+                    animator = idleLeft;
+                }
+                break;
+            case RIGHT:
+                if (ducking) {
+                    animator = duckRight;
+                } else if (attacking) {
+                    animator = attackRight;
+                } else if (velocity.getX() > 0) {
+                    animator = runningRight;
+                } else if (jumping) {
+                    animator = jumpRight;
+                } else {
+                    animator = idleRight;
+                }
+                break;
+        }
+        //THIS PORTION IS TOO MUCH DEPENDENT ON IMAGES USED.
+        if (ducking) {
+            //Image is according to full size even though we are dividing our height by 2.
+            animator.draw(g, (int) centre.getX(), (int) centre.getY() - height, width, height * 2);
+            showHealth((int) centre.getX(), (int) centre.getY() - height, health, maxHealth, g);
+        } else {
+            animator.draw(g, (int) centre.getX(), (int) centre.getY(), width, height);
+            showHealth(centre, health, maxHealth, g);
+        }
+    }
+
+    private void renderDefault(Graphics g) {
+        g.setColor(new Color(0, 0, 255));
+        g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
+        //todo remove
+        Graphics2D g2d = (Graphics2D) g;
+        g.setColor(Color.RED);
+        g2d.draw(getBoundsBottom());
+        g2d.draw(getBoundsLeft());
+        g2d.draw(getBoundsRight());
+        g2d.draw(getBoundsTop());
     }
 
     @Override
@@ -262,6 +307,7 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
     }
 
     public GameObject fireWeapon() {
+        attacking = true;
         if (currentWeaponIndex == -1) {
             return null;
         }
@@ -287,11 +333,13 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
     public void moveRight() {
         velocity.setX(speedX);
         facingDirection = FacingDirection.RIGHT;
+        attacking = false;
     }
 
     public void moveLeft() {
         velocity.setX(-speedX);
         facingDirection = FacingDirection.LEFT;
+        attacking = false;
     }
 
     public void makeIdle() {
@@ -325,5 +373,23 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy {
     @Override
     public void damageHealth(int damage) {
         health -= damage;
+    }
+
+    @Override
+    public void setupAnimator() {
+        if (!isTextured()) {
+            return;
+        }
+        //FRAME GAP IS DEPENDENT ON THE IMAGES USED
+        idleRight = new Animator(10, true, texture.getIdleRight());
+        idleLeft = new Animator(10, true, texture.getIdleLeft());
+        jumpLeft = new Animator(10, true, texture.getJumpLeft());
+        jumpRight = new Animator(10, true, texture.getJumpRight());
+        runningLeft = new Animator(10, true, texture.getRunningLeft());
+        runningRight = new Animator(10, true, texture.getRunningRight());
+        duckLeft = new Animator(10, true, texture.getDuckLeft());
+        duckRight = new Animator(10, true, texture.getDuckRight());
+        attackLeft = new Animator(20, true, texture.getAttackLeft());
+        attackRight = new Animator(20, true, texture.getAttackRight());
     }
 }

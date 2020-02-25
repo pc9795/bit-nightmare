@@ -3,6 +3,7 @@ package game.objects.enemies.adapters;
 import game.colliders.EnemyCollider;
 import game.framework.Model;
 import game.framework.visual.Animator;
+import game.objects.Animated;
 import game.objects.GameObject;
 import game.objects.enemies.Enemy;
 import game.physics.Point2f;
@@ -15,8 +16,8 @@ import java.awt.*;
  * Created On: 24-02-2020 01:26
  * Purpose: TODO:
  **/
-public class ShootingEnemyAdapter extends GameObject implements Enemy, EnemyCollider, Healthy {
-    protected Animator leftIdle, rightIdle, lastAnimator, leftAttack, rightAttack, leftDeath, rightDeath;
+public class ShootingEnemyAdapter extends GameObject implements Enemy, EnemyCollider, Healthy, Animated {
+    private Animator idleLeft, idleRight, attackLeft, attackRight, deathLeft, deathRight;
     protected boolean attacking, dead;
     protected int health, maxHealth;
     long deathTime;
@@ -28,29 +29,19 @@ public class ShootingEnemyAdapter extends GameObject implements Enemy, EnemyColl
         setupAnimator();
     }
 
-    protected void setupAnimator() {
-        if (texture == null) {
+    @Override
+    public void
+    setupAnimator() {
+        if (!isTextured()) {
             return;
         }
         //Value of frame gap depends on sprites so it will change according to images.
-        if (texture.getIdleRight().length != 0) {
-            rightIdle = new Animator(20, true, texture.getIdleRight());
-        }
-        if (texture.getIdleLeft().length != 0) {
-            leftIdle = new Animator(20, true, texture.getIdleLeft());
-        }
-        if (texture.getAttackLeft().length != 0) {
-            leftAttack = new Animator(20, true, texture.getAttackLeft());
-        }
-        if (texture.getAttackRight().length != 0) {
-            rightAttack = new Animator(20, true, texture.getAttackRight());
-        }
-        if (texture.getDeathLeft().length != 0) {
-            leftDeath = new Animator(20, false, texture.getDeathLeft());
-        }
-        if (texture.getDeathRight().length != 0) {
-            rightDeath = new Animator(20, false, texture.getDeathRight());
-        }
+        idleRight = new Animator(20, true, texture.getIdleRight());
+        idleLeft = new Animator(20, true, texture.getIdleLeft());
+        attackLeft = new Animator(20, true, texture.getAttackLeft());
+        attackRight = new Animator(20, true, texture.getAttackRight());
+        deathLeft = new Animator(20, false, texture.getDeathLeft());
+        deathRight = new Animator(20, false, texture.getDeathRight());
     }
 
     protected Animator getAnimatorAccordingToState() {
@@ -58,20 +49,20 @@ public class ShootingEnemyAdapter extends GameObject implements Enemy, EnemyColl
         switch (facingDirection) {
             case LEFT:
                 if (dead) {
-                    animator = leftDeath;
+                    animator = deathLeft;
                 } else if (attacking) {
-                    animator = leftAttack;
+                    animator = attackLeft;
                 } else {
-                    animator = leftIdle;
+                    animator = idleLeft;
                 }
                 break;
             case RIGHT:
                 if (dead) {
-                    animator = rightDeath;
+                    animator = deathRight;
                 } else if (attacking) {
-                    animator = rightAttack;
+                    animator = attackRight;
                 } else {
-                    animator = rightIdle;
+                    animator = idleRight;
                 }
                 break;
         }

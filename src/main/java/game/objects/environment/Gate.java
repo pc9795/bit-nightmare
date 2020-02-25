@@ -12,8 +12,8 @@ import java.awt.*;
  * Purpose: Represent a gate
  **/
 public class Gate extends GameObject {
-    private static final int DEFAULT_WIDTH = 32;
-    private static final int DEFAULT_HEIGHT = 32;
+    private static final int DEFAULT_WIDTH = 64;
+    private static final int DEFAULT_HEIGHT = 64;
 
     public Gate(Point2f centre) {
         super(DEFAULT_WIDTH, DEFAULT_HEIGHT, centre, GameObjectType.GATE);

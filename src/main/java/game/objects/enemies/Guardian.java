@@ -6,6 +6,7 @@ import game.objects.enemies.adapters.ShootingEnemyAdapter;
 import game.objects.weapons.bullets.BitArrayGunBullet;
 import game.objects.weapons.bullets.BitMatrixBlastBullet;
 import game.physics.Point2f;
+import org.lwjgl.Sys;
 
 import java.awt.*;
 import java.util.Random;
@@ -30,15 +31,11 @@ public class Guardian extends ShootingEnemyAdapter {
     private static final int DEFAULT_HEALTH = 500;
     //Variables
     private Random random = new Random();
-    private long lastFiredBullet = System.currentTimeMillis();
-    private long lastCharged = System.currentTimeMillis();
+    private long lastFiredBullet, lastCharged;
     private boolean charging = true;
     private int los;
-    private float chargeDurationInSec;
-    private float bulletFreqInSec;
-    private float speedX;
-    private float chargingProb;
-    private Animator leftRunning, rightRunning;
+    private float chargeDurationInSec, bulletFreqInSec, speedX, chargingProb;
+    private Animator runningLeft, runningRight, lastAnimator;
 
     public Guardian(Point2f centre) {
         super(DEFAULT_WIDTH, DEFAULT_HEIGHT, centre, GameObjectType.GUARDIAN);
@@ -51,21 +48,20 @@ public class Guardian extends ShootingEnemyAdapter {
         chargingProb = DEFAULT_CHARGING_PROB;
         health = DEFAULT_HEALTH;
         maxHealth = DEFAULT_HEALTH;
+        lastCharged = System.currentTimeMillis();
+        lastFiredBullet = lastCharged;
     }
 
     @Override
-    protected void setupAnimator() {
-        if (texture == null) {
+    public void setupAnimator() {
+        if (!isTextured()) {
             return;
         }
         //Setup animators in parent
         super.setupAnimator();
-        if (texture.getRunningLeft().length != 0) {
-            leftRunning = new Animator(20, true, texture.getRunningLeft());
-        }
-        if (texture.getRunningRight().length != 0) {
-            rightRunning = new Animator(20, true, texture.getRunningRight());
-        }
+        //FRAME GAP IS DEPENDENT ON THE IMAGES USED
+        runningLeft = new Animator(DEFAULT_FRAME_GAP, true, texture.getRunningLeft());
+        runningRight = new Animator(DEFAULT_FRAME_GAP, true, texture.getRunningRight());
     }
 
     @Override
@@ -100,17 +96,16 @@ public class Guardian extends ShootingEnemyAdapter {
 
     @Override
     public void render(Graphics g) {
-        if (!renderTexture(g)) {
+        if (isTextured()) {
+            renderTexture(g);
+        } else {
             renderDefault(g);
         }
         showHealth(centre, health, maxHealth, g);
     }
 
-    private boolean renderTexture(Graphics g) {
+    private void renderTexture(Graphics g) {
         Animator animator = getAnimatorAccordingToState();
-        if (animator == null) {
-            return false;
-        }
         if (lastAnimator != null && lastAnimator != animator) {
             //Reset the last animator
             lastAnimator.reset();
@@ -124,7 +119,6 @@ public class Guardian extends ShootingEnemyAdapter {
         } else {
             animator.draw(g, (int) centre.getX(), (int) centre.getY(), width, height);
         }
-        return true;
     }
 
     @SuppressWarnings("Duplicates")
@@ -134,12 +128,12 @@ public class Guardian extends ShootingEnemyAdapter {
         switch (facingDirection) {
             case LEFT:
                 if (!dead && charging) {
-                    animator = leftRunning;
+                    animator = runningLeft;
                 }
                 break;
             case RIGHT:
                 if (!dead && charging) {
-                    animator = rightRunning;
+                    animator = runningRight;
                 }
                 break;
         }

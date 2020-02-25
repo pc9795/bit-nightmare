@@ -13,8 +13,8 @@ import java.awt.*;
  * Purpose: Bit array gun
  **/
 public class BitArrayGun extends GameObject implements Weapon {
-    private static final int DEFAULT_WIDTH = 32;
-    private static final int DEFAULT_HEIGHT = 32;
+    private static final int DEFAULT_WIDTH = 48;
+    private static final int DEFAULT_HEIGHT = 48;
 
     public BitArrayGun(Point2f centre) {
         super(DEFAULT_WIDTH, DEFAULT_HEIGHT, centre, GameObjectType.BIT_ARRAY_GUN);
@@ -28,6 +28,7 @@ public class BitArrayGun extends GameObject implements Weapon {
     @Override
     public void render(Graphics g) {
         if (texture != null && texture.getIdleRight().length != 0) {
+            //THIS PORTION IS TOO MUCH DEPENDENT ON IMAGES USED.
             g.drawImage(texture.getIdleRight()[0], (int) centre.getX(), (int) centre.getY(), width, height, null);
         } else {
             g.setColor(new Color(63, 72, 204));

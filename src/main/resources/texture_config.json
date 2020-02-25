@@ -1,18 +1,361 @@
 [
   {
     "type": "PLAYER",
-    "spriteSheets": [
-      "/sprites/player.png"
-    ],
-    "idleLeft": [],
+    "spriteSheets": [],
     "idleRight": [
       {
-        "imageType": "SPRITE_SHEET",
-        "index": 0,
-        "x": 1,
-        "y": 1,
-        "width": 100,
-        "height": 180
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/idle/right/Idle (1).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/idle/right/Idle (2).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/idle/right/Idle (3).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/idle/right/Idle (4).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/idle/right/Idle (5).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/idle/right/Idle (6).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/idle/right/Idle (7).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/idle/right/Idle (8).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/idle/right/Idle (9).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/idle/right/Idle (10).png"
+      }
+    ],
+    "idleLeft": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/idle/left/Idle (1).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/idle/left/Idle (2).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/idle/left/Idle (3).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/idle/left/Idle (4).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/idle/left/Idle (5).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/idle/left/Idle (6).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/idle/left/Idle (7).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/idle/left/Idle (8).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/idle/left/Idle (9).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/idle/left/Idle (10).png"
+      }
+    ],
+    "jumpLeft": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/jump/left/Jump (1).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/jump/left/Jump (2).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/jump/left/Jump (3).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/jump/left/Jump (4).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/jump/left/Jump (5).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/jump/left/Jump (6).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/jump/left/Jump (7).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/jump/left/Jump (8).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/jump/left/Jump (9).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/jump/left/Jump (10).png"
+      }
+    ],
+    "jumpRight": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/jump/right/Jump (1).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/jump/right/Jump (2).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/jump/right/Jump (3).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/jump/right/Jump (4).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/jump/right/Jump (5).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/jump/right/Jump (6).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/jump/right/Jump (7).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/jump/right/Jump (8).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/jump/right/Jump (9).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/jump/right/Jump (10).png"
+      }
+    ],
+    "runningLeft": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/run/left/Run (1).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/run/left/Run (2).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/run/left/Run (3).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/run/left/Run (4).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/run/left/Run (5).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/run/left/Run (6).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/run/left/Run (7).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/run/left/Run (8).png"
+      }
+    ],
+    "runningRight": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/run/right/Run (1).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/run/right/Run (2).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/run/right/Run (3).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/run/right/Run (4).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/run/right/Run (5).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/run/right/Run (6).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/run/right/Run (7).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/run/right/Run (8).png"
+      }
+    ],
+    "attackLeft": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/shoot/left/Shoot (1).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/shoot/left/Shoot (2).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/shoot/left/Shoot (3).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/shoot/left/Shoot (4).png"
+      }
+    ],
+    "attackRight": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/shoot/right/Shoot (1).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/shoot/right/Shoot (2).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/shoot/right/Shoot (3).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/shoot/right/Shoot (4).png"
+      }
+    ],
+    "duckLeft": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/slide/left/Slide (1).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/slide/left/Slide (2).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/slide/left/Slide (3).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/slide/left/Slide (4).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/slide/left/Slide (5).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/slide/left/Slide (6).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/slide/left/Slide (7).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/slide/left/Slide (8).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/slide/left/Slide (9).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/slide/left/Slide (10).png"
+      }
+    ],
+    "duckRight": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/slide/right/Slide (1).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/slide/right/Slide (2).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/slide/right/Slide (3).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/slide/right/Slide (4).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/slide/right/Slide (5).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/slide/right/Slide (6).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/slide/right/Slide (7).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/slide/right/Slide (8).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/slide/right/Slide (9).png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/player/slide/right/Slide (10).png"
       }
     ]
   },
@@ -1495,6 +1838,516 @@
         "y": 1,
         "width": 16,
         "height": 32
+      }
+    ]
+  },
+  {
+    "type": "CHARGER",
+    "spriteSheets": [],
+    "idleRight": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/right/1.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/right/2.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/right/3.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/right/4.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/right/5.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/right/6.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/right/7.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/right/8.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/right/9.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/right/10.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/right/11.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/right/12.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/right/13.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/right/14.png"
+      }
+    ],
+    "idleLeft": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/left/1.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/left/2.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/left/3.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/left/4.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/left/5.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/left/6.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/left/7.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/left/8.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/left/9.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/left/10.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/left/11.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/left/12.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/left/13.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/enemies/charger/left/14.png"
+      }
+    ]
+  },
+  {
+    "type": "BIT_REVOLVER_BULLET",
+    "spriteSheets": [],
+    "idleLeft": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bullets/left/Bullet_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bullets/left/Bullet_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bullets/left/Bullet_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bullets/left/Bullet_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bullets/left/Bullet_004.png"
+      }
+    ],
+    "idleRight": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bullets/right/Bullet_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bullets/right/Bullet_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bullets/right/Bullet_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bullets/right/Bullet_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bullets/right/Bullet_004.png"
+      }
+    ]
+  },
+  {
+    "type": "BIT_ARRAY_GUN_BULLET",
+    "spriteSheets": [],
+    "idleLeft": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bullets/left/Bullet_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bullets/left/Bullet_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bullets/left/Bullet_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bullets/left/Bullet_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bullets/left/Bullet_004.png"
+      }
+    ],
+    "idleRight": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bullets/right/Bullet_000.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bullets/right/Bullet_001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bullets/right/Bullet_002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bullets/right/Bullet_003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bullets/right/Bullet_004.png"
+      }
+    ]
+  },
+  {
+    "type": "BIT_MATRIX_BLAST_BULLET",
+    "spriteSheets": [],
+    "idleRight": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bullets/big_bullet.png"
+      }
+    ]
+  },
+  {
+    "type": "LAVA",
+    "spriteSheets": [],
+    "idleRight": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10001.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10002.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10003.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10004.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10005.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10006.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10007.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10008.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10009.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10010.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10011.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10012.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10013.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10014.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10015.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10016.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10017.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10018.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10019.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10020.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10021.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10022.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10023.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10024.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10025.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10026.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10027.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10028.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10029.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10030.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10031.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10032.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10033.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10034.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10035.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10036.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10037.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10038.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10039.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10040.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10041.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10042.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10043.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10044.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/lava/10045.png"
+      }
+    ]
+  },
+  {
+    "type": "ENEMY_PORTAL",
+    "spriteSheets": [
+      "/sprites/tiles2.png"
+    ],
+    "idleRight": [
+      {
+        "imageType": "SPRITE_SHEET",
+        "index": 0,
+        "x": 1,
+        "y": 7,
+        "width": 64,
+        "height": 64
+      }
+    ]
+  },
+  {
+    "type": "GATE",
+    "spriteSheets": [
+      "/sprites/tiles2.png"
+    ],
+    "idleRight": [
+      {
+        "imageType": "SPRITE_SHEET",
+        "index": 0,
+        "x": 3,
+        "y": 7,
+        "width": 64,
+        "height": 64
+      }
+    ]
+  },
+  {
+    "type": "CHANGE_LEVEL",
+    "spriteSheets": [
+      "/sprites/tiles2.png"
+    ],
+    "idleRight": [
+      {
+        "imageType": "SPRITE_SHEET",
+        "index": 0,
+        "x": 1,
+        "y": 10,
+        "width": 64,
+        "height": 64
+      }
+    ]
+  },
+  {
+    "type": "END_GAME",
+    "spriteSheets": [
+      "/sprites/tiles2.png"
+    ],
+    "idleRight": [
+      {
+        "imageType": "SPRITE_SHEET",
+        "index": 0,
+        "x": 1,
+        "y": 10,
+        "width": 64,
+        "height": 64
+      }
+    ]
+  },
+  {
+    "type": "BIT_BOT",
+    "spriteSheets": [],
+    "idleRight": [
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bit_bot/1.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bit_bot/2.png"
+      },
+      {
+        "imageType": "SINGLE",
+        "imgLoc": "/sprites/bit_bot/3.png"
+      }
+    ]
+  },
+  {
+    "type": "CHECKPOINT",
+    "spriteSheets": [
+      "/sprites/tiles2.png"
+    ],
+    "idleRight": [
+      {
+        "imageType": "SPRITE_SHEET",
+        "index": 0,
+        "x": 5,
+        "y": 5,
+        "width": 64,
+        "height": 64
       }
     ]
   }

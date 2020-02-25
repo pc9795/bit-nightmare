@@ -24,10 +24,10 @@ public class Soldier extends ShootingAndDuckingEnemyAdapter {
     private static final float DEFAULT_DUCKING_PROB = 0.002f;
     //Variables
     private Random random = new Random();
-    private long lastFiredBullet = System.currentTimeMillis();
+    private long lastFiredBullet;
     private int los;
-    private float bulletFreqInSec;
-    private float duckingProb;
+    private float bulletFreqInSec, duckingProb;
+    private Animator lastAnimator;
 
     public Soldier(Point2f centre) {
         super(DEFAULT_WIDTH, DEFAULT_HEIGHT, centre, GameObjectType.SOLDIER);
@@ -36,6 +36,7 @@ public class Soldier extends ShootingAndDuckingEnemyAdapter {
         health = DEFAULT_HEALTH;
         maxHealth = DEFAULT_HEALTH;
         duckingProb = DEFAULT_DUCKING_PROB;
+        lastFiredBullet = System.currentTimeMillis();
     }
 
     @Override
@@ -56,16 +57,15 @@ public class Soldier extends ShootingAndDuckingEnemyAdapter {
 
     @Override
     public void render(Graphics g) {
-        if (!renderTexture(g)) {
+        if (isTextured()) {
+            renderTexture(g);
+        } else {
             renderDefault(g);
         }
     }
 
-    private boolean renderTexture(Graphics g) {
+    private void renderTexture(Graphics g) {
         Animator animator = getAnimatorAccordingToState();
-        if (animator == null) {
-            return false;
-        }
         if (lastAnimator != null && lastAnimator != animator) {
             //Reset the last animator
             lastAnimator.reset();
@@ -82,7 +82,6 @@ public class Soldier extends ShootingAndDuckingEnemyAdapter {
             animator.draw(g, (int) centre.getX(), (int) centre.getY(), width, height);
             showHealth(centre, health, maxHealth, g);
         }
-        return true;
     }
 
 

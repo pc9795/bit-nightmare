@@ -12,7 +12,7 @@ import java.awt.*;
  * Purpose: Marker to change to next level
  **/
 public class ChangeLevel extends GameObject {
-    private static final int DEFAULT_WIDTH = 16;
+    private static final int DEFAULT_WIDTH = 64;
     private static final int DEFAULT_HEIGHT = 64;
 
     public ChangeLevel(Point2f centre) {
