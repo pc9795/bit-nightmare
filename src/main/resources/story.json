@@ -1,0 +1,179 @@
+{
+  "images": [
+    "/sprites/player/idle/right/Idle (1).png",
+    "/sprites/bit_bot/3.png"
+  ],
+  "sequences": [
+    {
+      "id": "sequence1",
+      "pos": 0,
+      "stories": [
+        {
+          "imageLink": 0,
+          "actor": "Aedan",
+          "text": "What is this place. How did I come here?"
+        },
+        {
+          "imageLink": 0,
+          "actor": "Aedan",
+          "text": "It is just like comic books. I think I am teleported to some other dimension or maybe some other world. I don’t know what I am saying"
+        },
+        {
+          "imageLink": 0,
+          "actor": "Aedan",
+          "text": "Aedan, keep your calm don't freak out. Let's explore a bit"
+        },
+        {
+          "imageLink": 0,
+          "actor": "Aedan",
+          "text": "What is this thing?"
+        },
+        {
+          "imageLink": 0,
+          "actor": "Aedan",
+          "text": "It looks like a bot. There is a console attached to it. Let’s press this button and see what happens."
+        },
+        {
+          "imageLink": 1,
+          "actor": "Bit bot",
+          "text": "Hello, I am Bit bot. Welcome to the Bit prison."
+        },
+        {
+          "imageLink": 0,
+          "actor": "Aedan",
+          "text": "Bit prison! Is this place a prison?"
+        },
+        {
+          "imageLink": 1,
+          "actor": "Bit bot",
+          "text": "Yes it is a computer program to hold inmates. It is designed so that we don’t have to waste actual space to hold prisoners. Each inmate’s life form is a sequence of bits here."
+        },
+        {
+          "imageLink": 0,
+          "actor": "Aedan",
+          "text": "Who are you then?"
+        },
+        {
+          "imageLink": 1,
+          "actor": "Bit bot",
+          "text": "I was a tour guide for officials here. A recently upgraded bot has made me useless and so I was left in the open. "
+        },
+        {
+          "imageLink": 0,
+          "actor": "Aedan",
+          "text": "Do you know a way out of this place?"
+        },
+        {
+          "imageLink": 1,
+          "actor": "Bit bot",
+          "text": " Yes but it is heavily secured. You can’t make it on your own."
+        },
+        {
+          "imageLink": 0,
+          "actor": "Aedan",
+          "text": "I will never get out of here."
+        },
+        {
+          "imageLink": 1,
+          "actor": "Bit bot",
+          "text": "You can if I reprogram you with some higher instincts."
+        },
+        {
+          "imageLink": 0,
+          "actor": "Aedan",
+          "text": "Why are you helping me?"
+        },
+        {
+          "imageLink": 1,
+          "actor": "Bit bot",
+          "text": "I am just returning the favor. And as I am abandoned I don’t have any master. "
+        },
+        {
+          "imageLink": 1,
+          "actor": "Bit bot",
+          "text": "Now you have enhanced reflexes and abilities such as jumping high."
+        }
+      ]
+    },
+    {
+      "id": "sequence2",
+      "pos": 0,
+      "stories": [
+        {
+          "imageLink": 0,
+          "actor": "Aedan",
+          "text": "What are these?"
+        },
+        {
+          "imageLink": 1,
+          "actor": "Bit bot",
+          "text": "These are Chargers. They can corrupt your bit sequence if you touch them. In short, stay away from them else you will die!"
+        }
+      ]
+    },
+    {
+      "id": "sequence3",
+      "pos": 0,
+      "stories": [
+        {
+          "imageLink": 0,
+          "actor": "Aedan",
+          "text": " What is this? It looks like a weapon."
+        },
+        {
+          "imageLink": 1,
+          "actor": "Bit bot",
+          "text": "It is a bit revolver used by prison guards."
+        }
+      ]
+    },
+    {
+      "id": "sequence4",
+      "pos": 0,
+      "stories": [
+        {
+          "imageLink": 1,
+          "actor": "Bit bot",
+          "text": "Lookout prison guards have spotted us."
+        }
+      ]
+    },
+    {
+      "id": "sequence5",
+      "pos": 0,
+      "stories": [
+        {
+          "imageLink": 0,
+          "actor": "Aedan",
+          "text": "Who were those?"
+        },
+        {
+          "imageLink": 1,
+          "actor": "Bit bot",
+          "text": "Those were special prison guards. They are more experienced and dangerous."
+        },
+        {
+          "imageLink": 0,
+          "actor": "Aedan",
+          "text": "Maybe I can use their guns."
+        }
+      ]
+    },
+    {
+      "id": "sequence6",
+      "pos": 0,
+      "stories": [
+        {
+          "imageLink": 0,
+          "actor": "Aedan",
+          "text": "Let’s try to reprogram this weapon."
+        },
+        {
+          "imageLink": 1,
+          "actor": "Bit bot",
+          "text": "It is the strongest weapon used in this prison."
+        }
+      ]
+    }
+  ]
+}

@@ -18,6 +18,7 @@ public final class Constants {
     public static final int GAMEPAD_POLLING_WAIT_TIME_IN_SEC = 100;
     public static final String TEXTURE_CONFIG_FILE_LOC = "/texture_config.json";
     public static final String BACKGROUND_IMG_LOC = "/sprites/spooky.png";
+    public static final String STORY_CONFIG_FILE_LOC = "/story.json";
 
     public static final class SoundPaths {
         private SoundPaths() {

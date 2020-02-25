@@ -10,9 +10,9 @@ import game.physics.Boundary;
 import game.physics.Point2f;
 import game.physics.QuadTree;
 import game.utils.Constants;
-import game.utils.levelloader.Level;
-import game.utils.levelloader.LevelLoader;
-import game.utils.levelloader.LevelObject;
+import game.framework.levelloader.Level;
+import game.framework.levelloader.LevelLoader;
+import game.framework.levelloader.LevelObject;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -51,18 +51,13 @@ SOFTWARE.
  */
 public class Model {
     private Player player1;
-    private List<GameObject> enemies;
+    private List<GameObject> enemies, environment, movableEnvironment, collectibles, bullets;
     private QuadTree environmentQuadTree;
-    //Immovable things
-    private List<GameObject> environment;
-    //Movable things
-    private List<GameObject> movableEnvironment;
-    private List<GameObject> collectibles;
-    private List<GameObject> bullets;
     private List<String> levels;
     private Point2f lastCheckpoint;
     private Boundary levelBoundary;
     private String currentLevel;
+    private boolean pause;
 
     public Model(int width, int height) throws IOException, URISyntaxException {
         //Things which will be added and removed are stored in ArrayList.
@@ -132,6 +127,14 @@ public class Model {
 
     public Boundary getLevelBoundary() {
         return levelBoundary;
+    }
+
+    public void pause() {
+        pause = true;
+    }
+
+    public void resume() {
+        pause = false;
     }
 
     /**
@@ -218,6 +221,9 @@ public class Model {
      * This is the heart of the game , where the model takes in all the inputs ,decides the outcomes and then changes the model accordingly.
      */
     void gameLogic() {
+        if (pause) {
+            return;
+        }
         if (player1.getHealth() <= 0) {
             loadLastCheckPoint();
         }

@@ -1,4 +1,4 @@
-package game.utils.levelloader;
+package game.framework.levelloader;
 
 import game.physics.Point2f;
 

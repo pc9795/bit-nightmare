@@ -1,4 +1,4 @@
-package game.utils.levelloader;
+package game.framework.levelloader;
 
 import game.utils.BufferedImageLoader;
 import game.utils.Constants;
