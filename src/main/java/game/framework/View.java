@@ -367,14 +367,79 @@ class View extends Canvas {
                 }
                 break;
             case CONTROL_LAYOUT:
-                g.setColor(Color.ORANGE);
-                g.clearRect(0, 0, getWidth(), getHeight());
-                g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
-                KeyboardController.getInstance().poll();
-                if (KeyboardController.getInstance().isEscPressedOnce()) {
-                    currScreen = Screen.SETTINGS;
-                    prevScreen = Screen.CONTROL_LAYOUT;
-                    return;
+                try {
+                    g.setColor(Color.ORANGE);
+                    g.clearRect(0, 0, getWidth(), getHeight());
+                    g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
+                    g.setFont(new Font("Game Music Love", Font.BOLD, 60));
+                    margin = 100;
+                    BufferedImageLoader loader = BufferedImageLoader.getInstance();
+                    //todo handle exceptions
+                    BufferedImage w = loader.loadImage("/sprites/controllers/keyboard/Keyboard_White_W.png");
+                    BufferedImage a = loader.loadImage("/sprites/controllers/keyboard/Keyboard_White_A.png");
+                    BufferedImage s = loader.loadImage("/sprites/controllers/keyboard/Keyboard_White_S.png");
+                    BufferedImage d = loader.loadImage("/sprites/controllers/keyboard/Keyboard_White_D.png");
+                    BufferedImage q = loader.loadImage("/sprites/controllers/keyboard/Keyboard_White_Q.png");
+                    BufferedImage space = loader.loadImage("/sprites/controllers/keyboard/Keyboard_White_Space.png");
+                    BufferedImage esc = loader.loadImage("/sprites/controllers/keyboard/Keyboard_White_Esc.png");
+                    int x = margin;
+                    y = margin;
+                    int imgHeight = 90;
+                    int imgWidth = 90;
+                    g.drawImage(w, x, y, imgWidth, imgHeight, null);
+                    y += imgHeight;
+                    g.drawImage(a, x, y, imgWidth, imgHeight, null);
+                    y += imgHeight;
+                    g.drawImage(s, x, y, imgWidth, imgHeight, null);
+                    y += imgHeight;
+                    g.drawImage(d, x, y, imgWidth, imgHeight, null);
+                    y += imgHeight;
+                    g.drawImage(q, x, y, imgWidth, imgHeight, null);
+                    y += imgHeight;
+                    g.drawImage(space, x, y, imgWidth, imgHeight, null);
+                    y += imgHeight;
+                    g.drawImage(esc, x, y, imgWidth, imgHeight, null);
+
+                    BufferedImage left = loader.loadImage("/sprites/controllers/gamepad/360_Dpad_Left.png");
+                    BufferedImage right = loader.loadImage("/sprites/controllers/gamepad/360_Dpad_Right.png");
+                    BufferedImage up = loader.loadImage("/sprites/controllers/gamepad/360_Dpad_Up.png");
+                    BufferedImage down = loader.loadImage("/sprites/controllers/gamepad/360_Dpad_Down.png");
+                    BufferedImage a_ = loader.loadImage("/sprites/controllers/gamepad/360_A.png");
+                    BufferedImage x_ = loader.loadImage("/sprites/controllers/gamepad/360_X.png");
+                    BufferedImage start = loader.loadImage("/sprites/controllers/gamepad/360_Start_Alt.png");
+
+                    x = getWidth() - margin - imgWidth;
+                    y = margin;
+                    g.drawImage(up, x, y, imgWidth, imgHeight, null);
+                    y += imgHeight;
+                    g.drawImage(left, x, y, imgWidth, imgHeight, null);
+                    y += imgHeight;
+                    g.drawImage(down, x, y, imgWidth, imgHeight, null);
+                    y += imgHeight;
+                    g.drawImage(right, x, y, imgWidth, imgHeight, null);
+                    y += imgHeight;
+                    g.drawImage(x_, x, y, imgWidth, imgHeight, null);
+                    y += imgHeight;
+                    g.drawImage(a_, x, y, imgWidth, imgHeight, null);
+                    y += imgHeight;
+                    g.drawImage(start, x, y, imgWidth, imgHeight, null);
+
+                    fm = g.getFontMetrics();
+                    y = margin;
+                    List<String> words = Arrays.asList("Jump", "Move Left", "Duck", "Move Right", "Cycle Weapon", "Fire Weapon", "Pause");
+                    for (String word : words) {
+                        x = getWidth() / 2 - fm.stringWidth(word) / 2;
+                        g.drawString(word, x, y + imgHeight);
+                        y += imgHeight;
+                    }
+                    KeyboardController.getInstance().poll();
+                    if (KeyboardController.getInstance().isEscPressedOnce()) {
+                        currScreen = Screen.SETTINGS;
+                        prevScreen = Screen.CONTROL_LAYOUT;
+                        return;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 break;
             case PAUSE:
