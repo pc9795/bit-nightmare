@@ -166,5 +166,6 @@ public class Game extends JFrame implements Runnable {
     private void registerFonts() throws IOException, FontFormatException {
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, Game.class.getResourceAsStream("/fonts/ARCADECLASSIC.TTF")));
+        ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, Game.class.getResourceAsStream("/fonts/gomarice_game_music_love.ttf")));
     }
 }

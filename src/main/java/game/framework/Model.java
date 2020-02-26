@@ -2,6 +2,9 @@ package game.framework;
 
 import game.framework.controllers.GamepadController;
 import game.framework.controllers.KeyboardController;
+import game.framework.levelloader.Level;
+import game.framework.levelloader.LevelLoader;
+import game.framework.levelloader.LevelObject;
 import game.objects.GameObject;
 import game.objects.GameObjectFactory;
 import game.objects.Player;
@@ -10,9 +13,6 @@ import game.physics.Boundary;
 import game.physics.Point2f;
 import game.physics.QuadTree;
 import game.utils.Constants;
-import game.framework.levelloader.Level;
-import game.framework.levelloader.LevelLoader;
-import game.framework.levelloader.LevelObject;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -49,6 +49,10 @@ SOFTWARE.
    /
    (MIT LICENSE ) e.g do what you want with this :-) 
  */
+
+/**
+ * To start the model see `loadLastCheckpoint` and `loadLevel`
+ */
 public class Model {
     private Player player1;
     private List<GameObject> enemies, environment, movableEnvironment, collectibles, bullets;
@@ -58,6 +62,8 @@ public class Model {
     private Boundary levelBoundary;
     private String currentLevel;
     private boolean pause;
+    private boolean started;
+
 
     public Model(int width, int height) throws IOException, URISyntaxException {
         //Things which will be added and removed are stored in ArrayList.
@@ -70,7 +76,6 @@ public class Model {
         this.bullets = new CopyOnWriteArrayList<>();
         this.levelBoundary = new Boundary(width, height);
         init();
-
     }
 
     /**
@@ -90,7 +95,6 @@ public class Model {
         if (levels.size() == 0) {
             throw new RuntimeException("No levels to load");
         }
-        loadLevel(levels.get(0));
     }
 
     public Player getPlayer1() {
@@ -129,6 +133,10 @@ public class Model {
         return levelBoundary;
     }
 
+    public List<String> getLevels() {
+        return levels;
+    }
+
     public void pause() {
         pause = true;
     }
@@ -137,12 +145,16 @@ public class Model {
         pause = false;
     }
 
-    public void togglePause() {
-        if (pause) {
-            resume();
-        } else {
-            pause();
-        }
+    public void start() {
+        started = true;
+    }
+
+    public void stop() {
+        started = false;
+    }
+
+    public boolean isPaused() {
+        return pause;
     }
 
     /**
@@ -151,11 +163,13 @@ public class Model {
      * @param levelName name of the level
      * @throws IOException not able to load level files
      */
-    private void loadLevel(String levelName) throws IOException {
+    public void loadLevel(String levelName) throws IOException {
         clean();
         Level level = LevelLoader.getInstance().loadLevel(levelName);
         loadLevelUtil(level);
         currentLevel = levelName;
+        started = true;
+        pause = false;
     }
 
     /**
@@ -203,11 +217,18 @@ public class Model {
         player1 = null;
     }
 
+    public boolean isLastCheckpointAvailable() {
+        return false;
+    }
+
     /**
      * Load a last checkpoint
      */
-    private void loadLastCheckPoint() {
-        //todo improve
+    //todo implement it
+    public void loadLastCheckPoint() {
+        if (player1 == null) {
+            return;
+        }
         boolean bitBotFound = player1.isBitBotFound();
         List<Weapon> weapons = player1.getWeapons();
         int currentWeaponIndex = player1.getCurrentWeaponIndex();
@@ -221,14 +242,19 @@ public class Model {
             player1.setCurrentWeaponIndex(currentWeaponIndex);
 
         } catch (IOException e) {
-            throw new RuntimeException(String.format("Error while loading checkpoing: %s on level: %s", lastCheckpoint, currentLevel));
+            throw new RuntimeException(String.format("Error while loading checkpoint: %s on level: %s", lastCheckpoint, currentLevel));
         }
+        started = true;
+        pause = false;
     }
 
     /**
      * This is the heart of the game , where the model takes in all the inputs ,decides the outcomes and then changes the model accordingly.
      */
     void gameLogic() {
+        if (!started) {
+            return;
+        }
         if (pause) {
             return;
         }
@@ -290,6 +316,9 @@ public class Model {
             if (bullet != null) {
                 bullets.add(bullet);
             }
+        }
+        if (keyboardController.isEscPressedOnce()) {
+            pause();
         }
     }
 

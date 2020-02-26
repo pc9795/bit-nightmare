@@ -14,15 +14,31 @@ public final class MouseController implements MouseMotionListener, MouseListener
     private static final MouseController INSTANCE = new MouseController();
     private Point currentPos = new Point(0, 0);
     private Map<Integer, Boolean> keys = new HashMap<>();
+    private Map<Integer, Integer> pollCount = new HashMap<>();
 
     private MouseController() {
         // All the keys supported by the class must be entered in the map for one time. Else it can result in
         // NullPointerException if we trying to access a non-existing key.
         keys.put(MouseEvent.BUTTON1, false);
+        pollCount.put(MouseEvent.BUTTON1, 0);
     }
 
     public static MouseController getInstance() {
         return INSTANCE;
+    }
+
+    /**
+     * It must be called per frame. This method implements a functionality to check whether a button is pressed once
+     * or not. As when button is pressed for multiple frames it can cause unexpected behavior
+     */
+    public void poll() {
+        for (Integer key : pollCount.keySet()) {
+            if (keys.get(key)) {
+                pollCount.put(key, pollCount.get(key) + 1);
+            } else {
+                pollCount.put(key, 0);
+            }
+        }
     }
 
     public Point getCurrentPos() {
@@ -70,6 +86,10 @@ public final class MouseController implements MouseMotionListener, MouseListener
     }
 
     public boolean isLeftClicked() {
-        return keys.get(MouseEvent.BUTTON1);
+        return pollCount.get(MouseEvent.BUTTON1) > 0;
+    }
+
+    public boolean isLeftClickedOnce() {
+        return pollCount.get(MouseEvent.BUTTON1) == 1;
     }
 }

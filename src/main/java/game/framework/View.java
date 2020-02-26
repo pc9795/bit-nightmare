@@ -6,6 +6,7 @@ import game.framework.controllers.MouseController;
 import game.framework.narrator.Sequence;
 import game.framework.narrator.Story;
 import game.framework.narrator.StoryLoader;
+import game.framework.visual.TextureLoader;
 import game.utils.BufferedImageLoader;
 import game.utils.Constants;
 
@@ -13,11 +14,8 @@ import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.security.Key;
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
-import java.util.StringTokenizer;
 
 
 /*
@@ -52,10 +50,15 @@ class View extends Canvas {
     private StoryTeller storyTeller = new StoryTeller();
     private HashSet<Integer> storyLocationsProcessed = new HashSet<>();
     private float gameScreenAlpha = 1f;
+    private Screen currScreen = Screen.TITLE, prevScreen = null;
+    private String levelSelected;
+
 
     View(Model world) {
         this.gameWorld = world;
         this.camera = new Camera(0, 0);
+        //This will start loading of the textures. As it gives a massive lag to the system. So doing it early on.
+        TextureLoader.getInstance();
         try {
             this.bg = BufferedImageLoader.getInstance().loadImage(Constants.BACKGROUND_IMG_LOC);
 
@@ -74,20 +77,483 @@ class View extends Canvas {
         //Update camera
         Graphics g = bs.getDrawGraphics();
 
-        checkStories();
-        renderGame(g);
+        //ALL CONTROLLERS `poll` CALLS MUST BE INSIDE SPECIFIC CASES. Any call outside can produce unexpected results.
+        //If menu items are a DAG then it is easy to navigate. Have to check the possibility of cycles.
+        switch (currScreen) {
+            case TITLE:
+                g.clearRect(0, 0, getWidth(), getHeight());
+                g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
+                g.setColor(Color.ORANGE);
+                g.setFont(new Font("Game Music Love", Font.BOLD, 150));
+                String text = "BIT-NIGHTMARE";
+                FontMetrics fm = g.getFontMetrics();
+                int fontHeight = fm.getHeight() + fm.getDescent() + fm.getAscent();
+                int textWidth = fm.stringWidth(text);
+                int margin = 10;
+                g.drawString(text, getWidth() / 2 - textWidth / 2, margin + fontHeight);
+                g.setFont(new Font("Game Music Love", Font.BOLD, 30));
+                text = "LEFT CLICK TO CONTINUE";
+                fm = g.getFontMetrics();
+                textWidth = fm.stringWidth(text);
+                fontHeight = fm.getHeight() + fm.getDescent() + fm.getAscent();
+                Rectangle textArea = new Rectangle(getWidth() / 2 - textWidth / 2, getHeight() - fontHeight - margin, textWidth, fontHeight);
+                if (textArea.contains(MouseController.getInstance().getCurrentPos())) {
+                    g.setColor(Color.GRAY);
+                }
+                g.drawString(text, getWidth() / 2 - textWidth / 2, getHeight() - margin);
+                MouseController.getInstance().poll();
+                if (MouseController.getInstance().isLeftClickedOnce()) {
+                    currScreen = Screen.MAIN;
+                    prevScreen = Screen.TITLE;
+                }
+                break;
+            case MAIN:
+                g.setColor(Color.ORANGE);
+                g.clearRect(0, 0, getWidth(), getHeight());
+                g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
+                g.setFont(new Font("Game Music Love", Font.BOLD, 60));
+                fm = g.getFontMetrics();
+                margin = 10;
+                fontHeight = fm.getHeight() + fm.getDescent() + fm.getAscent();
+                List<String> menuItems;
+                boolean checkpointAvailable = gameWorld.isLastCheckpointAvailable();
+                if (checkpointAvailable) {
+                    menuItems = Arrays.asList("Continue", "New Game", "Select Level", "Settings", "Quit");
+                } else {
+                    menuItems = Arrays.asList("New Game", "Select Level", "Settings", "Quit");
+                }
+                Rectangle[] rectangles = new Rectangle[menuItems.size()];
+                int y = margin;
+                int option = -1;
+                for (int i = 0; i < menuItems.size(); i++) {
+                    rectangles[i] = new Rectangle(margin, y, fm.stringWidth(menuItems.get(i)), fontHeight);
+                    if (rectangles[i].contains(MouseController.getInstance().getCurrentPos())) {
+                        g.setColor(Color.GRAY);
+                        option = i;
+                    } else {
+                        g.setColor(Color.ORANGE);
+                    }
+                    g.drawString(menuItems.get(i), margin, y + fontHeight);
+                    y += fontHeight;
+                }
+                //Shifting as we now don't have a continue option
+                if (!checkpointAvailable && option != -1) {
+                    option++;
+                }
+                MouseController.getInstance().poll();
+                if (MouseController.getInstance().isLeftClickedOnce()) {
+                    switch (option) {
+                        case 0:
+                            gameWorld.loadLastCheckPoint();
+                            storyLocationsProcessed.clear();
+                            currScreen = Screen.IN_GAME;
+                            prevScreen = Screen.MAIN;
+                            break;
+                        case 1:
+                            //Load first level.
+                            //The game world should have at least one level else it will throw exception early.
+                            levelSelected = gameWorld.getLevels().get(0);
+                            if (checkpointAvailable) {
+                                currScreen = Screen.NEW_GAME;
+                            } else {
+                                currScreen = Screen.DIFFICULTY_SELECT;
+                            }
+                            prevScreen = Screen.MAIN;
+                            break;
+                        case 2:
+                            currScreen = Screen.LEVEL_SELECT;
+                            prevScreen = Screen.MAIN;
+                            break;
+                        case 3:
+                            currScreen = Screen.SETTINGS;
+                            prevScreen = Screen.MAIN;
+                            break;
+                        case 4:
+                            currScreen = Screen.QUIT;
+                            prevScreen = Screen.MAIN;
+                            break;
+                    }
+                }
+                break;
+            case NEW_GAME:
+                g.setColor(Color.ORANGE);
+                g.clearRect(0, 0, getWidth(), getHeight());
+                g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
+                g.setFont(new Font("Game Music Love", Font.BOLD, 60));
+                fm = g.getFontMetrics();
+                margin = 10;
+                fontHeight = fm.getHeight() + fm.getDescent() + fm.getAscent();
+                menuItems = Arrays.asList("Yes", "No");
+                rectangles = new Rectangle[menuItems.size()];
+                y = margin;
+                g.drawString("You will lose your previous data!", margin, y + fontHeight);
+                y += 2 * fontHeight;
+                option = -1;
+                for (int i = 0; i < menuItems.size(); i++) {
+                    rectangles[i] = new Rectangle(margin, y, fm.stringWidth(menuItems.get(i)), fontHeight);
+                    if (rectangles[i].contains(MouseController.getInstance().getCurrentPos())) {
+                        g.setColor(Color.GRAY);
+                        option = i;
+                    } else {
+                        g.setColor(Color.ORANGE);
+                    }
+                    g.drawString(menuItems.get(i), margin, y + fontHeight);
+                    y += fontHeight;
+                }
+                MouseController.getInstance().poll();
+                if (MouseController.getInstance().isLeftClickedOnce()) {
+                    switch (option) {
+                        case 0:
+                            try {
+                                gameWorld.loadLevel(levelSelected);
+                                storyLocationsProcessed.clear();
+                                currScreen = Screen.IN_GAME;
+                                prevScreen = Screen.NEW_GAME;
+                                //Clean the name. This option always come after some previous screen
+                                levelSelected = null;
 
-        if (storyTeller.isOn()) {
-            gameWorld.pause();
-            gameScreenAlpha = 0.5f;
-            renderStory(g);
-        } else {
-            gameWorld.resume();
-            gameScreenAlpha = 1f;
+                            } catch (IOException e) {
+                                System.out.println(String.format("Unable to load level: %s", levelSelected));
+                                e.printStackTrace();
+                            }
+                            break;
+                        case 1:
+                            currScreen = Screen.MAIN;
+                            prevScreen = Screen.NEW_GAME;
+                            break;
+                    }
+                }
+                KeyboardController.getInstance().poll();
+                if (KeyboardController.getInstance().isEscPressedOnce()) {
+                    currScreen = Screen.MAIN;
+                    prevScreen = Screen.NEW_GAME;
+                }
+                break;
+            case DIFFICULTY_SELECT:
+                g.setColor(Color.ORANGE);
+                g.clearRect(0, 0, getWidth(), getHeight());
+                g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
+                g.setFont(new Font("Game Music Love", Font.BOLD, 60));
+                fm = g.getFontMetrics();
+                margin = 10;
+                fontHeight = fm.getHeight() + fm.getDescent() + fm.getAscent();
+                menuItems = Arrays.asList("- I am not a programmer", "- I can code", "- I can reprogram you");
+                rectangles = new Rectangle[menuItems.size()];
+                y = margin;
+                g.drawString("Select a difficulty", margin, y + fontHeight);
+                y += fontHeight;
+                option = -1;
+                for (int i = 0; i < menuItems.size(); i++) {
+                    rectangles[i] = new Rectangle(margin, y, fm.stringWidth(menuItems.get(i)), fontHeight);
+                    if (rectangles[i].contains(MouseController.getInstance().getCurrentPos())) {
+                        g.setColor(Color.GRAY);
+                        option = i;
+                    } else {
+                        g.setColor(Color.ORANGE);
+                    }
+                    g.drawString(menuItems.get(i), margin, y + fontHeight);
+                    y += fontHeight;
+                }
+                MouseController.getInstance().poll();
+                if (MouseController.getInstance().isLeftClickedOnce()) {
+                    switch (option) {
+                        case 0:
+                        case 1:
+                        case 2:
+                            try {
+                                gameWorld.loadLevel(levelSelected);
+                                storyLocationsProcessed.clear();
+                                currScreen = Screen.IN_GAME;
+                                prevScreen = Screen.DIFFICULTY_SELECT;
+                                //Clean the name. This option always come after some previous screen
+                                levelSelected = null;
+
+                            } catch (IOException e) {
+                                System.out.println(String.format("Unable to load level: %s", levelSelected));
+                                e.printStackTrace();
+                            }
+                            break;
+                    }
+                }
+                KeyboardController.getInstance().poll();
+                if (KeyboardController.getInstance().isEscPressedOnce()) {
+                    currScreen = Screen.MAIN;
+                    prevScreen = Screen.DIFFICULTY_SELECT;
+                }
+                break;
+            case LEVEL_SELECT:
+                g.setColor(Color.ORANGE);
+                g.clearRect(0, 0, getWidth(), getHeight());
+                g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
+                g.setFont(new Font("Game Music Love", Font.BOLD, 60));
+                fm = g.getFontMetrics();
+                margin = 10;
+                fontHeight = fm.getHeight() + fm.getDescent() + fm.getAscent();
+                menuItems = gameWorld.getLevels();
+                rectangles = new Rectangle[menuItems.size()];
+                y = margin;
+                option = -1;
+                for (int i = 0; i < menuItems.size(); i++) {
+                    rectangles[i] = new Rectangle(margin, y, fm.stringWidth(menuItems.get(i)), fontHeight);
+                    if (rectangles[i].contains(MouseController.getInstance().getCurrentPos())) {
+                        g.setColor(Color.GRAY);
+                        option = i;
+                    } else {
+                        g.setColor(Color.ORANGE);
+                    }
+                    g.drawString(menuItems.get(i), margin, y + fontHeight);
+                    y += fontHeight;
+                }
+                MouseController.getInstance().poll();
+                if (MouseController.getInstance().isLeftClickedOnce()) {
+                    switch (option) {
+                        case -1:
+                            break;
+                        default:
+                            levelSelected = menuItems.get(option);
+                            if (gameWorld.isLastCheckpointAvailable()) {
+                                currScreen = Screen.NEW_GAME;
+                            } else {
+                                currScreen = Screen.DIFFICULTY_SELECT;
+                            }
+                            prevScreen = Screen.LEVEL_SELECT;
+                            break;
+                    }
+                }
+                KeyboardController.getInstance().poll();
+                if (KeyboardController.getInstance().isEscPressedOnce()) {
+                    currScreen = Screen.MAIN;
+                    prevScreen = Screen.LEVEL_SELECT;
+                    return;
+                }
+                break;
+            case SETTINGS:
+                g.setColor(Color.ORANGE);
+                g.clearRect(0, 0, getWidth(), getHeight());
+                g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
+                g.setFont(new Font("Game Music Love", Font.BOLD, 60));
+                fm = g.getFontMetrics();
+                margin = 10;
+                fontHeight = fm.getHeight() + fm.getDescent() + fm.getAscent();
+                menuItems = Collections.singletonList("Show Controller Layout");
+                rectangles = new Rectangle[menuItems.size()];
+                y = margin;
+                option = -1;
+                for (int i = 0; i < menuItems.size(); i++) {
+                    rectangles[i] = new Rectangle(margin, y, fm.stringWidth(menuItems.get(i)), fontHeight);
+                    if (rectangles[i].contains(MouseController.getInstance().getCurrentPos())) {
+                        g.setColor(Color.GRAY);
+                        option = i;
+                    } else {
+                        g.setColor(Color.ORANGE);
+                    }
+                    g.drawString(menuItems.get(i), margin, y + fontHeight);
+                    y += fontHeight;
+                }
+                MouseController.getInstance().poll();
+                if (MouseController.getInstance().isLeftClickedOnce()) {
+                    switch (option) {
+                        case 0:
+                            currScreen = Screen.CONTROL_LAYOUT;
+                            prevScreen = Screen.SETTINGS;
+                            break;
+                    }
+                }
+                KeyboardController.getInstance().poll();
+                if (KeyboardController.getInstance().isEscPressedOnce()) {
+                    currScreen = Screen.MAIN;
+                    prevScreen = Screen.SETTINGS;
+                    return;
+                }
+                break;
+            case CONTROL_LAYOUT:
+                g.setColor(Color.ORANGE);
+                g.clearRect(0, 0, getWidth(), getHeight());
+                g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
+                KeyboardController.getInstance().poll();
+                if (KeyboardController.getInstance().isEscPressedOnce()) {
+                    currScreen = Screen.SETTINGS;
+                    prevScreen = Screen.CONTROL_LAYOUT;
+                    return;
+                }
+                break;
+            case PAUSE:
+                g.setColor(Color.ORANGE);
+                g.clearRect(0, 0, getWidth(), getHeight());
+                g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
+                g.setFont(new Font("Game Music Love", Font.BOLD, 60));
+                fm = g.getFontMetrics();
+                margin = 10;
+                fontHeight = fm.getHeight() + fm.getDescent() + fm.getAscent();
+                menuItems = Arrays.asList("- Resume", "- Quit to main menu", "- Quit");
+                rectangles = new Rectangle[menuItems.size()];
+                y = margin;
+                g.drawString("Paused", margin, y + fontHeight);
+                y += fontHeight;
+                option = -1;
+                for (int i = 0; i < menuItems.size(); i++) {
+                    rectangles[i] = new Rectangle(margin, y, fm.stringWidth(menuItems.get(i)), fontHeight);
+                    if (rectangles[i].contains(MouseController.getInstance().getCurrentPos())) {
+                        g.setColor(Color.GRAY);
+                        option = i;
+                    } else {
+                        g.setColor(Color.ORANGE);
+                    }
+                    g.drawString(menuItems.get(i), margin, y + fontHeight);
+                    y += fontHeight;
+                }
+                MouseController.getInstance().poll();
+                if (MouseController.getInstance().isLeftClickedOnce()) {
+                    switch (option) {
+                        case 0:
+                            currScreen = Screen.IN_GAME;
+                            prevScreen = Screen.PAUSE;
+                            gameWorld.resume();
+                            break;
+                        case 1:
+                            currScreen = Screen.QUIT_TO_MENU;
+                            prevScreen = Screen.PAUSE;
+                            break;
+                        case 2:
+                            currScreen = Screen.QUIT;
+                            prevScreen = Screen.PAUSE;
+                            break;
+                    }
+                }
+                KeyboardController.getInstance().poll();
+                if (KeyboardController.getInstance().isEscPressedOnce()) {
+                    currScreen = Screen.IN_GAME;
+                    prevScreen = Screen.PAUSE;
+                    gameWorld.resume();
+                }
+                break;
+            case QUIT_TO_MENU:
+                g.setColor(Color.ORANGE);
+                g.clearRect(0, 0, getWidth(), getHeight());
+                g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
+                g.setFont(new Font("Game Music Love", Font.BOLD, 60));
+                fm = g.getFontMetrics();
+                margin = 10;
+                fontHeight = fm.getHeight() + fm.getDescent() + fm.getAscent();
+                menuItems = Arrays.asList("- Yes", "- No");
+                rectangles = new Rectangle[menuItems.size()];
+                y = margin;
+                g.drawString("Quit to main menu", margin, y + fontHeight);
+                y += 2 * fontHeight;
+                option = -1;
+                for (int i = 0; i < menuItems.size(); i++) {
+                    rectangles[i] = new Rectangle(margin, y, fm.stringWidth(menuItems.get(i)), fontHeight);
+                    if (rectangles[i].contains(MouseController.getInstance().getCurrentPos())) {
+                        g.setColor(Color.GRAY);
+                        option = i;
+                    } else {
+                        g.setColor(Color.ORANGE);
+                    }
+                    g.drawString(menuItems.get(i), margin, y + fontHeight);
+                    y += fontHeight;
+                }
+                MouseController.getInstance().poll();
+                if (MouseController.getInstance().isLeftClickedOnce()) {
+                    switch (option) {
+                        case 0:
+                            currScreen = Screen.MAIN;
+                            prevScreen = Screen.QUIT_TO_MENU;
+                            break;
+                        case 1:
+                            currScreen = Screen.PAUSE;
+                            prevScreen = Screen.QUIT_TO_MENU;
+                            break;
+                    }
+                }
+                KeyboardController.getInstance().poll();
+                if (KeyboardController.getInstance().isEscPressedOnce()) {
+                    currScreen = Screen.PAUSE;
+                    prevScreen = Screen.QUIT_TO_MENU;
+                }
+                break;
+            case QUIT:
+                g.setColor(Color.ORANGE);
+                g.clearRect(0, 0, getWidth(), getHeight());
+                g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
+                g.setFont(new Font("Game Music Love", Font.BOLD, 60));
+                fm = g.getFontMetrics();
+                margin = 10;
+                fontHeight = fm.getHeight() + fm.getDescent() + fm.getAscent();
+                menuItems = Arrays.asList("- Yes", "- No");
+                rectangles = new Rectangle[menuItems.size()];
+                y = margin;
+                g.drawString("Quit the game", margin, y + fontHeight);
+                y += 2 * fontHeight;
+                option = -1;
+                for (int i = 0; i < menuItems.size(); i++) {
+                    rectangles[i] = new Rectangle(margin, y, fm.stringWidth(menuItems.get(i)), fontHeight);
+                    if (rectangles[i].contains(MouseController.getInstance().getCurrentPos())) {
+                        g.setColor(Color.GRAY);
+                        option = i;
+                    } else {
+                        g.setColor(Color.ORANGE);
+                    }
+                    g.drawString(menuItems.get(i), margin, y + fontHeight);
+                    y += fontHeight;
+                }
+                MouseController.getInstance().poll();
+                if (MouseController.getInstance().isLeftClickedOnce()) {
+                    switch (option) {
+                        case 0:
+                            System.exit(0);
+                            break;
+                        case 1:
+                            currScreen = prevScreen;
+                            break;
+                    }
+                }
+                KeyboardController.getInstance().poll();
+                if (KeyboardController.getInstance().isEscPressedOnce()) {
+                    currScreen = prevScreen;
+                }
+                break;
+            case IN_GAME:
+                if (gameWorld.isPaused()) {
+                    gameWorld.pause();
+                    currScreen = Screen.PAUSE;
+                    prevScreen = Screen.IN_GAME;
+                }
+                //When the View is in IN_GAME mode then controllers are expected to be processed by Model. So any `poll`
+                //call to the controller will produce unexpected results.
+                checkStories();
+                renderGame(g);
+                if (storyTeller.isOn()) {
+                    gameWorld.stop();
+                    gameScreenAlpha = 0.5f;
+                    renderStory(g);
+                } else {
+                    gameWorld.start();
+                    gameScreenAlpha = 1f;
+                }
+                break;
+            case END:
+                g.clearRect(0, 0, getWidth(), getHeight());
+                g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
+                g.setColor(Color.ORANGE);
+                g.setFont(new Font("Game Music Love", Font.BOLD, 100));
+                text = "A Game by Prashant";
+                fm = g.getFontMetrics();
+                fontHeight = fm.getHeight() + fm.getDescent() + fm.getAscent();
+                textWidth = fm.stringWidth(text);
+                margin = 10;
+                g.drawString(text, getWidth() / 2 - textWidth / 2, margin + fontHeight);
+                margin += fontHeight;
+                text = "Hope you enjoyed!";
+                textWidth = fm.stringWidth(text);
+                g.drawString(text, getWidth() / 2 - textWidth / 2, margin + fontHeight);
+                break;
+
         }
 
         //todo remove; only for debug
         Point mousePos = MouseController.getInstance().getCurrentPos();
+        g.setColor(Color.RED);
+        g.setFont(new Font("Time New Roman", Font.BOLD, 20));
         g.drawString(String.format("X=%s,Y=%s", mousePos.getX(), mousePos.getY()), mousePos.x, mousePos.y);
 
         g.dispose();
@@ -174,6 +640,11 @@ class View extends Canvas {
         gameWorld.getBullets().forEach(object -> object.render(g));
         gameWorld.getPlayer1().render(g);
         g2d.translate(-camera.getX(), -camera.getY());
+    }
+
+    private enum Screen {
+        TITLE, LEVEL_SELECT, MAIN, QUIT_TO_MENU, PAUSE, QUIT, SETTINGS, CONTROL_LAYOUT, IN_GAME,
+        NEW_GAME, DIFFICULTY_SELECT, END
     }
 
     private static class StoryTeller {

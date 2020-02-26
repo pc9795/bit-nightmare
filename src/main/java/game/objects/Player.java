@@ -113,6 +113,8 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
             renderDefault(g);
         }
         //todo remove
+        g.setColor(Color.RED);
+        g.setFont(new Font("Time New Roman", Font.BOLD, 20));
         g.drawString(String.format("X:%s,Y:%s", (int) centre.getX(), (int) centre.getY()), (int) centre.getX(), (int) centre.getY() - 20);
     }
 

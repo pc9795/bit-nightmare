@@ -136,4 +136,8 @@ public final class KeyboardController implements KeyListener {
     public boolean isEscPressed() {
         return pollCount.get(KeyEvent.VK_ESCAPE) > 0;
     }
+
+    public boolean isEscPressedOnce() {
+        return pollCount.get(KeyEvent.VK_ESCAPE) == 1;
+    }
 }
