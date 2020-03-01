@@ -28,14 +28,19 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
     private static final int DEFAULT_HEALTH = 200;
     //Variables
     private List<Weapon> weapons;
-    private boolean ducking, bitBotFound, attacking;
+    private boolean ducking, attacking, bitBotFound;
     private int health, maxHealth, currentWeaponIndex;
-    private long lastFiredBullet;
+    private transient long lastFiredBullet;
     private float speedX, speedY, bulletFreqInSec;
-    private Animator idleLeft, idleRight, jumpLeft, jumpRight, runningLeft, runningRight, duckLeft, duckRight,
+    private transient Animator idleLeft, idleRight, jumpLeft, jumpRight, runningLeft, runningRight, duckLeft, duckRight,
             attackLeft, attackRight;
 
-    Player(Point2f centre) {
+    //Only for deserialization purpose
+    public Player() {
+        super(DEFAULT_WIDTH, DEFAULT_HEIGHT, new Point2f(0, 0), GameObjectType.PLAYER);
+    }
+
+    public Player(Point2f centre) {
         super(DEFAULT_WIDTH, DEFAULT_HEIGHT, centre, GameObjectType.PLAYER);
         gravity = DEFAULT_GRAVITY;
         falling = true;
@@ -49,9 +54,9 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
         lastFiredBullet = System.currentTimeMillis();
 
         //todo remove
-        //this.centre.setX(11760);
-        //this.centre.setY(449);
-        //bitBotFound = true;
+        this.centre.setX(3861);
+        this.centre.setY(321);
+        bitBotFound = true;
         //addWeapon(new BitArrayGun(new Point2f(0, 0)));
 
         setupAnimator();
@@ -192,7 +197,7 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
             switch (env.getType()) {
                 case CHECKPOINT:
                     if (bounds.intersects(getBounds())) {
-                        model.setLastCheckpoint(env.getCentre().copy());
+                        model.saveCheckpoint(env.getCentre().copy());
                     }
                     break;
                 case LAVA:

@@ -1,3 +1,5 @@
+package integration;
+
 import game.framework.controllers.MouseController;
 import org.junit.Test;
 

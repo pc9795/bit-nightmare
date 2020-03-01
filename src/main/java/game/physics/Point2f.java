@@ -26,10 +26,12 @@ SOFTWARE.
 //Modified from Graphics 3033J course point class  by Abey Campbell 
 
 
+import java.io.Serializable;
+
 /**
  * A point in the 2D space
  */
-public class Point2f {
+public class Point2f implements Serializable {
     private float x;
     private float y;
     private Boundary boundary;

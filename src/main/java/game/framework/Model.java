@@ -15,14 +15,16 @@ import game.physics.QuadTree;
 import game.utils.Constants;
 
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /*
@@ -58,11 +60,11 @@ public class Model {
     private List<GameObject> enemies, environment, movableEnvironment, collectibles, bullets;
     private QuadTree environmentQuadTree;
     private List<String> levels;
-    private Point2f lastCheckpoint;
     private Boundary levelBoundary;
     private String currentLevel;
     private boolean pause;
     private boolean started;
+    private Point2f lastCheckPointSaved;
 
 
     public Model(int width, int height) throws IOException, URISyntaxException {
@@ -115,10 +117,6 @@ public class Model {
 
     public List<GameObject> getCollectibles() {
         return collectibles;
-    }
-
-    public void setLastCheckpoint(Point2f lastCheckpoint) {
-        this.lastCheckpoint = lastCheckpoint;
     }
 
     public List<GameObject> getMovableEnvironment() {
@@ -217,32 +215,92 @@ public class Model {
         player1 = null;
     }
 
+    private Path savePath() throws IOException {
+        Path saveDirectory = Paths.get(Paths.get(System.getProperty("user.home")).toString(), Constants.SAVE_DIRECTORY_NAME);
+        if (!Files.isDirectory(saveDirectory)) {
+            Files.createDirectory(saveDirectory);
+        }
+        return Paths.get(saveDirectory.toString(), Constants.SAVE_FILE_NAME);
+    }
+
+    public void saveCheckpoint(Point2f checkPointLocation) {
+        //If player is standing on the same checkpoint.
+        if (lastCheckPointSaved != null && (lastCheckPointSaved.getX() == checkPointLocation.getX() && lastCheckPointSaved.getY() == checkPointLocation.getY())) {
+            return;
+        }
+        try {
+            Path savePath = savePath();
+            //Auto closing
+            try (FileOutputStream fos = new FileOutputStream(savePath.toFile()); ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+                oos.writeObject(toCheckpoint());
+            }
+            //Expecting that I am getting a copy so not calling copy().
+            lastCheckPointSaved = checkPointLocation;
+        } catch (Exception exc) {
+            System.out.println("Not able to save checkpoint");
+            exc.printStackTrace();
+        }
+    }
+
     public boolean isLastCheckpointAvailable() {
-        return false;
+        Path savePath;
+        try {
+            savePath = savePath();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return Files.exists(savePath);
     }
 
     /**
      * Load a last checkpoint
      */
-    //todo implement it
     public void loadLastCheckPoint() {
-        if (player1 == null) {
-            return;
-        }
-        boolean bitBotFound = player1.isBitBotFound();
-        List<Weapon> weapons = player1.getWeapons();
-        int currentWeaponIndex = player1.getCurrentWeaponIndex();
+        Checkpoint checkpoint;
         try {
-            loadLevel(currentLevel);
-            if (lastCheckpoint != null) {
-                player1.setCentre(lastCheckpoint.copy());
+            //If no check point then load the current level.
+            if (!isLastCheckpointAvailable()) {
+                loadLevel(currentLevel);
+                return;
             }
-            player1.setBitBotFound(bitBotFound);
-            player1.setWeapons(weapons);
-            player1.setCurrentWeaponIndex(currentWeaponIndex);
 
-        } catch (IOException e) {
-            throw new RuntimeException(String.format("Error while loading checkpoint: %s on level: %s", lastCheckpoint, currentLevel));
+            Path savePath = savePath();
+            //Auto closing
+            try (FileInputStream fis = new FileInputStream(savePath.toFile()); ObjectInputStream ois = new ObjectInputStream(fis)) {
+                checkpoint = (Checkpoint) ois.readObject();
+            }
+
+            loadLevel(checkpoint.currLevel);
+            //Configuring player attributes.
+            player1.setCentre(checkpoint.player1.getCentre());
+            player1.setBitBotFound(checkpoint.player1.isBitBotFound());
+            player1.setWeapons(checkpoint.player1.getWeapons());
+            player1.setCurrentWeaponIndex(checkpoint.player1.getCurrentWeaponIndex());
+
+            //Removing collectibles which wre already found. This code looks like mess but right now I think it is
+            //the best way to do it may be can clean in future.
+            //Checking which weapon types are found.
+            Set<GameObject.GameObjectType> weaponTypes = new HashSet<>();
+            checkpoint.player1.getWeapons().forEach(weapon -> weaponTypes.add(((GameObject) weapon).getType()));
+            for (int i = 0; i < collectibles.size(); ) {
+                GameObject object = collectibles.get(i);
+                //Bit bot is already found then removing from collectibles.
+                if (object.getType() == GameObject.GameObjectType.BIT_BOT && checkpoint.player1.isBitBotFound()) {
+                    collectibles.remove(i);
+                    continue;
+                }
+                //Remove weapons which are previously found.
+                if (weaponTypes.contains(object.getType())) {
+                    collectibles.remove(i);
+                    continue;
+                }
+                i++;
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error while loading checkpoint", e);
         }
         started = true;
         pause = false;
@@ -355,6 +413,20 @@ public class Model {
                 break;
             default:
                 System.out.println(String.format("Object type is not supported: %s by the Model", object.getType()));
+        }
+    }
+
+    private Checkpoint toCheckpoint() {
+        return new Checkpoint(player1, currentLevel);
+    }
+
+    private static class Checkpoint implements Serializable {
+        private Player player1;
+        private String currLevel;
+
+        public Checkpoint(Player player1, String currLevel) {
+            this.player1 = player1;
+            this.currLevel = currLevel;
         }
     }
 }

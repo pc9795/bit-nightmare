@@ -1,3 +1,5 @@
+package integration;
+
 import game.framework.Model;
 import game.objects.GameObject;
 import game.physics.Point2f;

@@ -1,12 +1,14 @@
 package game.physics;
 
+import java.io.Serializable;
+
 /**
  * Created By: Prashant Chaubey
  * Created On: 18-02-2020 19:21
  * No setters so effectively immutable. Have to check before adding setters as this object instance is shared between
  * multiple objects.
  **/
-public class Boundary {
+public class Boundary implements Serializable {
     private float xMin;
     private float xMax;
     private float yMin;

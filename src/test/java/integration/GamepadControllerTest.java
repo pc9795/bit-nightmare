@@ -1,4 +1,6 @@
-import game.framework.controllers.KeyboardController;
+package integration;
+
+import game.framework.controllers.GamepadController;
 import org.junit.Test;
 
 import javax.swing.*;
@@ -7,22 +9,23 @@ import java.awt.image.BufferStrategy;
 
 /**
  * Created By: Prashant Chaubey
- * Created On: 18-02-2020 15:01
+ * Created On: 18-02-2020 18:07
  **/
-public class KeyboardControllerTest {
+public class GamepadControllerTest {
     /**
-     * It is more of an integration test to check keypad controller. I didn't wrote much documentation about how frame is
+     * It is more of an integration test to check game-pad controller. I didn't wrote much documentation about how frame is
      * displayed here. For more info refer to the `Game` class.
      */
     @Test
     public void testKeyboardControllerWorking() throws InterruptedException {
-        JFrame testFrame = new JFrame("Keyboard Test");
+        JFrame testFrame = new JFrame("Gamepad Test");
         Canvas testCanvas = new Canvas();
         testCanvas.setPreferredSize(new Dimension(1000, 500));
         testCanvas.setBackground(Color.WHITE);
 
-        //Adding listeners
-        testCanvas.addKeyListener(KeyboardController.getInstance());
+        //Game-pad thread
+        GamepadController.getInstance().setDetecting(true);
+        new Thread(GamepadController.getInstance()).start();
 
         testCanvas.setIgnoreRepaint(true);
         testFrame.getContentPane().add(testCanvas);
@@ -40,16 +43,16 @@ public class KeyboardControllerTest {
             public void run() {
                 testCanvas.createBufferStrategy(3);
                 running = true;
-                printKeyboardControllerStats();
+                printGamepadControllerStatus();
             }
 
             /**
              * Method of interest
              */
-            private void printKeyboardControllerStats() {
+            private void printGamepadControllerStatus() {
                 testCanvas.requestFocus();
                 BufferStrategy bs = testCanvas.getBufferStrategy();
-                KeyboardController controller = KeyboardController.getInstance();
+                GamepadController controller = GamepadController.getInstance();
                 while (running) {
                     controller.poll();
                     Graphics g = bs.getDrawGraphics();
@@ -59,21 +62,21 @@ public class KeyboardControllerTest {
                     int fontHeight = fm.getHeight() + fm.getAscent() + fm.getDescent();
                     int initialTextPos = fontHeight;
 
-                    g.drawString("PRESS keyboard keys and TEST", 5, initialTextPos);
-                    initialTextPos += fontHeight;
-                    g.drawString(String.format("W Pressed: %s", controller.isWPressed()), 5, initialTextPos);
+                    g.drawString("PRESS Gamepad keys and TEST", 5, initialTextPos);
                     initialTextPos += fontHeight;
                     g.drawString(String.format("A Pressed: %s", controller.isAPressed()), 5, initialTextPos);
                     initialTextPos += fontHeight;
-                    g.drawString(String.format("D Pressed: %s", controller.isDPressed()), 5, initialTextPos);
+                    g.drawString(String.format("X Pressed: %s", controller.isXPressed()), 5, initialTextPos);
                     initialTextPos += fontHeight;
-                    g.drawString(String.format("S Pressed: %s", controller.isSPressed()), 5, initialTextPos);
+                    g.drawString(String.format("Y Pressed: %s", controller.isYPressed()), 5, initialTextPos);
                     initialTextPos += fontHeight;
-                    g.drawString(String.format("Q Pressed: %s", controller.isQPressed()), 5, initialTextPos);
+                    g.drawString(String.format("B Pressed: %s", controller.isBPressed()), 5, initialTextPos);
                     initialTextPos += fontHeight;
-                    g.drawString(String.format("Space Pressed: %s", controller.isSpacePressed()), 5, initialTextPos);
+                    g.drawString(String.format("Right Pressed: %s", controller.isRightPressed()), 5, initialTextPos);
                     initialTextPos += fontHeight;
-                    g.drawString(String.format("Escape Pressed: %s", controller.isEscPressed()), 5, initialTextPos);
+                    g.drawString(String.format("Left Pressed: %s", controller.isLeftPressed()), 5, initialTextPos);
+                    initialTextPos += fontHeight;
+                    g.drawString(String.format("Start Pressed: %s", controller.isStartPressed()), 5, initialTextPos);
 
                     g.dispose();
                     bs.show();

@@ -25,11 +25,13 @@ SOFTWARE.
    (MIT LICENSE ) e.g do what you want with this :-) 
  */
 
+import java.io.Serializable;
+
 /**
  * Modified from Graphics 3033J course point class  by Abey Campbell
  * It behaves same as `Point2f` but will help in distinguishing the applications.
  */
-public class Vector2f {
+public class Vector2f implements Serializable {
     private float x;
     private float y;
 

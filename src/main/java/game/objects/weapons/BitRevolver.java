@@ -6,6 +6,7 @@ import game.objects.weapons.bullets.BitRevolverBullet;
 import game.physics.Point2f;
 
 import java.awt.*;
+import java.io.Serializable;
 
 /**
  * Created By: Prashant Chaubey

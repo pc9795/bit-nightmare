@@ -7,6 +7,7 @@ import game.physics.Point2f;
 import game.physics.Vector2f;
 
 import java.awt.*;
+import java.io.Serializable;
 
 /*
  * Created by Abraham Campbell on 15/01/2020.
@@ -32,7 +33,7 @@ SOFTWARE.
    
    (MIT LICENSE ) e.g do what you want with this :-) 
  */
-public abstract class GameObject {
+public abstract class GameObject implements Serializable {
     public enum GameObjectType {
         BLOCK, LAVA, PLAYER, BIT_BOT, CHARGER, SOLDIER, SUPER_SOLDIER, ENEMY_PORTAL, BIT_REVOLVER, BIT_ARRAY_GUN,
         GATE, MOVABLE_BLOCK, GUARDIAN, BIT_MATRIX_BLAST, HIDING_BLOCK, END_GAME, CHECKPOINT, CHANGE_LEVEL,
@@ -54,7 +55,7 @@ public abstract class GameObject {
     protected boolean falling;
     protected FacingDirection facingDirection = FacingDirection.RIGHT;
     protected float gravity = 0f;
-    protected Texture texture;
+    protected transient Texture texture;
 
     public GameObject(int width, int height, Point2f centre, GameObjectType type) {
         this.width = width;
