@@ -6,7 +6,7 @@
   "sequences": [
     {
       "id": "sequence1",
-      "pos": 1490,
+      "pos": 0,
       "stories": [
         {
           "imageLink": 0,
@@ -27,7 +27,7 @@
     },
     {
       "id": "sequence1.5",
-      "pos": 1580,
+      "pos": 0,
       "stories": [
         {
           "imageLink": 0,
@@ -103,7 +103,7 @@
     },
     {
       "id": "sequence2",
-      "pos": 1750,
+      "pos": 0,
       "stories": [
         {
           "imageLink": 0,
@@ -119,7 +119,7 @@
     },
     {
       "id": "sequence3",
-      "pos": 2700,
+      "pos": 0,
       "stories": [
         {
           "imageLink": 0,
@@ -135,7 +135,7 @@
     },
     {
       "id": "sequence4",
-      "pos": 2872,
+      "pos": 0,
       "stories": [
         {
           "imageLink": 1,
@@ -146,7 +146,7 @@
     },
     {
       "id": "sequence5",
-      "pos": 6412,
+      "pos": 0,
       "stories": [
         {
           "imageLink": 0,
@@ -167,7 +167,7 @@
     },
     {
       "id": "sequence6",
-      "pos": 10800,
+      "pos": 0,
       "stories": [
         {
           "imageLink": 0,

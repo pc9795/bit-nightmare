@@ -49,11 +49,10 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
         lastFiredBullet = System.currentTimeMillis();
 
         //todo remove
-        //10839 513
-        //5798 513
-        //this.centre.setX(10839);
-        //this.centre.setY(513);
+        //this.centre.setX(11760);
+        //this.centre.setY(449);
         //bitBotFound = true;
+        //addWeapon(new BitArrayGun(new Point2f(0, 0)));
 
         setupAnimator();
     }

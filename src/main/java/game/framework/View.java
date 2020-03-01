@@ -50,7 +50,8 @@ class View extends Canvas {
     private StoryTeller storyTeller = new StoryTeller();
     private HashSet<Integer> storyLocationsProcessed = new HashSet<>();
     private float gameScreenAlpha = 1f;
-    private Screen currScreen = Screen.TITLE, prevScreen = null;
+    //todo fix the screen
+    private Screen currScreen = Screen.IN_GAME, prevScreen = null;
     private String levelSelected;
 
 
@@ -61,7 +62,8 @@ class View extends Canvas {
         TextureLoader.getInstance();
         try {
             this.bg = BufferedImageLoader.getInstance().loadImage(Constants.BACKGROUND_IMG_LOC);
-
+            //todo remove
+            gameWorld.loadLevel(gameWorld.getLevels().get(0));
         } catch (IOException e) {
             System.out.println(String.format("Unable to load background image:%s", Constants.BACKGROUND_IMG_LOC));
             e.printStackTrace();
