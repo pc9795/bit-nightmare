@@ -62,7 +62,7 @@ public class Model {
     private QuadTree environmentQuadTree;
     private List<String> levels;
     private Boundary levelBoundary;
-    private String currentLevel;
+    private int currLevelIndex;
     private boolean pause;
     private boolean started;
     private Point2f lastCheckPointSaved;
@@ -161,18 +161,43 @@ public class Model {
         return pause;
     }
 
+    public void nextLevel() {
+        if (currLevelIndex == levels.size() - 1) {
+            System.out.println("!!!WARNING!!!Next level requested at the last level.");
+            return;
+        }
+        try {
+            //Can look for a better way to do it. Currently changing levels can't be saved.
+            //Caching previous state
+            boolean bitBotFound = player1.isBitBotFound();
+            List<Weapon> weapons = player1.getWeapons();
+            int currWeaponIndex = player1.getCurrentWeaponIndex();
+            //Loading next level
+            loadLevel(currLevelIndex + 1, difficulty);
+            //Setting the cached state.
+            player1.setBitBotFound(bitBotFound);
+            player1.setWeapons(weapons);
+            player1.setCurrentWeaponIndex(currWeaponIndex);
+
+
+        } catch (IOException e) {
+            System.out.println(String.format("Unable to load level at index:%s from levels:%s", currLevelIndex + 1, levels));
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Load a level
      *
-     * @param levelName name of the level
+     * @param index index of the level
      * @throws IOException not able to load level files
      */
-    public void loadLevel(String levelName, Difficulty difficulty) throws IOException {
+    public void loadLevel(int index, Difficulty difficulty) throws IOException {
         clean();
-        Level level = LevelLoader.getInstance().loadLevel(levelName);
+        Level level = LevelLoader.getInstance().loadLevel(levels.get(index));
         loadLevelUtil(level, difficulty);
         this.difficulty = difficulty;
-        this.currentLevel = levelName;
+        this.currLevelIndex = index;
         this.started = true;
         this.pause = false;
     }
@@ -270,7 +295,7 @@ public class Model {
             //If no check point then load the current level.
             if (!isLastCheckpointAvailable()) {
                 assert difficulty != null : "Difficulty can't be null at this point";
-                loadLevel(currentLevel, difficulty);
+                loadLevel(currLevelIndex, difficulty);
                 return;
             }
 
@@ -280,7 +305,7 @@ public class Model {
                 checkpoint = (Checkpoint) ois.readObject();
             }
 
-            loadLevel(checkpoint.currLevel, checkpoint.difficulty);
+            loadLevel(checkpoint.currLevelIndex, checkpoint.difficulty);
             //Configuring player attributes.
             player1.setCentre(checkpoint.player1.getCentre());
             player1.setBitBotFound(checkpoint.player1.isBitBotFound());
@@ -425,17 +450,17 @@ public class Model {
     }
 
     private Checkpoint toCheckpoint() {
-        return new Checkpoint(player1, currentLevel, difficulty);
+        return new Checkpoint(player1, currLevelIndex, difficulty);
     }
 
     private static class Checkpoint implements Serializable {
         private Player player1;
-        private String currLevel;
+        private int currLevelIndex;
         private Difficulty difficulty;
 
-        public Checkpoint(Player player1, String currLevel, Difficulty difficulty) {
+        public Checkpoint(Player player1, int currLevelIndex, Difficulty difficulty) {
             this.player1 = player1;
-            this.currLevel = currLevel;
+            this.currLevelIndex = currLevelIndex;
             this.difficulty = difficulty;
         }
     }

@@ -54,9 +54,9 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
         lastFiredBullet = System.currentTimeMillis();
 
         //todo remove
-        this.centre.setX(3861);
-        this.centre.setY(321);
-        bitBotFound = true;
+        //this.centre.setX(3861);
+        //this.centre.setY(321);
+        //bitBotFound = true;
         //addWeapon(new BitArrayGun(new Point2f(0, 0)));
 
         setupAnimator();
@@ -195,6 +195,11 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
         for (GameObject env : willCollide) {
             Rectangle bounds = env.getBounds();
             switch (env.getType()) {
+                case CHANGE_LEVEL:
+                    if (bounds.intersects(getBounds())) {
+                        model.nextLevel();
+                    }
+                    break;
                 case CHECKPOINT:
                     if (bounds.intersects(getBounds())) {
                         model.saveCheckpoint(env.getCentre().copy());

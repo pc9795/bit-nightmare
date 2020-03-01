@@ -51,9 +51,8 @@ class View extends Canvas {
     private StoryTeller storyTeller = new StoryTeller();
     private HashSet<Integer> storyLocationsProcessed = new HashSet<>();
     private float gameScreenAlpha = 1f;
-    //todo fix the screen
-    private Screen currScreen = Screen.IN_GAME, prevScreen = null;
-    private String levelSelected;
+    private Screen currScreen = Screen.TITLE, prevScreen = null;
+    private int levelSelected;
 
 
     View(Model world) {
@@ -63,8 +62,6 @@ class View extends Canvas {
         TextureLoader.getInstance();
         try {
             this.bg = BufferedImageLoader.getInstance().loadImage(Constants.BACKGROUND_IMG_LOC);
-            //todo remove
-            gameWorld.loadLevel(gameWorld.getLevels().get(0), Difficulty.MEDIUM);
         } catch (IOException e) {
             System.out.println(String.format("Unable to load background image:%s", Constants.BACKGROUND_IMG_LOC));
             e.printStackTrace();
@@ -152,7 +149,7 @@ class View extends Canvas {
                         case 1:
                             //Load first level.
                             //The game world should have at least one level else it will throw exception early.
-                            levelSelected = gameWorld.getLevels().get(0);
+                            levelSelected = 0;
                             if (checkpointAvailable) {
                                 currScreen = Screen.NEW_GAME;
                             } else {
@@ -260,7 +257,7 @@ class View extends Canvas {
                         currScreen = Screen.IN_GAME;
                         prevScreen = Screen.DIFFICULTY_SELECT;
                         //Clean the name. This option always come after some previous screen
-                        levelSelected = null;
+                        levelSelected = -1;
 
                     } catch (IOException e) {
                         System.out.println(String.format("Unable to load level: %s", levelSelected));
@@ -299,7 +296,7 @@ class View extends Canvas {
                         case -1:
                             break;
                         default:
-                            levelSelected = menuItems.get(option);
+                            levelSelected = option;
                             if (gameWorld.isLastCheckpointAvailable()) {
                                 currScreen = Screen.NEW_GAME;
                             } else {
