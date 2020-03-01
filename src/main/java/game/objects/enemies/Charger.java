@@ -4,6 +4,7 @@ import game.colliders.FineGrainedCollider;
 import game.framework.Model;
 import game.framework.visual.Animator;
 import game.objects.Animated;
+import game.objects.Difficulty;
 import game.objects.GameObject;
 import game.physics.Point2f;
 import game.properties.Healthy;
@@ -18,6 +19,7 @@ import java.util.List;
  **/
 public class Charger extends GameObject implements FineGrainedCollider, Healthy, Enemy, Animated {
     //Constants
+    //ADJUST DIFFICULTY WHEN YOU CHANGE THE DEFAULTS
     private static final int DEFAULT_WIDTH = 32;
     private static final int DEFAULT_HEIGHT = 32;
     private static final float DEFAULT_SPEED_X = 4f;
@@ -29,7 +31,7 @@ public class Charger extends GameObject implements FineGrainedCollider, Healthy,
     private float speedX;
     private Animator idleRight, idleLeft;
 
-    public Charger(Point2f centre) {
+    private Charger(Point2f centre) {
         super(DEFAULT_WIDTH, DEFAULT_HEIGHT, centre, GameObjectType.CHARGER);
         this.gravity = DEFAULT_GRAVITY;
         this.falling = true;
@@ -38,6 +40,20 @@ public class Charger extends GameObject implements FineGrainedCollider, Healthy,
         this.health = DEFAULT_HEALTH;
         this.maxHealth = DEFAULT_HEALTH;
         setupAnimator();
+    }
+
+    public Charger(Point2f centre, Difficulty difficulty) {
+        this(centre);
+        //ADJUST IF YOU HAVE CHANGED THE DEFAULTS
+        switch (difficulty) {
+            case EASY:
+                this.speedX -= 1f;
+                break;
+            case HARD:
+                this.los += 100;
+                this.speedX += 1f;
+                break;
+        }
     }
 
     @Override

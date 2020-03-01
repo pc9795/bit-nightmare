@@ -2,11 +2,11 @@ package game.objects.enemies;
 
 import game.framework.Model;
 import game.framework.visual.Animator;
+import game.objects.Difficulty;
 import game.objects.enemies.adapters.ShootingEnemyAdapter;
 import game.objects.weapons.bullets.BitArrayGunBullet;
 import game.objects.weapons.bullets.BitMatrixBlastBullet;
 import game.physics.Point2f;
-import org.lwjgl.Sys;
 
 import java.awt.*;
 import java.util.Random;
@@ -21,28 +21,29 @@ import java.util.Random;
  **/
 public class Guardian extends ShootingEnemyAdapter {
     //Constants
+    //ADJUST DIFFICULTY WHEN YOU CHANGE THE DEFAULTS
     private static final int DEFAULT_WIDTH = 64;
     private static final int DEFAULT_HEIGHT = 64;
     private static final float DEFAULT_SPEED_X = 5f;
     private static final float DEFAULT_CHARGE_DURATION_IN_SEC = 2f;
-    private static final float DEFAULT_BULLET_FREQ_IN_SEC = 1.5f;
-    private static final int DEFAULT_LOS = 500;
+    private static final float DEFAULT_BULLET_INTERVAL_IN_SEC = 1.5f;
+    private static final int DEFAULT_LOS = 900;
     private static final float DEFAULT_CHARGING_PROB = 0.002f;
-    private static final int DEFAULT_HEALTH = 500;
+    private static final int DEFAULT_HEALTH = 1000;
     //Variables
     private Random random = new Random();
     private long lastFiredBullet, lastCharged;
     private boolean charging = true;
     private int los;
-    private float chargeDurationInSec, bulletFreqInSec, speedX, chargingProb;
+    private float chargeDurationInSec, bulletIntervalInSec, speedX, chargingProb;
     private Animator runningLeft, runningRight, lastAnimator;
 
-    public Guardian(Point2f centre) {
+    private Guardian(Point2f centre) {
         super(DEFAULT_WIDTH, DEFAULT_HEIGHT, centre, GameObjectType.GUARDIAN);
         gravity = DEFAULT_GRAVITY;
         los = DEFAULT_LOS;
         chargeDurationInSec = DEFAULT_CHARGE_DURATION_IN_SEC;
-        bulletFreqInSec = DEFAULT_BULLET_FREQ_IN_SEC;
+        bulletIntervalInSec = DEFAULT_BULLET_INTERVAL_IN_SEC;
         speedX = DEFAULT_SPEED_X;
         falling = true;
         chargingProb = DEFAULT_CHARGING_PROB;
@@ -50,6 +51,28 @@ public class Guardian extends ShootingEnemyAdapter {
         maxHealth = DEFAULT_HEALTH;
         lastCharged = System.currentTimeMillis();
         lastFiredBullet = lastCharged;
+    }
+
+    public Guardian(Point2f centre, Difficulty difficulty) {
+        this(centre);
+        //ADJUST IF YOU HAVE CHANGED THE DEFAULTS
+        switch (difficulty) {
+            case EASY:
+                speedX -= 1f;
+                chargeDurationInSec -= 0.5f;
+                bulletIntervalInSec -= 0.5f;
+                chargingProb /= 2;
+                health -= 200;
+                break;
+            case HARD:
+                los += 300;
+                speedX += 1f;
+                chargeDurationInSec += 0.5f;
+                bulletIntervalInSec += 0.5f;
+                chargingProb *= 2;
+                health += 500;
+                break;
+        }
     }
 
     @Override
@@ -170,7 +193,7 @@ public class Guardian extends ShootingEnemyAdapter {
         long now = System.currentTimeMillis();
         long diff = now - lastFiredBullet;
         //Rate limiter
-        if (diff <= bulletFreqInSec * 1000) {
+        if (diff <= bulletIntervalInSec * 1000) {
             return;
         }
         //In case of right facing shift the bullet position by width

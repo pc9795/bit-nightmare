@@ -17,18 +17,18 @@ import game.physics.Point2f;
  * Purpose: Factory to generate game objects
  **/
 public final class GameObjectFactory {
-    public static GameObject getGameObject(GameObject.GameObjectType type, Point2f centre) {
+    public static GameObject getGameObject(GameObject.GameObjectType type, Point2f centre, Difficulty difficulty) {
         switch (type) {
             case GUARDIAN:
-                return new Guardian(centre);
+                return new Guardian(centre, difficulty);
             case CHARGER:
-                return new Charger(centre);
+                return new Charger(centre, difficulty);
             case SOLDIER:
-                return new Soldier(centre);
+                return new Soldier(centre, difficulty);
             case SUPER_SOLDIER:
-                return new SuperSoldier(centre);
+                return new SuperSoldier(centre, difficulty);
             case ENEMY_PORTAL:
-                return new EnemyPortal(centre);
+                return new EnemyPortal(centre, difficulty);
             case BLOCK:
                 return new Block(centre);
             case END_GAME:

@@ -7,6 +7,7 @@ import game.framework.narrator.Sequence;
 import game.framework.narrator.Story;
 import game.framework.narrator.StoryLoader;
 import game.framework.visual.TextureLoader;
+import game.objects.Difficulty;
 import game.utils.BufferedImageLoader;
 import game.utils.Constants;
 
@@ -63,7 +64,7 @@ class View extends Canvas {
         try {
             this.bg = BufferedImageLoader.getInstance().loadImage(Constants.BACKGROUND_IMG_LOC);
             //todo remove
-            gameWorld.loadLevel(gameWorld.getLevels().get(0));
+            gameWorld.loadLevel(gameWorld.getLevels().get(0), Difficulty.MEDIUM);
         } catch (IOException e) {
             System.out.println(String.format("Unable to load background image:%s", Constants.BACKGROUND_IMG_LOC));
             e.printStackTrace();
@@ -78,14 +79,14 @@ class View extends Canvas {
         }
         //Update camera
         Graphics g = bs.getDrawGraphics();
+        g.clearRect(0, 0, getWidth(), getHeight());
+        g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
+        g.setColor(Color.ORANGE);
 
         //ALL CONTROLLERS `poll` CALLS MUST BE INSIDE SPECIFIC CASES. Any call outside can produce unexpected results.
         //If menu items are a DAG then it is easy to navigate. Have to check the possibility of cycles.
         switch (currScreen) {
             case TITLE:
-                g.clearRect(0, 0, getWidth(), getHeight());
-                g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
-                g.setColor(Color.ORANGE);
                 g.setFont(new Font("Game Music Love", Font.BOLD, 150));
                 String text = "BIT-NIGHTMARE";
                 FontMetrics fm = g.getFontMetrics();
@@ -110,9 +111,6 @@ class View extends Canvas {
                 }
                 break;
             case MAIN:
-                g.setColor(Color.ORANGE);
-                g.clearRect(0, 0, getWidth(), getHeight());
-                g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
                 g.setFont(new Font("Game Music Love", Font.BOLD, 60));
                 fm = g.getFontMetrics();
                 margin = 10;
@@ -178,9 +176,6 @@ class View extends Canvas {
                 }
                 break;
             case NEW_GAME:
-                g.setColor(Color.ORANGE);
-                g.clearRect(0, 0, getWidth(), getHeight());
-                g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
                 g.setFont(new Font("Game Music Love", Font.BOLD, 60));
                 fm = g.getFontMetrics();
                 margin = 10;
@@ -206,18 +201,8 @@ class View extends Canvas {
                 if (MouseController.getInstance().isLeftClickedOnce()) {
                     switch (option) {
                         case 0:
-                            try {
-                                gameWorld.loadLevel(levelSelected);
-                                storyLocationsProcessed.clear();
-                                currScreen = Screen.IN_GAME;
-                                prevScreen = Screen.NEW_GAME;
-                                //Clean the name. This option always come after some previous screen
-                                levelSelected = null;
-
-                            } catch (IOException e) {
-                                System.out.println(String.format("Unable to load level: %s", levelSelected));
-                                e.printStackTrace();
-                            }
+                            currScreen = Screen.DIFFICULTY_SELECT;
+                            prevScreen = Screen.NEW_GAME;
                             break;
                         case 1:
                             currScreen = Screen.MAIN;
@@ -232,9 +217,6 @@ class View extends Canvas {
                 }
                 break;
             case DIFFICULTY_SELECT:
-                g.setColor(Color.ORANGE);
-                g.clearRect(0, 0, getWidth(), getHeight());
-                g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
                 g.setFont(new Font("Game Music Love", Font.BOLD, 60));
                 fm = g.getFontMetrics();
                 margin = 10;
@@ -256,25 +238,33 @@ class View extends Canvas {
                     g.drawString(menuItems.get(i), margin, y + fontHeight);
                     y += fontHeight;
                 }
+                Difficulty difficulty = null;
                 MouseController.getInstance().poll();
                 if (MouseController.getInstance().isLeftClickedOnce()) {
                     switch (option) {
                         case 0:
-                        case 1:
-                        case 2:
-                            try {
-                                gameWorld.loadLevel(levelSelected);
-                                storyLocationsProcessed.clear();
-                                currScreen = Screen.IN_GAME;
-                                prevScreen = Screen.DIFFICULTY_SELECT;
-                                //Clean the name. This option always come after some previous screen
-                                levelSelected = null;
-
-                            } catch (IOException e) {
-                                System.out.println(String.format("Unable to load level: %s", levelSelected));
-                                e.printStackTrace();
-                            }
+                            difficulty = Difficulty.EASY;
                             break;
+                        case 1:
+                            difficulty = Difficulty.MEDIUM;
+                            break;
+                        case 2:
+                            difficulty = Difficulty.HARD;
+                            break;
+                    }
+                }
+                if (difficulty != null) {
+                    try {
+                        gameWorld.loadLevel(levelSelected, difficulty);
+                        storyLocationsProcessed.clear();
+                        currScreen = Screen.IN_GAME;
+                        prevScreen = Screen.DIFFICULTY_SELECT;
+                        //Clean the name. This option always come after some previous screen
+                        levelSelected = null;
+
+                    } catch (IOException e) {
+                        System.out.println(String.format("Unable to load level: %s", levelSelected));
+                        e.printStackTrace();
                     }
                 }
                 KeyboardController.getInstance().poll();
@@ -284,9 +274,6 @@ class View extends Canvas {
                 }
                 break;
             case LEVEL_SELECT:
-                g.setColor(Color.ORANGE);
-                g.clearRect(0, 0, getWidth(), getHeight());
-                g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
                 g.setFont(new Font("Game Music Love", Font.BOLD, 60));
                 fm = g.getFontMetrics();
                 margin = 10;
@@ -330,9 +317,6 @@ class View extends Canvas {
                 }
                 break;
             case SETTINGS:
-                g.setColor(Color.ORANGE);
-                g.clearRect(0, 0, getWidth(), getHeight());
-                g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
                 g.setFont(new Font("Game Music Love", Font.BOLD, 60));
                 fm = g.getFontMetrics();
                 margin = 10;
@@ -370,9 +354,6 @@ class View extends Canvas {
                 break;
             case CONTROL_LAYOUT:
                 try {
-                    g.setColor(Color.ORANGE);
-                    g.clearRect(0, 0, getWidth(), getHeight());
-                    g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
                     g.setFont(new Font("Game Music Love", Font.BOLD, 60));
                     margin = 100;
                     BufferedImageLoader loader = BufferedImageLoader.getInstance();
@@ -445,9 +426,6 @@ class View extends Canvas {
                 }
                 break;
             case PAUSE:
-                g.setColor(Color.ORANGE);
-                g.clearRect(0, 0, getWidth(), getHeight());
-                g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
                 g.setFont(new Font("Game Music Love", Font.BOLD, 60));
                 fm = g.getFontMetrics();
                 margin = 10;
@@ -495,9 +473,6 @@ class View extends Canvas {
                 }
                 break;
             case QUIT_TO_MENU:
-                g.setColor(Color.ORANGE);
-                g.clearRect(0, 0, getWidth(), getHeight());
-                g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
                 g.setFont(new Font("Game Music Love", Font.BOLD, 60));
                 fm = g.getFontMetrics();
                 margin = 10;
@@ -539,9 +514,6 @@ class View extends Canvas {
                 }
                 break;
             case QUIT:
-                g.setColor(Color.ORANGE);
-                g.clearRect(0, 0, getWidth(), getHeight());
-                g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
                 g.setFont(new Font("Game Music Love", Font.BOLD, 60));
                 fm = g.getFontMetrics();
                 margin = 10;
@@ -690,12 +662,6 @@ class View extends Canvas {
     private void renderGame(Graphics g) {
         camera.update(gameWorld.getPlayer1());
         Graphics2D g2d = (Graphics2D) g;
-        //Clear scenery
-        g.clearRect(0, 0, getWidth(), getHeight());
-        //Background
-        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, gameScreenAlpha));
-        g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
-
         g2d.translate(camera.getX(), camera.getY());
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         //Drawing stuff
@@ -780,4 +746,3 @@ class View extends Canvas {
         }
     }
 }
-

@@ -1,6 +1,7 @@
 package game.objects.environment;
 
 import game.framework.Model;
+import game.objects.Difficulty;
 import game.objects.GameObject;
 import game.objects.GameObjectFactory;
 import game.objects.enemies.Enemy;
@@ -18,11 +19,12 @@ import java.util.Random;
  **/
 public class EnemyPortal extends GameObject implements Enemy {
     //Constants
+    //ADJUST DIFFICULTY WHEN YOU CHANGE THE DEFAULTS
     private static final int DEFAULT_WIDTH = 64;
     private static final int DEFAULT_HEIGHT = 64;
     private static final int DEFAULT_LOS = 500;
     private static final int DEFAULT_RANGE = 300;
-    private static final float DEFAULT_SPAWN_FREQ_IN_SEC = 1f;
+    private static final float DEFAULT_SPAWN_INTERVAL_IN_SEC = 1f;
     private static final int DEFAULT_ENEMY_COUNT = 5;
     //Variables
     private List<GameObjectType> enemyTypes;
@@ -31,15 +33,32 @@ public class EnemyPortal extends GameObject implements Enemy {
     private int enemyCount;
     private int los;
     private int range;
-    private float spawnFreqInSec;
+    private float spawnIntervalInSec;
 
-    public EnemyPortal(Point2f centre) {
+    private EnemyPortal(Point2f centre) {
         super(DEFAULT_WIDTH, DEFAULT_HEIGHT, centre, GameObjectType.ENEMY_PORTAL);
         enemyTypes = Arrays.asList(GameObjectType.CHARGER, GameObjectType.SOLDIER, GameObjectType.SUPER_SOLDIER);
         los = DEFAULT_LOS;
         range = DEFAULT_RANGE;
-        spawnFreqInSec = DEFAULT_SPAWN_FREQ_IN_SEC;
+        spawnIntervalInSec = DEFAULT_SPAWN_INTERVAL_IN_SEC;
         enemyCount = DEFAULT_ENEMY_COUNT;
+    }
+
+    public EnemyPortal(Point2f centre, Difficulty difficulty) {
+        this(centre);
+        //ADJUST DIFFICULTY WHEN YOU CHANGE THE DEFAULTS
+        switch (difficulty) {
+            case EASY:
+                enemyCount -= 1;
+                spawnIntervalInSec += 0.5f;
+                break;
+            case HARD:
+                los += 100;
+                range += 100;
+                enemyCount += 2;
+                spawnIntervalInSec -= 0.5f;
+                break;
+        }
     }
 
     @Override
@@ -84,7 +103,7 @@ public class EnemyPortal extends GameObject implements Enemy {
         long now = System.currentTimeMillis();
         long diff = now - lastBeingSpawned;
         //Rate limiter
-        if (diff <= spawnFreqInSec * 1000) {
+        if (diff <= spawnIntervalInSec * 1000) {
             return;
         }
         //Select an enemy to spawn
@@ -93,7 +112,7 @@ public class EnemyPortal extends GameObject implements Enemy {
         float x = centre.getX();
         x -= facingDirection == FacingDirection.LEFT ? random.nextInt(range) : -random.nextInt(range);
         //Create enemy
-        GameObject enemy = GameObjectFactory.getGameObject(type, new Point2f(x, centre.getY(), model.getLevelBoundary()));
+        GameObject enemy = GameObjectFactory.getGameObject(type, new Point2f(x, centre.getY(), model.getLevelBoundary()), model.getDifficulty());
         model.getEnemies().add(enemy);
         lastBeingSpawned = now;
         enemyCount--;

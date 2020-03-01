@@ -2,6 +2,7 @@ package game.objects.enemies;
 
 import game.framework.Model;
 import game.framework.visual.Animator;
+import game.objects.Difficulty;
 import game.objects.enemies.adapters.ShootingAndDuckingEnemyAdapter;
 import game.objects.weapons.bullets.BitRevolverBullet;
 import game.physics.Point2f;
@@ -16,27 +17,48 @@ import java.util.Random;
  **/
 public class Soldier extends ShootingAndDuckingEnemyAdapter {
     //Constants
+    //ADJUST DIFFICULTY WHEN YOU CHANGE THE DEFAULTS
     private static final int DEFAULT_WIDTH = 64;
     private static final int DEFAULT_HEIGHT = 64;
     private static final int DEFAULT_LOS = 600;
-    private static final float DEFAULT_BULLET_FREQ_IN_SEC = 1.5f;
+    private static final float DEFAULT_BULLET_INTERVAL_IN_SEC = 1.5f;
     private static final int DEFAULT_HEALTH = 100;
     private static final float DEFAULT_DUCKING_PROB = 0.002f;
     //Variables
     private Random random = new Random();
     private long lastFiredBullet;
     private int los;
-    private float bulletFreqInSec, duckingProb;
+    private float bulletIntervalInSec, duckingProb;
     private Animator lastAnimator;
 
-    public Soldier(Point2f centre) {
+    private Soldier(Point2f centre) {
         super(DEFAULT_WIDTH, DEFAULT_HEIGHT, centre, GameObjectType.SOLDIER);
         los = DEFAULT_LOS;
-        bulletFreqInSec = DEFAULT_BULLET_FREQ_IN_SEC;
+        bulletIntervalInSec = DEFAULT_BULLET_INTERVAL_IN_SEC;
         health = DEFAULT_HEALTH;
         maxHealth = DEFAULT_HEALTH;
         duckingProb = DEFAULT_DUCKING_PROB;
         lastFiredBullet = System.currentTimeMillis();
+    }
+
+    public Soldier(Point2f centre, Difficulty difficulty) {
+        this(centre);
+        //ADJUST IF YOU HAVE CHANGED THE DEFAULTS
+        switch (difficulty) {
+            case EASY:
+                bulletIntervalInSec += 0.5f;
+                //They can die from BitArrayGun in 2 shots. Assuming attack of 8/bullet, total 40.
+                health -= 20;
+                duckingProb /= 2;
+                break;
+            case HARD:
+                los += 100;
+                bulletIntervalInSec -= 0.5f;
+                //They can die from BitArrayGun in 4 shots. Assuming attack of 8/bullet, total 40.
+                health += 30;
+                duckingProb *= 2;
+                break;
+        }
     }
 
     @Override
@@ -109,7 +131,7 @@ public class Soldier extends ShootingAndDuckingEnemyAdapter {
         long now = System.currentTimeMillis();
         long diff = now - lastFiredBullet;
         //Rate limiter
-        if (diff <= bulletFreqInSec * 1000) {
+        if (diff <= bulletIntervalInSec * 1000) {
             return;
         }
         //In case of right facing shift the bullet position by width

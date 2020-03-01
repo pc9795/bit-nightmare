@@ -5,6 +5,7 @@ import game.framework.controllers.KeyboardController;
 import game.framework.levelloader.Level;
 import game.framework.levelloader.LevelLoader;
 import game.framework.levelloader.LevelObject;
+import game.objects.Difficulty;
 import game.objects.GameObject;
 import game.objects.GameObjectFactory;
 import game.objects.Player;
@@ -65,6 +66,7 @@ public class Model {
     private boolean pause;
     private boolean started;
     private Point2f lastCheckPointSaved;
+    private Difficulty difficulty;
 
 
     public Model(int width, int height) throws IOException, URISyntaxException {
@@ -97,6 +99,10 @@ public class Model {
         if (levels.size() == 0) {
             throw new RuntimeException("No levels to load");
         }
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
     }
 
     public Player getPlayer1() {
@@ -161,13 +167,14 @@ public class Model {
      * @param levelName name of the level
      * @throws IOException not able to load level files
      */
-    public void loadLevel(String levelName) throws IOException {
+    public void loadLevel(String levelName, Difficulty difficulty) throws IOException {
         clean();
         Level level = LevelLoader.getInstance().loadLevel(levelName);
-        loadLevelUtil(level);
-        currentLevel = levelName;
-        started = true;
-        pause = false;
+        loadLevelUtil(level, difficulty);
+        this.difficulty = difficulty;
+        this.currentLevel = levelName;
+        this.started = true;
+        this.pause = false;
     }
 
     /**
@@ -175,8 +182,8 @@ public class Model {
      *
      * @param level level object
      */
-    private void loadLevelUtil(Level level) {
-        levelBoundary = new Boundary(level.getMaxX() * Constants.Level.PIXEL_TO_WIDTH_RATIO,
+    private void loadLevelUtil(Level level, Difficulty difficulty) {
+        this.levelBoundary = new Boundary(level.getMaxX() * Constants.Level.PIXEL_TO_WIDTH_RATIO,
                 level.getMaxY() * Constants.Level.PIXEL_TO_WIDTH_RATIO);
         // QuadTree is to be initialized by the new boundaries.
         environmentQuadTree = new QuadTree(new Rectangle(0, 0, (int) levelBoundary.getxMax(), (int) levelBoundary.getyMax()));
@@ -194,7 +201,7 @@ public class Model {
             }
             Point2f center = new Point2f(object.getCentre().getX() * Constants.Level.PIXEL_TO_WIDTH_RATIO,
                     object.getCentre().getY() * Constants.Level.PIXEL_TO_WIDTH_RATIO, levelBoundary);
-            GameObject gameObject = GameObjectFactory.getGameObject(type, center);
+            GameObject gameObject = GameObjectFactory.getGameObject(type, center, difficulty);
             addGameObject(gameObject);
         }
         if (player1 == null) {
@@ -262,7 +269,8 @@ public class Model {
         try {
             //If no check point then load the current level.
             if (!isLastCheckpointAvailable()) {
-                loadLevel(currentLevel);
+                assert difficulty != null : "Difficulty can't be null at this point";
+                loadLevel(currentLevel, difficulty);
                 return;
             }
 
@@ -272,7 +280,7 @@ public class Model {
                 checkpoint = (Checkpoint) ois.readObject();
             }
 
-            loadLevel(checkpoint.currLevel);
+            loadLevel(checkpoint.currLevel, checkpoint.difficulty);
             //Configuring player attributes.
             player1.setCentre(checkpoint.player1.getCentre());
             player1.setBitBotFound(checkpoint.player1.isBitBotFound());
@@ -417,16 +425,18 @@ public class Model {
     }
 
     private Checkpoint toCheckpoint() {
-        return new Checkpoint(player1, currentLevel);
+        return new Checkpoint(player1, currentLevel, difficulty);
     }
 
     private static class Checkpoint implements Serializable {
         private Player player1;
         private String currLevel;
+        private Difficulty difficulty;
 
-        public Checkpoint(Player player1, String currLevel) {
+        public Checkpoint(Player player1, String currLevel, Difficulty difficulty) {
             this.player1 = player1;
             this.currLevel = currLevel;
+            this.difficulty = difficulty;
         }
     }
 }
