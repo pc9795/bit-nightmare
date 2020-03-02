@@ -68,13 +68,13 @@ public class GamepadControllerTest {
                     initialTextPos += fontHeight;
                     g.drawString(String.format("X Pressed: %s", controller.isXPressed()), 5, initialTextPos);
                     initialTextPos += fontHeight;
-                    g.drawString(String.format("Y Pressed: %s", controller.isYPressed()), 5, initialTextPos);
+                    g.drawString(String.format("Hat Switch Up Pressed: %s", controller.isHatSwitchUpPressed()), 5, initialTextPos);
                     initialTextPos += fontHeight;
-                    g.drawString(String.format("B Pressed: %s", controller.isBPressed()), 5, initialTextPos);
+                    g.drawString(String.format("Hat Switch Right Pressed: %s", controller.isHatSwitchRightPressed()), 5, initialTextPos);
                     initialTextPos += fontHeight;
-                    g.drawString(String.format("Right Pressed: %s", controller.isRightPressed()), 5, initialTextPos);
+                    g.drawString(String.format("Hat Switch Down Pressed: %s", controller.isHatSwitchDownPressed()), 5, initialTextPos);
                     initialTextPos += fontHeight;
-                    g.drawString(String.format("Left Pressed: %s", controller.isLeftPressed()), 5, initialTextPos);
+                    g.drawString(String.format("Hat Switch Left Pressed: %s", controller.isHatSwitchLeftPressed()), 5, initialTextPos);
                     initialTextPos += fontHeight;
                     g.drawString(String.format("Start Pressed: %s", controller.isStartPressed()), 5, initialTextPos);
 

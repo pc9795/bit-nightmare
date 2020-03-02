@@ -29,7 +29,7 @@ public class Guardian extends ShootingEnemyAdapter {
     private static final float DEFAULT_BULLET_INTERVAL_IN_SEC = 1.5f;
     private static final int DEFAULT_LOS = 900;
     private static final float DEFAULT_CHARGING_PROB = 0.002f;
-    private static final int DEFAULT_HEALTH = 1000;
+    private static final int DEFAULT_HEALTH = 700;
     //Variables
     private Random random = new Random();
     private long lastFiredBullet, lastCharged;
@@ -70,7 +70,7 @@ public class Guardian extends ShootingEnemyAdapter {
                 chargeDurationInSec += 0.5f;
                 bulletIntervalInSec += 0.5f;
                 chargingProb *= 2;
-                health += 500;
+                health += 200;
                 break;
         }
         maxHealth = health;

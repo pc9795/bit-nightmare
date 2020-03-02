@@ -252,7 +252,7 @@ class View extends Canvas {
                 }
                 if (difficulty != null) {
                     try {
-                        gameWorld.loadLevel(levelSelected, difficulty);
+                        gameWorld.newGame(difficulty);
                         storyLocationsProcessed.clear();
                         currScreen = Screen.IN_GAME;
                         prevScreen = Screen.DIFFICULTY_SELECT;

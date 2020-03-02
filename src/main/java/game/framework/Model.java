@@ -178,12 +178,18 @@ public class Model {
             player1.setBitBotFound(bitBotFound);
             player1.setWeapons(weapons);
             player1.setCurrentWeaponIndex(currWeaponIndex);
-
+            //Saving checkpoint on next level.
+            saveCheckpoint(player1.getCentre().copy());
 
         } catch (IOException e) {
             System.out.println(String.format("Unable to load level at index:%s from levels:%s", currLevelIndex + 1, levels));
             e.printStackTrace();
         }
+    }
+
+    public void newGame(Difficulty difficulty) throws IOException {
+        loadLevel(0, difficulty);
+        saveCheckpoint(getPlayer1().getCentre().copy());
     }
 
     /**
@@ -192,7 +198,7 @@ public class Model {
      * @param index index of the level
      * @throws IOException not able to load level files
      */
-    public void loadLevel(int index, Difficulty difficulty) throws IOException {
+    private void loadLevel(int index, Difficulty difficulty) throws IOException {
         clean();
         Level level = LevelLoader.getInstance().loadLevel(levels.get(index));
         loadLevelUtil(level, difficulty);
@@ -382,33 +388,33 @@ public class Model {
         gamepadController.poll();
 
         //Left and right
-        if (keyboardController.isAPressed() || gamepadController.isLeftPressed()) {
+        if (keyboardController.isAPressed() || gamepadController.isHatSwitchLeftPressed()) {
             player1.moveLeft();
-        } else if (keyboardController.isDPressed() || gamepadController.isRightPressed()) {
+        } else if (keyboardController.isDPressed() || gamepadController.isHatSwitchRightPressed()) {
             player1.moveRight();
         } else {
             player1.makeIdle();
         }
         //Jump
-        if ((keyboardController.isWPressedOnce() || gamepadController.isAPressedOnce())) {
+        if ((keyboardController.isWPressedOnce() || gamepadController.isHatSwitchUpPressedOnce())) {
             player1.jump();
         }
         //Duck
-        if (keyboardController.isSPressedOnce() || gamepadController.isXPressedOnce()) {
+        if (keyboardController.isSPressedOnce() || gamepadController.isHatSwitchDownPressedOnce()) {
             player1.toggleDuck();
         }
         //Cycle weapon
-        if (keyboardController.isQPressedOnce() || gamepadController.isYPressedOnce()) {
+        if (keyboardController.isQPressedOnce() || gamepadController.isXPressedOnce()) {
             player1.cycleWeapon();
         }
         //Fire weapon
-        if (keyboardController.isSpacePressedOnce() || gamepadController.isBPressedOnce()) {
+        if (keyboardController.isSpacePressedOnce() || gamepadController.isAPressedOnce()) {
             GameObject bullet = player1.fireWeapon();
             if (bullet != null) {
                 bullets.add(bullet);
             }
         }
-        if (keyboardController.isEscPressedOnce()) {
+        if (keyboardController.isEscPressedOnce() || gamepadController.isStartPressedOnce()) {
             pause();
         }
     }

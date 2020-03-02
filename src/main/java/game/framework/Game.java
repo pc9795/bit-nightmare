@@ -84,8 +84,8 @@ public class Game extends JFrame implements Runnable {
         canvas.addMouseMotionListener(MouseController.getInstance());
         canvas.addMouseWheelListener(MouseController.getInstance());
         GamepadController.getInstance().setDetecting(true);
-        //gamepadControllerThread = new Thread(GamepadController.getInstance());
-        //gamepadControllerThread.start();
+        gamepadControllerThread = new Thread(GamepadController.getInstance());
+        gamepadControllerThread.start();
 
         //Configuring game window
         getContentPane().add(canvas);
@@ -111,7 +111,7 @@ public class Game extends JFrame implements Runnable {
     @Override
     public void run() {
         canvas.requestFocus();
-        //JukeBox.getInstance().playTheme();
+        JukeBox.getInstance().playTheme();
         // Can shift to nano seconds if need more accuracy with frames.
         long lastTime = System.currentTimeMillis();
         double timeBetweenFrames = 1000 / Constants.TARGET_FPS;

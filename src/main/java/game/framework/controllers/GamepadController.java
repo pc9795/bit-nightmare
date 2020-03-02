@@ -11,10 +11,10 @@ import java.util.*;
  * Purpose: Controller to access game pad
  **/
 public class GamepadController implements Runnable {
+    private static final float THRESHOLD = 0.001f;
     private static final GamepadController INSTANCE = new GamepadController();
     private Map<String, Boolean> keys = new HashMap<>();
     private Map<String, Integer> pollCount = new HashMap<>();
-    private float xAxis;
     private Controller gamepad;
     private boolean detecting;
 
@@ -24,7 +24,12 @@ public class GamepadController implements Runnable {
         static final String BUTTON_2 = "Button 2";
         static final String BUTTON_3 = "Button 3";
         static final String BUTTON_7 = "Button 7";
-        static final String X_AXIS = "X Axis";
+        static final String HAT_SWITCH = "Hat Switch";
+        //Custom ones
+        static final String HAT_SWITCH_UP = "Hat Switch-Up";
+        static final String HAT_SWITCH_RIGHT = "Hat Switch-Right";
+        static final String HAT_SWITCH_DOWN = "Hat Switch-Down";
+        static final String HAT_SWITCH_LEFT = "Hat Switch-Left";
 
     }
 
@@ -39,7 +44,8 @@ public class GamepadController implements Runnable {
         // All the keys supported by the class must be entered in the map for one time. Else it can result in
         // NullPointerException if we trying to access a non-existing key.
         List<String> configuredButtons = Arrays.asList(GamepadEvent.BUTTON_0, GamepadEvent.BUTTON_1, GamepadEvent.BUTTON_2,
-                GamepadEvent.BUTTON_3, GamepadEvent.BUTTON_7);
+                GamepadEvent.BUTTON_3, GamepadEvent.BUTTON_7, GamepadEvent.HAT_SWITCH_DOWN, GamepadEvent.HAT_SWITCH_LEFT,
+                GamepadEvent.HAT_SWITCH_RIGHT, GamepadEvent.HAT_SWITCH_UP);
         for (String button : configuredButtons) {
             keys.put(button, false);
             pollCount.put(button, 0);
@@ -79,11 +85,55 @@ public class GamepadController implements Runnable {
             Event event = new Event();
             while (queue.getNextEvent(event)) {
                 Component comp = event.getComponent();
-                if (comp.getName().equals(GamepadEvent.X_AXIS)) {
-                    xAxis = event.getValue();
+                if (!comp.getName().equals(GamepadEvent.HAT_SWITCH)) {
+                    keys.put(comp.getName(), Math.abs(event.getValue() - 1.0f) < THRESHOLD);
                     continue;
                 }
-                keys.put(comp.getName(), event.getValue() == 1.0f);
+                //Handling Hat Switch
+                //Using threshold based apprach for float comparison
+                if (Math.abs(event.getValue() - 0.125f) < THRESHOLD) {
+                    keys.put(GamepadEvent.HAT_SWITCH_LEFT, true);
+                    keys.put(GamepadEvent.HAT_SWITCH_UP, true);
+                    keys.put(GamepadEvent.HAT_SWITCH_RIGHT, false);
+                    keys.put(GamepadEvent.HAT_SWITCH_DOWN, false);
+                } else if (Math.abs(event.getValue() - 0.25f) < THRESHOLD) {
+                    keys.put(GamepadEvent.HAT_SWITCH_UP, true);
+                    keys.put(GamepadEvent.HAT_SWITCH_RIGHT, false);
+                    keys.put(GamepadEvent.HAT_SWITCH_DOWN, false);
+                    keys.put(GamepadEvent.HAT_SWITCH_LEFT, false);
+                } else if (Math.abs(event.getValue() - 0.375f) < THRESHOLD) {
+                    keys.put(GamepadEvent.HAT_SWITCH_RIGHT, true);
+                    keys.put(GamepadEvent.HAT_SWITCH_UP, true);
+                    keys.put(GamepadEvent.HAT_SWITCH_DOWN, false);
+                    keys.put(GamepadEvent.HAT_SWITCH_LEFT, false);
+                } else if (Math.abs(event.getValue() - 0.5f) < THRESHOLD) {
+                    keys.put(GamepadEvent.HAT_SWITCH_RIGHT, true);
+                    keys.put(GamepadEvent.HAT_SWITCH_UP, false);
+                    keys.put(GamepadEvent.HAT_SWITCH_DOWN, false);
+                    keys.put(GamepadEvent.HAT_SWITCH_LEFT, false);
+                } else if (Math.abs(event.getValue() - 0.625f) < THRESHOLD) {
+                    keys.put(GamepadEvent.HAT_SWITCH_RIGHT, true);
+                    keys.put(GamepadEvent.HAT_SWITCH_DOWN, true);
+                    keys.put(GamepadEvent.HAT_SWITCH_UP, false);
+                    keys.put(GamepadEvent.HAT_SWITCH_LEFT, false);
+                } else if (Math.abs(event.getValue() - 0.75f) < THRESHOLD) {
+                    keys.put(GamepadEvent.HAT_SWITCH_DOWN, true);
+                    keys.put(GamepadEvent.HAT_SWITCH_UP, false);
+                    keys.put(GamepadEvent.HAT_SWITCH_RIGHT, false);
+                    keys.put(GamepadEvent.HAT_SWITCH_LEFT, false);
+                } else if (Math.abs(event.getValue() - 0.875f) < THRESHOLD) {
+                    keys.put(GamepadEvent.HAT_SWITCH_LEFT, true);
+                    keys.put(GamepadEvent.HAT_SWITCH_DOWN, true);
+                    keys.put(GamepadEvent.HAT_SWITCH_UP, false);
+                    keys.put(GamepadEvent.HAT_SWITCH_RIGHT, false);
+                } else if (Math.abs(event.getValue() - 1f) < THRESHOLD) {
+                    keys.put(GamepadEvent.HAT_SWITCH_LEFT, true);
+                } else {
+                    keys.put(GamepadEvent.HAT_SWITCH_UP, false);
+                    keys.put(GamepadEvent.HAT_SWITCH_RIGHT, false);
+                    keys.put(GamepadEvent.HAT_SWITCH_DOWN, false);
+                    keys.put(GamepadEvent.HAT_SWITCH_LEFT, false);
+                }
             }
             //Hoping the event queue mechanism of the queue will not let events to miss out.
             try {
@@ -122,47 +172,51 @@ public class GamepadController implements Runnable {
         return false;
     }
 
-    public boolean isAPressed() {
-        return pollCount.get(GamepadEvent.BUTTON_0) > 0;
-    }
-
-    public boolean isXPressed() {
-        return pollCount.get(GamepadEvent.BUTTON_1) > 0;
-    }
-
-    public boolean isYPressed() {
-        return pollCount.get(GamepadEvent.BUTTON_2) > 0;
-    }
-
-    public boolean isBPressed() {
-        return pollCount.get(GamepadEvent.BUTTON_3) > 0;
-    }
-
     public boolean isAPressedOnce() {
         return pollCount.get(GamepadEvent.BUTTON_0) == 1;
     }
 
-    public boolean isXPressedOnce() {
-        return pollCount.get(GamepadEvent.BUTTON_1) == 1;
+    public boolean isAPressed() {
+        return pollCount.get(GamepadEvent.BUTTON_0) > 0;
     }
 
-    public boolean isYPressedOnce() {
+    public boolean isXPressedOnce() {
         return pollCount.get(GamepadEvent.BUTTON_2) == 1;
     }
 
-    public boolean isBPressedOnce() {
-        return pollCount.get(GamepadEvent.BUTTON_3) == 1;
+    public boolean isXPressed() {
+        return pollCount.get(GamepadEvent.BUTTON_2) > 0;
+    }
+
+    public boolean isStartPressedOnce() {
+        return pollCount.get(GamepadEvent.BUTTON_7) == 1;
     }
 
     public boolean isStartPressed() {
-        return keys.get(GamepadEvent.BUTTON_7);
+        return pollCount.get(GamepadEvent.BUTTON_7) > 0;
     }
 
-    public boolean isRightPressed() {
-        return (int) xAxis == 1;
+    public boolean isHatSwitchUpPressedOnce() {
+        return pollCount.get(GamepadEvent.HAT_SWITCH_UP) == 1;
     }
 
-    public boolean isLeftPressed() {
-        return (int) xAxis == -1;
+    public boolean isHatSwitchUpPressed() {
+        return pollCount.get(GamepadEvent.HAT_SWITCH_UP) > 0;
+    }
+
+    public boolean isHatSwitchDownPressedOnce() {
+        return pollCount.get(GamepadEvent.HAT_SWITCH_DOWN) == 1;
+    }
+
+    public boolean isHatSwitchDownPressed() {
+        return pollCount.get(GamepadEvent.HAT_SWITCH_DOWN) > 0;
+    }
+
+    public boolean isHatSwitchRightPressed() {
+        return pollCount.get(GamepadEvent.HAT_SWITCH_RIGHT) > 0;
+    }
+
+    public boolean isHatSwitchLeftPressed() {
+        return pollCount.get(GamepadEvent.HAT_SWITCH_LEFT) > 0;
     }
 }

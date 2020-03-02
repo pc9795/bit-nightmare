@@ -36,6 +36,7 @@ public interface EnemyCollider extends FineGrainedCollider {
                 case BLOCK:
                 case HIDING_BLOCK:
                 case MOVABLE_BLOCK:
+                case GATE:
                     collisions = fineGrainedCollision(obj, env);
                     if (collisions[FineGrainedCollider.BOTTOM]) {
                         bottomCollision = true;
