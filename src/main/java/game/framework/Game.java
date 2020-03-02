@@ -84,8 +84,8 @@ public class Game extends JFrame implements Runnable {
         canvas.addMouseMotionListener(MouseController.getInstance());
         canvas.addMouseWheelListener(MouseController.getInstance());
         GamepadController.getInstance().setDetecting(true);
-        gamepadControllerThread = new Thread(GamepadController.getInstance());
-        gamepadControllerThread.start();
+        //gamepadControllerThread = new Thread(GamepadController.getInstance());
+        //gamepadControllerThread.start();
 
         //Configuring game window
         getContentPane().add(canvas);
@@ -111,7 +111,7 @@ public class Game extends JFrame implements Runnable {
     @Override
     public void run() {
         canvas.requestFocus();
-        JukeBox.getInstance().playTheme();
+        //JukeBox.getInstance().playTheme();
         // Can shift to nano seconds if need more accuracy with frames.
         long lastTime = System.currentTimeMillis();
         double timeBetweenFrames = 1000 / Constants.TARGET_FPS;
@@ -167,5 +167,7 @@ public class Game extends JFrame implements Runnable {
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         //REF: https://www.1001fonts.com/game-music-love-font.html
         ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, Game.class.getResourceAsStream("/fonts/gomarice_game_music_love.ttf")));
+        //REF: https://www.1001fonts.com/arcadeclassic-font.html
+        ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, Game.class.getResourceAsStream("/fonts/ARCADECLASSIC.TTF")));
     }
 }

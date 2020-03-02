@@ -2,18 +2,17 @@ package game.framework;
 
 import game.framework.controllers.GamepadController;
 import game.framework.controllers.KeyboardController;
+import game.framework.controllers.MouseController;
 import game.framework.levelloader.Level;
 import game.framework.levelloader.LevelLoader;
 import game.framework.levelloader.LevelObject;
-import game.objects.Difficulty;
-import game.objects.GameObject;
-import game.objects.GameObjectFactory;
-import game.objects.Player;
+import game.objects.*;
 import game.objects.weapons.Weapon;
 import game.physics.Boundary;
 import game.physics.Point2f;
 import game.physics.QuadTree;
 import game.utils.Constants;
+import org.lwjgl.input.Mouse;
 
 import java.awt.*;
 import java.io.*;
@@ -67,7 +66,7 @@ public class Model {
     private boolean started;
     private Point2f lastCheckPointSaved;
     private Difficulty difficulty;
-
+    private Descriptor descriptor;
 
     public Model(int width, int height) throws IOException, URISyntaxException {
         //Things which will be added and removed are stored in ArrayList.
@@ -99,6 +98,7 @@ public class Model {
         if (levels.size() == 0) {
             throw new RuntimeException("No levels to load");
         }
+        this.descriptor = new Descriptor(GameObject.GameObjectType.DESCRIPTOR);
     }
 
     public Difficulty getDifficulty() {
@@ -159,6 +159,10 @@ public class Model {
 
     public boolean isPaused() {
         return pause;
+    }
+
+    public Descriptor getDescriptor() {
+        return descriptor;
     }
 
     public String getCurrentLevel() {
@@ -378,6 +382,9 @@ public class Model {
         //Enemies
         enemies.forEach(GameObject::update);
         enemies.forEach(object -> object.perceiveEnv(this));
+        //Descriptor
+        descriptor.update();
+        descriptor.perceiveEnv(this);
     }
 
     /**
@@ -390,6 +397,7 @@ public class Model {
         GamepadController gamepadController = GamepadController.getInstance();
         keyboardController.poll();
         gamepadController.poll();
+        MouseController.getInstance().poll();
 
         //Left and right
         if (keyboardController.isAPressed() || gamepadController.isHatSwitchLeftPressed()) {

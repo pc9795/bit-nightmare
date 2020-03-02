@@ -10,6 +10,8 @@ import game.framework.visual.TextureLoader;
 import game.objects.Difficulty;
 import game.utils.BufferedImageLoader;
 import game.utils.Constants;
+import game.utils.Utils;
+import org.lwjgl.input.Mouse;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -79,6 +81,7 @@ class View extends Canvas {
         g.clearRect(0, 0, getWidth(), getHeight());
         g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
         g.setColor(Color.ORANGE);
+        int margin = 10;
 
         //ALL CONTROLLERS `poll` CALLS MUST BE INSIDE SPECIFIC CASES. Any call outside can produce unexpected results.
         //If menu items are a DAG then it is easy to navigate. Have to check the possibility of cycles.
@@ -89,7 +92,6 @@ class View extends Canvas {
                 FontMetrics fm = g.getFontMetrics();
                 int fontHeight = fm.getHeight() + fm.getDescent() + fm.getAscent();
                 int textWidth = fm.stringWidth(text);
-                int margin = 10;
                 g.drawString(text, getWidth() / 2 - textWidth / 2, margin + fontHeight);
                 g.setFont(new Font("Game Music Love", Font.BOLD, 30));
                 text = "LEFT CLICK TO CONTINUE";
@@ -109,9 +111,6 @@ class View extends Canvas {
                 break;
             case MAIN:
                 g.setFont(new Font("Game Music Love", Font.BOLD, 60));
-                fm = g.getFontMetrics();
-                margin = 10;
-                fontHeight = fm.getHeight() + fm.getDescent() + fm.getAscent();
                 List<String> menuItems;
                 boolean checkpointAvailable = gameWorld.isLastCheckpointAvailable();
                 if (checkpointAvailable) {
@@ -119,20 +118,7 @@ class View extends Canvas {
                 } else {
                     menuItems = Arrays.asList("New Game", "Select Level", "Settings", "Quit");
                 }
-                Rectangle[] rectangles = new Rectangle[menuItems.size()];
-                int y = margin;
-                int option = -1;
-                for (int i = 0; i < menuItems.size(); i++) {
-                    rectangles[i] = new Rectangle(margin, y, fm.stringWidth(menuItems.get(i)), fontHeight);
-                    if (rectangles[i].contains(MouseController.getInstance().getCurrentPos())) {
-                        g.setColor(Color.GRAY);
-                        option = i;
-                    } else {
-                        g.setColor(Color.ORANGE);
-                    }
-                    g.drawString(menuItems.get(i), margin, y + fontHeight);
-                    y += fontHeight;
-                }
+                int option = renderMenu(menuItems, MouseController.getInstance().getCurrentPos(), g, margin, margin);
                 //Shifting as we now don't have a continue option
                 if (!checkpointAvailable && option != -1) {
                     option++;
@@ -175,25 +161,10 @@ class View extends Canvas {
             case NEW_GAME:
                 g.setFont(new Font("Game Music Love", Font.BOLD, 60));
                 fm = g.getFontMetrics();
-                margin = 10;
                 fontHeight = fm.getHeight() + fm.getDescent() + fm.getAscent();
                 menuItems = Arrays.asList("Yes", "No");
-                rectangles = new Rectangle[menuItems.size()];
-                y = margin;
-                g.drawString("You will lose your previous data!", margin, y + fontHeight);
-                y += 2 * fontHeight;
-                option = -1;
-                for (int i = 0; i < menuItems.size(); i++) {
-                    rectangles[i] = new Rectangle(margin, y, fm.stringWidth(menuItems.get(i)), fontHeight);
-                    if (rectangles[i].contains(MouseController.getInstance().getCurrentPos())) {
-                        g.setColor(Color.GRAY);
-                        option = i;
-                    } else {
-                        g.setColor(Color.ORANGE);
-                    }
-                    g.drawString(menuItems.get(i), margin, y + fontHeight);
-                    y += fontHeight;
-                }
+                g.drawString("You will lose your previous data!", margin, margin + fontHeight);
+                option = renderMenu(menuItems, MouseController.getInstance().getCurrentPos(), g, margin, margin + 2 * fontHeight);
                 MouseController.getInstance().poll();
                 if (MouseController.getInstance().isLeftClickedOnce()) {
                     switch (option) {
@@ -216,25 +187,10 @@ class View extends Canvas {
             case DIFFICULTY_SELECT:
                 g.setFont(new Font("Game Music Love", Font.BOLD, 60));
                 fm = g.getFontMetrics();
-                margin = 10;
                 fontHeight = fm.getHeight() + fm.getDescent() + fm.getAscent();
                 menuItems = Arrays.asList("- I am not a programmer", "- I can code", "- I can reprogram you");
-                rectangles = new Rectangle[menuItems.size()];
-                y = margin;
-                g.drawString("Select a difficulty", margin, y + fontHeight);
-                y += fontHeight;
-                option = -1;
-                for (int i = 0; i < menuItems.size(); i++) {
-                    rectangles[i] = new Rectangle(margin, y, fm.stringWidth(menuItems.get(i)), fontHeight);
-                    if (rectangles[i].contains(MouseController.getInstance().getCurrentPos())) {
-                        g.setColor(Color.GRAY);
-                        option = i;
-                    } else {
-                        g.setColor(Color.ORANGE);
-                    }
-                    g.drawString(menuItems.get(i), margin, y + fontHeight);
-                    y += fontHeight;
-                }
+                g.drawString("Select a difficulty", margin, margin + fontHeight);
+                option = renderMenu(menuItems, MouseController.getInstance().getCurrentPos(), g, margin, margin + fontHeight);
                 Difficulty difficulty = null;
                 MouseController.getInstance().poll();
                 if (MouseController.getInstance().isLeftClickedOnce()) {
@@ -272,24 +228,8 @@ class View extends Canvas {
                 break;
             case LEVEL_SELECT:
                 g.setFont(new Font("Game Music Love", Font.BOLD, 60));
-                fm = g.getFontMetrics();
-                margin = 10;
-                fontHeight = fm.getHeight() + fm.getDescent() + fm.getAscent();
                 menuItems = gameWorld.getLevels();
-                rectangles = new Rectangle[menuItems.size()];
-                y = margin;
-                option = -1;
-                for (int i = 0; i < menuItems.size(); i++) {
-                    rectangles[i] = new Rectangle(margin, y, fm.stringWidth(menuItems.get(i)), fontHeight);
-                    if (rectangles[i].contains(MouseController.getInstance().getCurrentPos())) {
-                        g.setColor(Color.GRAY);
-                        option = i;
-                    } else {
-                        g.setColor(Color.ORANGE);
-                    }
-                    g.drawString(menuItems.get(i), margin, y + fontHeight);
-                    y += fontHeight;
-                }
+                option = renderMenu(menuItems, MouseController.getInstance().getCurrentPos(), g, margin, margin);
                 MouseController.getInstance().poll();
                 if (MouseController.getInstance().isLeftClickedOnce()) {
                     switch (option) {
@@ -315,24 +255,8 @@ class View extends Canvas {
                 break;
             case SETTINGS:
                 g.setFont(new Font("Game Music Love", Font.BOLD, 60));
-                fm = g.getFontMetrics();
-                margin = 10;
-                fontHeight = fm.getHeight() + fm.getDescent() + fm.getAscent();
                 menuItems = Collections.singletonList("Show Controller Layout");
-                rectangles = new Rectangle[menuItems.size()];
-                y = margin;
-                option = -1;
-                for (int i = 0; i < menuItems.size(); i++) {
-                    rectangles[i] = new Rectangle(margin, y, fm.stringWidth(menuItems.get(i)), fontHeight);
-                    if (rectangles[i].contains(MouseController.getInstance().getCurrentPos())) {
-                        g.setColor(Color.GRAY);
-                        option = i;
-                    } else {
-                        g.setColor(Color.ORANGE);
-                    }
-                    g.drawString(menuItems.get(i), margin, y + fontHeight);
-                    y += fontHeight;
-                }
+                option = renderMenu(menuItems, MouseController.getInstance().getCurrentPos(), g, margin, margin);
                 MouseController.getInstance().poll();
                 if (MouseController.getInstance().isLeftClickedOnce()) {
                     switch (option) {
@@ -350,11 +274,11 @@ class View extends Canvas {
                 }
                 break;
             case CONTROL_LAYOUT:
+                //todo handle exceptions
                 try {
                     g.setFont(new Font("Game Music Love", Font.BOLD, 60));
                     margin = 100;
                     BufferedImageLoader loader = BufferedImageLoader.getInstance();
-                    //todo handle exceptions
                     BufferedImage w = loader.loadImage("/sprites/controllers/keyboard/Keyboard_White_W.png");
                     BufferedImage a = loader.loadImage("/sprites/controllers/keyboard/Keyboard_White_A.png");
                     BufferedImage s = loader.loadImage("/sprites/controllers/keyboard/Keyboard_White_S.png");
@@ -363,7 +287,7 @@ class View extends Canvas {
                     BufferedImage space = loader.loadImage("/sprites/controllers/keyboard/Keyboard_White_Space.png");
                     BufferedImage esc = loader.loadImage("/sprites/controllers/keyboard/Keyboard_White_Esc.png");
                     int x = margin;
-                    y = margin;
+                    int y = margin;
                     int imgHeight = 90;
                     int imgWidth = 90;
                     g.drawImage(w, x, y, imgWidth, imgHeight, null);
@@ -425,25 +349,10 @@ class View extends Canvas {
             case PAUSE:
                 g.setFont(new Font("Game Music Love", Font.BOLD, 60));
                 fm = g.getFontMetrics();
-                margin = 10;
                 fontHeight = fm.getHeight() + fm.getDescent() + fm.getAscent();
                 menuItems = Arrays.asList("- Resume", "- Quit to main menu", "- Quit");
-                rectangles = new Rectangle[menuItems.size()];
-                y = margin;
-                g.drawString("Paused", margin, y + fontHeight);
-                y += fontHeight;
-                option = -1;
-                for (int i = 0; i < menuItems.size(); i++) {
-                    rectangles[i] = new Rectangle(margin, y, fm.stringWidth(menuItems.get(i)), fontHeight);
-                    if (rectangles[i].contains(MouseController.getInstance().getCurrentPos())) {
-                        g.setColor(Color.GRAY);
-                        option = i;
-                    } else {
-                        g.setColor(Color.ORANGE);
-                    }
-                    g.drawString(menuItems.get(i), margin, y + fontHeight);
-                    y += fontHeight;
-                }
+                g.drawString("Paused", margin, margin + fontHeight);
+                option = renderMenu(menuItems, MouseController.getInstance().getCurrentPos(), g, margin, margin + fontHeight);
                 MouseController.getInstance().poll();
                 if (MouseController.getInstance().isLeftClickedOnce()) {
                     switch (option) {
@@ -472,25 +381,10 @@ class View extends Canvas {
             case QUIT_TO_MENU:
                 g.setFont(new Font("Game Music Love", Font.BOLD, 60));
                 fm = g.getFontMetrics();
-                margin = 10;
                 fontHeight = fm.getHeight() + fm.getDescent() + fm.getAscent();
                 menuItems = Arrays.asList("- Yes", "- No");
-                rectangles = new Rectangle[menuItems.size()];
-                y = margin;
-                g.drawString("Quit to main menu", margin, y + fontHeight);
-                y += 2 * fontHeight;
-                option = -1;
-                for (int i = 0; i < menuItems.size(); i++) {
-                    rectangles[i] = new Rectangle(margin, y, fm.stringWidth(menuItems.get(i)), fontHeight);
-                    if (rectangles[i].contains(MouseController.getInstance().getCurrentPos())) {
-                        g.setColor(Color.GRAY);
-                        option = i;
-                    } else {
-                        g.setColor(Color.ORANGE);
-                    }
-                    g.drawString(menuItems.get(i), margin, y + fontHeight);
-                    y += fontHeight;
-                }
+                g.drawString("Quit to main menu", margin, margin + fontHeight);
+                option = renderMenu(menuItems, MouseController.getInstance().getCurrentPos(), g, margin, margin + 2 * fontHeight);
                 MouseController.getInstance().poll();
                 if (MouseController.getInstance().isLeftClickedOnce()) {
                     switch (option) {
@@ -513,25 +407,10 @@ class View extends Canvas {
             case QUIT:
                 g.setFont(new Font("Game Music Love", Font.BOLD, 60));
                 fm = g.getFontMetrics();
-                margin = 10;
                 fontHeight = fm.getHeight() + fm.getDescent() + fm.getAscent();
                 menuItems = Arrays.asList("- Yes", "- No");
-                rectangles = new Rectangle[menuItems.size()];
-                y = margin;
-                g.drawString("Quit the game", margin, y + fontHeight);
-                y += 2 * fontHeight;
-                option = -1;
-                for (int i = 0; i < menuItems.size(); i++) {
-                    rectangles[i] = new Rectangle(margin, y, fm.stringWidth(menuItems.get(i)), fontHeight);
-                    if (rectangles[i].contains(MouseController.getInstance().getCurrentPos())) {
-                        g.setColor(Color.GRAY);
-                        option = i;
-                    } else {
-                        g.setColor(Color.ORANGE);
-                    }
-                    g.drawString(menuItems.get(i), margin, y + fontHeight);
-                    y += fontHeight;
-                }
+                g.drawString("Quit the game", margin, margin + fontHeight);
+                option = renderMenu(menuItems, MouseController.getInstance().getCurrentPos(), g, margin, margin + 2 * fontHeight);
                 MouseController.getInstance().poll();
                 if (MouseController.getInstance().isLeftClickedOnce()) {
                     switch (option) {
@@ -619,26 +498,11 @@ class View extends Canvas {
         g.setColor(new Color(111, 66, 150));
         g.fillRect(x, y, dialogWidth, dialogHeight);
         g.drawImage(story.getImage(), x + margin, y + margin, imageWidth, imageHeight, null);
-        g.setFont(new Font("Arcade Classic", Font.BOLD, 25));
+        g.setFont(new Font("Times New Roman", Font.BOLD, 25));
         g.setColor(Color.WHITE);
         FontMetrics fm = g.getFontMetrics();
         int fontHeight = fm.getHeight() + fm.getDescent() + fm.getDescent();
-
-        StringTokenizer tokenizer = new StringTokenizer(story.getText(), " ");
-        StringBuilder sb = new StringBuilder();
-        int yy = y + margin + imageHeight + fontHeight;
-        while (tokenizer.hasMoreTokens()) {
-            String token = tokenizer.nextToken();
-            if (fm.stringWidth(sb.toString()) + fm.stringWidth(token) + fm.stringWidth(" ") <= 780) {
-                sb.append(token).append(" ");
-                continue;
-            }
-            g.drawString(sb.toString(), x + margin, yy);
-            yy += fontHeight;
-            sb = new StringBuilder();
-            sb.append(token).append(" ");
-        }
-        g.drawString(sb.toString(), x + margin, yy);
+        Utils.renderDialog(story.getText(), g, margin, x, y + imageHeight, dialogWidth);
         g.drawString("Press [Space] to skip", x + margin, y + dialogHeight - margin - fontHeight);
     }
 
@@ -669,6 +533,7 @@ class View extends Canvas {
         gameWorld.getEnemies().forEach(object -> object.render(g));
         gameWorld.getBullets().forEach(object -> object.render(g));
         gameWorld.getPlayer1().render(g);
+        gameWorld.getDescriptor().render(g);
         g2d.translate(-camera.getX(), -camera.getY());
     }
 
@@ -741,5 +606,24 @@ class View extends Canvas {
             }
             return fragment;
         }
+    }
+
+    private int renderMenu(List<String> menuItems, Point mousePointer, Graphics g, int margin, int y) {
+        int option = -1;
+        Rectangle[] rectangles = new Rectangle[menuItems.size()];
+        FontMetrics fm = g.getFontMetrics();
+        int fontHeight = fm.getHeight() + fm.getDescent() + fm.getAscent();
+        for (int i = 0; i < menuItems.size(); i++) {
+            rectangles[i] = new Rectangle(margin, y, fm.stringWidth(menuItems.get(i)), fontHeight);
+            if (rectangles[i].contains(mousePointer)) {
+                g.setColor(Color.GRAY);
+                option = i;
+            } else {
+                g.setColor(Color.ORANGE);
+            }
+            g.drawString(menuItems.get(i), margin, y + fontHeight);
+            y += fontHeight;
+        }
+        return option;
     }
 }

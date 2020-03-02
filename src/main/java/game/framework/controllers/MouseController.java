@@ -20,7 +20,9 @@ public final class MouseController implements MouseMotionListener, MouseListener
         // All the keys supported by the class must be entered in the map for one time. Else it can result in
         // NullPointerException if we trying to access a non-existing key.
         keys.put(MouseEvent.BUTTON1, false);
+        keys.put(MouseEvent.BUTTON3, false);
         pollCount.put(MouseEvent.BUTTON1, 0);
+        pollCount.put(MouseEvent.BUTTON3, 0);
     }
 
     public static MouseController getInstance() {
@@ -91,5 +93,13 @@ public final class MouseController implements MouseMotionListener, MouseListener
 
     public boolean isLeftClickedOnce() {
         return pollCount.get(MouseEvent.BUTTON1) == 1;
+    }
+
+    public boolean isRightClicked() {
+        return pollCount.get(MouseEvent.BUTTON3) > 0;
+    }
+
+    public boolean isRightClickedOnce() {
+        return pollCount.get(MouseEvent.BUTTON3) == 1;
     }
 }

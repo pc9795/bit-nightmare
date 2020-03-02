@@ -22,6 +22,7 @@ public final class Constants {
     public static final String STORY_CONFIG_FILE_LOC = "/story.json";
     public static final String SAVE_DIRECTORY_NAME = "Bit-Nightmare";
     public static final String SAVE_FILE_NAME = "data.sav";
+    public static final int CAMERA_OFFSET = 400;
 
     public static final class SoundPaths {
         private SoundPaths() {

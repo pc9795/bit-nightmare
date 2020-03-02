@@ -4,13 +4,14 @@ import game.objects.GameObject;
 
 import java.awt.*;
 
+import static game.utils.Constants.CAMERA_OFFSET;
+
 /**
  * Created By: Prashant Chaubey
  * Created On: 19-02-2020 00:48
  * Purpose: Camera object which follows a object
  **/
 public class Camera {
-    private static final int CAMERA_OFFSET = 400;
     private Point point;
 
     Camera(float x, float y) {

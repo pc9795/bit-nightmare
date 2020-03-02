@@ -26,6 +26,7 @@ SOFTWARE.
 //Modified from Graphics 3033J course point class  by Abey Campbell 
 
 
+import java.awt.*;
 import java.io.Serializable;
 
 /**
@@ -83,6 +84,10 @@ public class Point2f implements Serializable {
 
     public Point2f copy() {
         return new Point2f(x, y, boundary);
+    }
+
+    public Point toAWTPoint() {
+        return new Point((int) x, (int) y);
     }
 
     @Override
