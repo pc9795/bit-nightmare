@@ -2282,6 +2282,14 @@
         "y": 7,
         "width": 64,
         "height": 64
+      },
+      {
+        "imageType": "SPRITE_SHEET",
+        "index": 0,
+        "x": 4,
+        "y": 7,
+        "width": 64,
+        "height": 64
       }
     ]
   },
@@ -2339,6 +2347,22 @@
     "type": "CHECKPOINT",
     "spriteSheets": [
       "/sprites/tiles2.png"
+    ],
+    "idleRight": [
+      {
+        "imageType": "SPRITE_SHEET",
+        "index": 0,
+        "x": 5,
+        "y": 5,
+        "width": 64,
+        "height": 64
+      }
+    ]
+  },
+  {
+    "type": "KEY",
+    "spriteSheets": [
+      "/sprites/tiles1.png"
     ],
     "idleRight": [
       {

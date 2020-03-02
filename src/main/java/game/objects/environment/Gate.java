@@ -14,6 +14,7 @@ import java.awt.*;
 public class Gate extends GameObject {
     private static final int DEFAULT_WIDTH = 64;
     private static final int DEFAULT_HEIGHT = 64;
+    private boolean opened;
 
     public Gate(Point2f centre) {
         super(DEFAULT_WIDTH, DEFAULT_HEIGHT, centre, GameObjectType.GATE);
@@ -24,10 +25,16 @@ public class Gate extends GameObject {
 
     }
 
+
     @Override
     public void render(Graphics g) {
-        if (texture != null && texture.getIdleRight().length != 0) {
-            g.drawImage(texture.getIdleRight()[0], (int) centre.getX(), (int) centre.getY(), width, height, null);
+        //We expect two textures. First will be for closed and second for opened
+        if (texture != null && texture.getIdleRight().length >= 2) {
+            if (opened) {
+                g.drawImage(texture.getIdleRight()[1], (int) centre.getX(), (int) centre.getY(), width, height, null);
+            } else {
+                g.drawImage(texture.getIdleRight()[0], (int) centre.getX(), (int) centre.getY(), width, height, null);
+            }
         } else {
             g.setColor(new Color(88, 88, 88));
             g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
@@ -41,7 +48,13 @@ public class Gate extends GameObject {
 
     @Override
     public Rectangle getBounds() {
-        //todo implement it
-        return new Rectangle((int) centre.getX(), (int) centre.getY(), 0, 0);
+        if (opened) {
+            return new Rectangle((int) centre.getX(), (int) centre.getY(), 0, 0);
+        }
+        return new Rectangle((int) centre.getX(), (int) centre.getY(), width, height);
+    }
+
+    public void open() {
+        opened = true;
     }
 }

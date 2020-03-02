@@ -3,6 +3,7 @@ package game.objects;
 import game.colliders.FineGrainedCollider;
 import game.framework.Model;
 import game.framework.visual.Animator;
+import game.objects.environment.Gate;
 import game.objects.environment.HidingBlock;
 import game.objects.environment.movables.MovableBlock;
 import game.objects.weapons.Weapon;
@@ -28,7 +29,7 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
     private static final int DEFAULT_HEALTH = 200;
     //Variables
     private List<Weapon> weapons;
-    private boolean ducking, attacking, bitBotFound;
+    private boolean ducking, attacking, bitBotFound, hasKey;
     private int health, maxHealth, currentWeaponIndex;
     private transient long lastFiredBullet;
     private float speedX, speedY, bulletFreqInSec;
@@ -195,6 +196,14 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
         for (GameObject env : willCollide) {
             Rectangle bounds = env.getBounds();
             switch (env.getType()) {
+                case GATE:
+                    collisions = fineGrainedCollision(this, env);
+                    if ((collisions[FineGrainedCollider.RIGHT] || collisions[FineGrainedCollider.LEFT]) && hasKey) {
+                        ((Gate) env).open();
+                    } else if (collisions[FineGrainedCollider.BOTTOM]) {
+                        bottomCollision = true;
+                    }
+                    break;
                 case CHANGE_LEVEL:
                     if (bounds.intersects(getBounds())) {
                         model.nextLevel();
@@ -263,6 +272,9 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
                 case BIT_ARRAY_GUN:
                 case BIT_MATRIX_BLAST:
                     addWeapon((Weapon) obj);
+                    break;
+                case KEY:
+                    hasKey = true;
                     break;
             }
             model.getCollectibles().remove(obj);

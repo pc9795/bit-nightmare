@@ -134,6 +134,7 @@ public class Charger extends GameObject implements FineGrainedCollider, Healthy,
                 case BLOCK:
                 case HIDING_BLOCK:
                 case MOVABLE_BLOCK:
+                case GATE:
                     collisions = fineGrainedCollision(this, env);
                     if (collisions[FineGrainedCollider.BOTTOM]) {
                         bottomCollision = true;

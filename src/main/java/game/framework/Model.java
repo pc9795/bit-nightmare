@@ -442,6 +442,7 @@ public class Model {
             case BIT_MATRIX_BLAST:
             case BIT_REVOLVER:
             case BIT_BOT:
+            case KEY:
                 collectibles.add(object);
                 break;
             default:

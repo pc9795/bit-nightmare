@@ -60,6 +60,7 @@ public class SuperSoldier extends ShootingAndDuckingEnemyAdapter {
                 duckingProb *= 2;
                 break;
         }
+        maxHealth = health;
     }
 
     @Override

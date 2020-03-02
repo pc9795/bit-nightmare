@@ -5,6 +5,7 @@ import game.framework.Model;
 import game.framework.visual.Animator;
 import game.objects.Animated;
 import game.objects.GameObject;
+import game.objects.GameObjectFactory;
 import game.objects.enemies.Enemy;
 import game.physics.Point2f;
 import game.properties.Healthy;
@@ -88,6 +89,8 @@ public class ShootingEnemyAdapter extends GameObject implements Enemy, EnemyColl
                 deathTime = System.currentTimeMillis();
             } else if (System.currentTimeMillis() - deathTime > CORPSE_REMOVAL_PERIOD_IN_SEC * 1000) {
                 model.getEnemies().remove(this);
+                //Death of a guardian will generate a key.
+                model.getCollectibles().add(GameObjectFactory.getGameObject(GameObjectType.KEY, centre.copy(), model.getDifficulty()));
             }
             return;
         }

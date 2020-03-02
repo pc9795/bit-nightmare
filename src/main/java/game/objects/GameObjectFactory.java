@@ -55,6 +55,8 @@ public final class GameObjectFactory {
                 return new BitBot(centre);
             case PLAYER:
                 return new Player(centre);
+            case KEY:
+                return new Key(centre);
         }
         throw new RuntimeException(String.format("%s is not configured in factory", type));
     }

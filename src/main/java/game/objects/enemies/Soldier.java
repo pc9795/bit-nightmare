@@ -59,6 +59,7 @@ public class Soldier extends ShootingAndDuckingEnemyAdapter {
                 duckingProb *= 2;
                 break;
         }
+        maxHealth = health;
     }
 
     @Override

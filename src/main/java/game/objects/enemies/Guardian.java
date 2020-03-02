@@ -73,6 +73,7 @@ public class Guardian extends ShootingEnemyAdapter {
                 health += 500;
                 break;
         }
+        maxHealth = health;
     }
 
     @Override
