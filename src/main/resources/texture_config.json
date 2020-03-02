@@ -1,5 +1,6 @@
 [
   {
+    //REF: https://opengameart.org/content/the-robot-free-sprite
     "type": "PLAYER",
     "spriteSheets": [],
     "idleRight": [
@@ -360,6 +361,7 @@
     ]
   },
   {
+    //REF: https://craftpix.net/freebies/free-robot-sprite/
     "type": "SOLDIER",
     "spriteSheets": [],
     "idleLeft": [
@@ -836,6 +838,7 @@
     ]
   },
   {
+    //REF: https://craftpix.net/freebies/free-robot-sprite/
     "type": "SUPER_SOLDIER",
     "spriteSheets": [],
     "idleLeft": [
@@ -1312,6 +1315,7 @@
     ]
   },
   {
+    //REF: https://craftpix.net/freebies/free-robot-sprite/
     "type": "GUARDIAN",
     "spriteSheets": [],
     "idleLeft": [
@@ -1764,6 +1768,7 @@
     ]
   },
   {
+    //REF: https://craftpix.net/freebies/free-sci-fi-items-icons-weapons/
     "type": "BIT_REVOLVER",
     "spriteSheets": [],
     "idleRight": [
@@ -1774,6 +1779,7 @@
     ]
   },
   {
+    //REF: https://craftpix.net/freebies/free-sci-fi-items-icons-weapons/
     "type": "BIT_ARRAY_GUN",
     "spriteSheets": [],
     "idleRight": [
@@ -1784,6 +1790,7 @@
     ]
   },
   {
+    //REF: https://craftpix.net/freebies/free-sci-fi-items-icons-weapons/
     "type": "BIT_MATRIX_BLAST",
     "spriteSheets": [],
     "idleRight": [
@@ -1794,6 +1801,7 @@
     ]
   },
   {
+    //REF: https://opengameart.org/content/techno-bricks
     "type": "BLOCK",
     "spriteSheets": [
       "/sprites/techno_bricks.png"
@@ -1810,6 +1818,7 @@
     ]
   },
   {
+    //REF: https://opengameart.org/content/techno-bricks
     "type": "MOVABLE_BLOCK",
     "spriteSheets": [
       "/sprites/techno_bricks.png"
@@ -1826,6 +1835,7 @@
     ]
   },
   {
+    //REF: https://opengameart.org/content/techno-bricks
     "type": "HIDING_BLOCK",
     "spriteSheets": [
       "/sprites/techno_bricks.png"
@@ -1842,6 +1852,7 @@
     ]
   },
   {
+    //REF: https://opengameart.org/content/cruncher-monster
     "type": "CHARGER",
     "spriteSheets": [],
     "idleRight": [
@@ -1962,6 +1973,7 @@
     ]
   },
   {
+    //REF: https://opengameart.org/content/the-robot-free-sprite
     "type": "BIT_REVOLVER_BULLET",
     "spriteSheets": [],
     "idleLeft": [
@@ -2010,6 +2022,7 @@
     ]
   },
   {
+    //REF: https://opengameart.org/content/the-robot-free-sprite
     "type": "BIT_ARRAY_GUN_BULLET",
     "spriteSheets": [],
     "idleLeft": [
@@ -2058,6 +2071,7 @@
     ]
   },
   {
+    //REF: https://opengameart.org/content/missiles-bullets-and-bomb-set
     "type": "BIT_MATRIX_BLAST_BULLET",
     "spriteSheets": [],
     "idleRight": [
@@ -2068,6 +2082,7 @@
     ]
   },
   {
+    //REF: https://opengameart.org/content/16x16-and-animated-lava-tile-45-frames
     "type": "LAVA",
     "spriteSheets": [],
     "idleRight": [
@@ -2254,6 +2269,7 @@
     ]
   },
   {
+    //REF: https://opengameart.org/content/platformer-sprites
     "type": "ENEMY_PORTAL",
     "spriteSheets": [
       "/sprites/tiles2.png"
@@ -2270,6 +2286,7 @@
     ]
   },
   {
+    //REF: https://opengameart.org/content/platformer-sprites
     "type": "GATE",
     "spriteSheets": [
       "/sprites/tiles2.png"
@@ -2294,6 +2311,7 @@
     ]
   },
   {
+    //REF: https://opengameart.org/content/platformer-sprites
     "type": "CHANGE_LEVEL",
     "spriteSheets": [
       "/sprites/tiles2.png"
@@ -2310,6 +2328,7 @@
     ]
   },
   {
+    //REF: https://opengameart.org/content/platformer-sprites
     "type": "END_GAME",
     "spriteSheets": [
       "/sprites/tiles2.png"
@@ -2326,6 +2345,7 @@
     ]
   },
   {
+    //REF: https://opengameart.org/content/animated-spy-bot-security-bot
     "type": "BIT_BOT",
     "spriteSheets": [],
     "idleRight": [
@@ -2344,6 +2364,7 @@
     ]
   },
   {
+    //REF: https://opengameart.org/content/platformer-sprites
     "type": "CHECKPOINT",
     "spriteSheets": [
       "/sprites/tiles2.png"
@@ -2360,6 +2381,7 @@
     ]
   },
   {
+    //REF: https://opengameart.org/content/platformer-sprites
     "type": "KEY",
     "spriteSheets": [
       "/sprites/tiles1.png"

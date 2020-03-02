@@ -24,6 +24,7 @@ public class JukeBox {
 
     private void init() {
         try (InputStream in = JukeBox.class.getResourceAsStream(Constants.SoundPaths.MAIN_THEME)) {
+            //REF: https://www.dl-sounds.com/royalty-free/blazer-rail/
             themeMusic = new Music(in, "theme.ogg");
 
         } catch (Exception e) {

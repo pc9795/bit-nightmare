@@ -1,5 +1,6 @@
 package game.framework.visual;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import game.objects.GameObject;
 import game.utils.Constants;
@@ -35,6 +36,7 @@ public class TextureLoader {
 
     private void init() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
         try (InputStream in = TextureLoader.class.getResourceAsStream(Constants.TEXTURE_CONFIG_FILE_LOC)) {
             //Loading data from json
             TextureConfig[] configs = mapper.readValue(in, TextureConfig[].class);
