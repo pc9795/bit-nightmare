@@ -6,7 +6,8 @@
   "sequences": [
     {
       "id": "sequence1",
-      "pos": 0,
+      "level":"level1",
+      "pos": 1560,
       "stories": [
         {
           "imageLink": 0,
@@ -26,8 +27,9 @@
       ]
     },
     {
-      "id": "sequence1.5",
-      "pos": 0,
+      "id": "sequence2",
+      "level":"level1",
+      "pos": 1990,
       "stories": [
         {
           "imageLink": 0,
@@ -102,8 +104,9 @@
       ]
     },
     {
-      "id": "sequence2",
-      "pos": 0,
+      "id": "sequence3",
+      "level":"level1",
+      "pos": 2254,
       "stories": [
         {
           "imageLink": 0,
@@ -118,8 +121,9 @@
       ]
     },
     {
-      "id": "sequence3",
-      "pos": 0,
+      "id": "sequence4",
+      "level":"level1",
+      "pos": 3507,
       "stories": [
         {
           "imageLink": 0,
@@ -134,8 +138,9 @@
       ]
     },
     {
-      "id": "sequence4",
-      "pos": 0,
+      "id": "sequence5",
+      "level":"level1",
+      "pos": 3640,
       "stories": [
         {
           "imageLink": 1,
@@ -145,8 +150,9 @@
       ]
     },
     {
-      "id": "sequence5",
-      "pos": 0,
+      "id": "sequence6",
+      "level":"level1",
+      "pos": 8245,
       "stories": [
         {
           "imageLink": 0,
@@ -166,8 +172,9 @@
       ]
     },
     {
-      "id": "sequence6",
-      "pos": 0,
+      "id": "sequence7",
+      "level":"level2",
+      "pos": 7926,
       "stories": [
         {
           "imageLink": 0,

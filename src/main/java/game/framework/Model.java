@@ -161,6 +161,10 @@ public class Model {
         return pause;
     }
 
+    public String getCurrentLevel() {
+        return levels.get(currLevelIndex);
+    }
+
     public void nextLevel() {
         if (currLevelIndex == levels.size() - 1) {
             System.out.println("!!!WARNING!!!Next level requested at the last level.");

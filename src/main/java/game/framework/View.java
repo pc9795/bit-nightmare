@@ -556,7 +556,7 @@ class View extends Canvas {
                 }
                 //When the View is in IN_GAME mode then controllers are expected to be processed by Model. So any `poll`
                 //call to the controller will produce unexpected results.
-                checkStories();
+                checkStories(gameWorld.getCurrentLevel());
                 renderGame(g);
                 if (storyTeller.isOn()) {
                     gameWorld.stop();
@@ -642,17 +642,17 @@ class View extends Canvas {
         g.drawString("Press [Space] to skip", x + margin, y + dialogHeight - margin - fontHeight);
     }
 
-    private void checkStories() {
+    private void checkStories(String level) {
         StoryLoader loader = StoryLoader.getInstance();
-        if (!loader.hasStories()) {
+        if (!loader.hasStories(level)) {
             return;
         }
         int playerLoc = (int) gameWorld.getPlayer1().getCentre().getX();
-        int nearestLoc = loader.getNearestStoryPos(playerLoc);
+        int nearestLoc = loader.getNearestStoryPos(level, playerLoc);
         if (storyLocationsProcessed.contains(nearestLoc)) {
             return;
         }
-        storyTeller.load(loader.getSequences(nearestLoc));
+        storyTeller.load(loader.getSequences(level, nearestLoc));
         storyLocationsProcessed.add(nearestLoc);
     }
 

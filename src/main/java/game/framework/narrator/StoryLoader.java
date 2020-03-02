@@ -17,7 +17,7 @@ import java.util.*;
 public class StoryLoader {
     private static final StoryLoader INSTANCE = new StoryLoader();
     //For having locations in sorted order.
-    private Map<Integer, List<Sequence>> sequenceMap = new TreeMap<>();
+    private Map<String, Map<Integer, List<Sequence>>> sequenceMap = new HashMap<>();
 
     private StoryLoader() {
         try {
@@ -45,23 +45,28 @@ public class StoryLoader {
             images[i] = imgLoader.loadImage(config.getImages()[i]);
         }
         for (Sequence sequence : config.getSequences()) {
-            if (!sequenceMap.containsKey(sequence.getPos())) {
-                sequenceMap.put(sequence.getPos(), new LinkedList<>());
+            if (!sequenceMap.containsKey(sequence.getLevel())) {
+                sequenceMap.put(sequence.getLevel(), new TreeMap<>());
+            }
+            Map<Integer, List<Sequence>> levelSequenceMap = sequenceMap.get(sequence.getLevel());
+            if (!levelSequenceMap.containsKey(sequence.getPos())) {
+                levelSequenceMap.put(sequence.getPos(), new LinkedList<>());
             }
             for (Story story : sequence.getStories()) {
                 story.setImage(images[story.getImageLink()]);
             }
-            sequenceMap.get(sequence.getPos()).add(sequence);
+            levelSequenceMap.get(sequence.getPos()).add(sequence);
         }
     }
 
-    public boolean hasStories() {
-        return sequenceMap.size() != 0;
+    public boolean hasStories(String level) {
+        return sequenceMap.getOrDefault(level, new HashMap<>()).size() != 0;
     }
 
-    public int getNearestStoryPos(int pos) {
+    public int getNearestStoryPos(String level, int pos) {
+        Map<Integer, List<Sequence>> levelSequenceMap = sequenceMap.getOrDefault(level, new HashMap<>());
         int nearest = -1;
-        for (Integer storyPos : sequenceMap.keySet()) {
+        for (Integer storyPos : levelSequenceMap.keySet()) {
             //todo make configurable
             if (pos < storyPos - 50 || pos > storyPos + 50) {
                 continue;
@@ -72,7 +77,8 @@ public class StoryLoader {
         return nearest;
     }
 
-    public List<Sequence> getSequences(int pos) {
-        return sequenceMap.getOrDefault(pos,new ArrayList<>());
+    public List<Sequence> getSequences(String level, int pos) {
+        Map<Integer, List<Sequence>> levelSequenceMap = sequenceMap.getOrDefault(level, new HashMap<>());
+        return levelSequenceMap.getOrDefault(pos, new ArrayList<>());
     }
 }

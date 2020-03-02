@@ -8,6 +8,7 @@ package game.framework.narrator;
 public class Sequence {
     private String id;
     private int pos;
+    private String level;
     private Story[] stories;
 
     public String getId() {
@@ -20,5 +21,9 @@ public class Sequence {
 
     public Story[] getStories() {
         return stories;
+    }
+
+    public String getLevel() {
+        return level;
     }
 }
