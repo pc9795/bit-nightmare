@@ -342,13 +342,24 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
     }
 
     public void moveRight() {
-        velocity.setX(speedX);
+        //ADJUST ACCORDING TO DEFAULTS
+        if (ducking) {
+            velocity.setX(speedX - 1);
+        } else {
+            velocity.setX(speedX);
+        }
         facingDirection = FacingDirection.RIGHT;
         attacking = false;
     }
 
     public void moveLeft() {
-        velocity.setX(-speedX);
+        //ADJUST ACCORDING TO DEFAULTS
+        if (ducking) {
+            velocity.setX(-speedX + 1f);
+        } else {
+            velocity.setX(-speedX);
+        }
+
         facingDirection = FacingDirection.LEFT;
         attacking = false;
     }
@@ -375,10 +386,15 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
     }
 
     public void jump() {
-        if (!jumping && isBitBotFound()) {
-            velocity.setY(-speedY);
-            jumping = true;
+        if (jumping || !isBitBotFound()) {
+            return;
         }
+        if (ducking) {
+            velocity.setY(-speedY + 1);
+        } else {
+            velocity.setY(-speedY);
+        }
+        jumping = true;
     }
 
     @Override
