@@ -1,12 +1,10 @@
-package game.objects;
+package game.properties;
 
 /**
  * Created By: Prashant Chaubey
  * Created On: 24-02-2020 23:47
- * Purpose: TODO:
+ * Purpose: Behavior of object which is animated.
  **/
 public interface Animated {
-    int DEFAULT_FRAME_GAP = 20;
-
     void setupAnimator();
 }

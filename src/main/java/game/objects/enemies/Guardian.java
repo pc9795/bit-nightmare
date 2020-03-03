@@ -84,8 +84,8 @@ public class Guardian extends ShootingEnemyAdapter {
         //Setup animators in parent
         super.setupAnimator();
         //FRAME GAP IS DEPENDENT ON THE IMAGES USED
-        runningLeft = new Animator(DEFAULT_FRAME_GAP, true, texture.getRunningLeft());
-        runningRight = new Animator(DEFAULT_FRAME_GAP, true, texture.getRunningRight());
+        runningLeft = new Animator(20, true, texture.getRunningLeft());
+        runningRight = new Animator(20, true, texture.getRunningRight());
     }
 
     @Override
@@ -128,23 +128,6 @@ public class Guardian extends ShootingEnemyAdapter {
         showHealth(centre, health, maxHealth, g);
     }
 
-    private void renderTexture(Graphics g) {
-        Animator animator = getAnimatorAccordingToState();
-        if (lastAnimator != null && lastAnimator != animator) {
-            //Reset the last animator
-            lastAnimator.reset();
-            lastAnimator = animator;
-        }
-        //THIS PORTION IS TOO MUCH DEPENDENT ON TEXTURE USED.
-        if (charging) {
-            animator.draw(g, (int) (centre.getX() - .1 * width), (int) (centre.getY() - .1 * height), (int) (1.1 * width), (int) (1.1 * height));
-        } else if (attacking) {
-            animator.draw(g, (int) (centre.getX() - .5 * width), (int) (centre.getY() - .3 * height), (int) (1.5 * width), (int) (1.3 * height));
-        } else {
-            animator.draw(g, (int) centre.getX(), (int) centre.getY(), width, height);
-        }
-    }
-
     @SuppressWarnings("Duplicates")
     @Override
     protected Animator getAnimatorAccordingToState() {
@@ -164,6 +147,33 @@ public class Guardian extends ShootingEnemyAdapter {
         return animator;
     }
 
+    /**
+     * Render the texture for the given object
+     *
+     * @param g grpahics object
+     */
+    private void renderTexture(Graphics g) {
+        Animator animator = getAnimatorAccordingToState();
+        if (lastAnimator != null && lastAnimator != animator) {
+            //Reset the last animator
+            lastAnimator.reset();
+            lastAnimator = animator;
+        }
+        //THIS PORTION IS TOO MUCH DEPENDENT ON TEXTURE USED.
+        if (charging) {
+            animator.draw(g, (int) (centre.getX() - .1 * width), (int) (centre.getY() - .1 * height), (int) (1.1 * width), (int) (1.1 * height));
+        } else if (attacking) {
+            animator.draw(g, (int) (centre.getX() - .5 * width), (int) (centre.getY() - .3 * height), (int) (1.5 * width), (int) (1.3 * height));
+        } else {
+            animator.draw(g, (int) centre.getX(), (int) centre.getY(), width, height);
+        }
+    }
+
+    /**
+     * When there is no texture it will render a rectangle with a selected color for this object
+     *
+     * @param g graphics object
+     */
     private void renderDefault(Graphics g) {
         g.setColor(new Color(0, 168, 243));
         g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);

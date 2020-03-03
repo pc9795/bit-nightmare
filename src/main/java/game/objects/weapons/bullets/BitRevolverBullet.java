@@ -3,7 +3,7 @@ package game.objects.weapons.bullets;
 import game.colliders.BulletCollider;
 import game.framework.Model;
 import game.framework.visual.Animator;
-import game.objects.Animated;
+import game.properties.Animated;
 import game.objects.GameObject;
 import game.physics.Point2f;
 
@@ -50,6 +50,11 @@ public class BitRevolverBullet extends GameObject implements BulletCollider, Ani
         }
     }
 
+    /**
+     * Render the texture for the given object
+     *
+     * @param g grpahics object
+     */
     private void renderTexture(Graphics g) {
         Animator animator = null;
         switch (facingDirection) {
@@ -64,6 +69,11 @@ public class BitRevolverBullet extends GameObject implements BulletCollider, Ani
         animator.draw(g, (int) centre.getX(), (int) centre.getY(), width, height);
     }
 
+    /**
+     * When there is no texture it will render a rectangle with a selected color for this object
+     *
+     * @param g graphics object
+     */
     private void renderDefault(Graphics g) {
         g.setColor(new Color(182, 3, 253));
         g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
@@ -82,6 +92,7 @@ public class BitRevolverBullet extends GameObject implements BulletCollider, Ani
         if (!isTextured()) {
             return;
         }
+        //FRAME GAP IS DEPENDENT ON THE IMAGES USED
         idleRight = new Animator(10, true, texture.getIdleRight());
         idleLeft = new Animator(10, true, texture.getIdleLeft());
     }

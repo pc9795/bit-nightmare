@@ -10,6 +10,14 @@ import java.io.IOException;
  * Created By: Prashant Chaubey
  * Created On: 23-02-2020 18:21
  * Purpose: Represents texture for a game object
+ * <p>
+ * REF: https://www.youtube.com/watch?v=DnsKYv39VfI&list=PLWms45O3n--54U-22GDqKMRGlXROOZtMx&index=12
+ * Used mentioned video to see the basics of using Sprite Sheets. My implementation took this basic information to the
+ * next level by using a configuration based approach where a texture is unique for a game object. I can just drop in
+ * any sprite sheet or image in the configuration and things will reflect here because of parsing logic I designed.
+ * The video was very limiting and depended on hard-coded values. I have created different properties such as
+ * `idleRight`, `runningLeft` etc. So that now inside code instead of deciding from a list of images what to do with
+ * each image, we have a list of images grouped for a specific purpose.
  **/
 public class Texture {
     private GameObject.GameObjectType type;
@@ -29,7 +37,7 @@ public class Texture {
 
     //Only Texture loader will create it.
     private Texture() {
-        //Initializing with default values for flexible configuration.
+        //Initializing with default values for flexible configuration. Else we have to null handle everywhere.
         idleLeft = new BufferedImage[0];
         idleRight = new BufferedImage[0];
         duckLeft = new BufferedImage[0];
@@ -96,10 +104,19 @@ public class Texture {
         return jumpRight;
     }
 
+    /**
+     * Create a texture based on a configuration.
+     *
+     * @param config texture config
+     * @return texture
+     * @throws IOException if the images mentioned in the configuration are not present.
+     */
     static Texture fromTextureConfig(TextureConfig config) throws IOException {
         Texture texture = new Texture();
+
         //Load game object type
         texture.type = GameObject.GameObjectType.valueOf(config.getType());
+
         //Load sprite sheets
         BufferedImageLoader imgLoader = BufferedImageLoader.getInstance();
         String[] spriteSheetPaths = config.getSpriteSheets();
@@ -107,6 +124,7 @@ public class Texture {
         for (int i = 0; i < spriteSheetPaths.length; i++) {
             spriteSheets[i] = imgLoader.loadImage(spriteSheetPaths[i]);
         }
+
         //Load idle images
         if (config.getIdleRight() != null) {
             texture.idleRight = getBufferedImagesFromImageConfig(config.getIdleRight(), spriteSheets);
@@ -114,6 +132,7 @@ public class Texture {
         if (config.getIdleLeft() != null) {
             texture.idleLeft = getBufferedImagesFromImageConfig(config.getIdleLeft(), spriteSheets);
         }
+
         //Load ducking images
         if (config.getDuckLeft() != null) {
             texture.duckLeft = getBufferedImagesFromImageConfig(config.getDuckLeft(), spriteSheets);
@@ -121,6 +140,7 @@ public class Texture {
         if (config.getDuckRight() != null) {
             texture.duckRight = getBufferedImagesFromImageConfig(config.getDuckRight(), spriteSheets);
         }
+
         //Load death images
         if (config.getDeathLeft() != null) {
             texture.deathLeft = getBufferedImagesFromImageConfig(config.getDeathLeft(), spriteSheets);
@@ -128,6 +148,7 @@ public class Texture {
         if (config.getDeathRight() != null) {
             texture.deathRight = getBufferedImagesFromImageConfig(config.getDeathRight(), spriteSheets);
         }
+
         //Load attack images
         if (config.getAttackRight() != null) {
             texture.attackRight = getBufferedImagesFromImageConfig(config.getAttackRight(), spriteSheets);
@@ -135,6 +156,7 @@ public class Texture {
         if (config.getAttackLeft() != null) {
             texture.attackLeft = getBufferedImagesFromImageConfig(config.getAttackLeft(), spriteSheets);
         }
+
         //Load running images
         if (config.getRunningLeft() != null) {
             texture.runningLeft = getBufferedImagesFromImageConfig(config.getRunningLeft(), spriteSheets);
@@ -142,6 +164,7 @@ public class Texture {
         if (config.getRunningRight() != null) {
             texture.runningRight = getBufferedImagesFromImageConfig(config.getRunningRight(), spriteSheets);
         }
+
         //Load jumping images
         if (config.getJumpLeft() != null) {
             texture.jumpLeft = getBufferedImagesFromImageConfig(config.getJumpLeft(), spriteSheets);
@@ -149,9 +172,18 @@ public class Texture {
         if (config.getJumpRight() != null) {
             texture.jumpRight = getBufferedImagesFromImageConfig(config.getJumpRight(), spriteSheets);
         }
+
         return texture;
     }
 
+    /**
+     * Get images from an ImageConfig
+     *
+     * @param imgConfigArr array of ImageConfig objects
+     * @param spriteSheets array of sprite sheets mentioned in the configuration.
+     * @return images in the given configuration.
+     * @throws IOException if the mentioned images are not present.
+     */
     private static BufferedImage[] getBufferedImagesFromImageConfig(TextureConfig.ImageConfig[] imgConfigArr,
                                                                     BufferedImage[] spriteSheets) throws IOException {
         BufferedImageLoader imgLoader = BufferedImageLoader.getInstance();
@@ -160,13 +192,16 @@ public class Texture {
         int i = 0;
         for (TextureConfig.ImageConfig imgConfig : imgConfigArr) {
             switch (imgConfig.getImageType()) {
+                //Single images will be loaded
                 case SINGLE:
                     images[i++] = imgLoader.loadImage(imgConfig.getImgLoc());
                     break;
+                //In case of sprite sheets we get specific part from the sprite sheet.
+                //Index is 1 based.
                 case SPRITE_SHEET:
-                    images[i++] = spriteSheets[imgConfig.getIndex()].
-                            getSubimage((imgConfig.getX() - 1) * imgConfig.getWidth(), (imgConfig.getY() - 1) * imgConfig.getHeight(),
-                                    imgConfig.getWidth(), imgConfig.getHeight());
+                    int x = (imgConfig.getX() - 1) * imgConfig.getWidth();
+                    int y = (imgConfig.getY() - 1) * imgConfig.getHeight();
+                    images[i++] = spriteSheets[imgConfig.getIndex()].getSubimage(x, y, imgConfig.getWidth(), imgConfig.getHeight());
                     break;
             }
         }

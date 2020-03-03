@@ -9,6 +9,9 @@ import java.net.URL;
  * Created By: Prashant Chaubey
  * Created On: 18-02-2020 00:31
  * Purpose: Helper to load images.
+ * <p>
+ * REF: https://www.youtube.com/watch?v=1TFDOT1HiBo&list=PLWms45O3n--54U-22GDqKMRGlXROOZtMx&index=11
+ * Used the mentioned video for the implementation.
  **/
 public final class BufferedImageLoader {
     private static final BufferedImageLoader INSTANCE = new BufferedImageLoader();
@@ -20,6 +23,13 @@ public final class BufferedImageLoader {
         return INSTANCE;
     }
 
+    /**
+     * Load an image from the classpath
+     *
+     * @param path path of the image.
+     * @return loaded image
+     * @throws IOException if image is not found.
+     */
     public BufferedImage loadImage(String path) throws IOException {
         URL url = BufferedImageLoader.class.getResource(path);
         if (url == null) {

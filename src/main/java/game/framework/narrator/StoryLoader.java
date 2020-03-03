@@ -12,16 +12,17 @@ import java.util.*;
 /**
  * Created By: Prashant Chaubey
  * Created On: 25-02-2020 13:41
- * Purpose: TODO:
+ * Purpose: Load the stories from a story configuration.
  **/
 public class StoryLoader {
+    private static final int NEAREST_THRESHOLD = 50;
     private static final StoryLoader INSTANCE = new StoryLoader();
-    //For having locations in sorted order.
     private Map<String, Map<Integer, List<Sequence>>> sequenceMap = new HashMap<>();
 
     private StoryLoader() {
         try {
             init();
+
         } catch (IOException e) {
             System.out.println("Error in loading stories");
             e.printStackTrace();
@@ -32,20 +33,31 @@ public class StoryLoader {
         return INSTANCE;
     }
 
+    /**
+     * Initialization
+     *
+     * @throws IOException if there is error in reading the story config json file or any of the images mentioned in it.
+     */
     private void init() throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
         StoryConfig config;
+
+        //Loading data from json
+        ObjectMapper mapper = new ObjectMapper();
         try (InputStream in = StoryLoader.class.getResourceAsStream(Constants.STORY_CONFIG_FILE_LOC)) {
-            //Loading data from json
             config = mapper.readValue(in, StoryConfig.class);
         }
+
+        //Loading all the images mentioned in config.
         BufferedImageLoader imgLoader = BufferedImageLoader.getInstance();
         BufferedImage[] images = new BufferedImage[config.getImages().length];
         for (int i = 0; i < images.length; i++) {
             images[i] = imgLoader.loadImage(config.getImages()[i]);
         }
+
+        //Loading all stories
         for (Sequence sequence : config.getSequences()) {
             if (!sequenceMap.containsKey(sequence.getLevel())) {
+                //For having locations in sorted order.
                 sequenceMap.put(sequence.getLevel(), new TreeMap<>());
             }
             Map<Integer, List<Sequence>> levelSequenceMap = sequenceMap.get(sequence.getLevel());
@@ -59,16 +71,28 @@ public class StoryLoader {
         }
     }
 
+    /**
+     * @param level name of the level
+     * @return true if there are stories for a given level
+     */
     public boolean hasStories(String level) {
         return sequenceMap.getOrDefault(level, new HashMap<>()).size() != 0;
     }
 
+    /**
+     * Get the nearest story for a given level and a position
+     *
+     * @param level name of the level
+     * @param pos   position to which to find the nearest story.
+     * @return position of the nearest story else -1.
+     */
     public int getNearestStoryPos(String level, int pos) {
         Map<Integer, List<Sequence>> levelSequenceMap = sequenceMap.getOrDefault(level, new HashMap<>());
         int nearest = -1;
+        //As the positions are stored in a tree map they will be sorted. So we traverse through all the positions
+        //and stop at the first position within a threshold value.
         for (Integer storyPos : levelSequenceMap.keySet()) {
-            //todo make configurable
-            if (pos < storyPos - 50 || pos > storyPos + 50) {
+            if (Math.abs(pos - storyPos) > NEAREST_THRESHOLD) {
                 continue;
             }
             nearest = storyPos;
@@ -77,6 +101,13 @@ public class StoryLoader {
         return nearest;
     }
 
+    /**
+     * Get stories for a given level and position.
+     *
+     * @param level name of the level
+     * @param pos   position of the sequence
+     * @return sequence at the given level and position.
+     */
     public List<Sequence> getSequences(String level, int pos) {
         Map<Integer, List<Sequence>> levelSequenceMap = sequenceMap.getOrDefault(level, new HashMap<>());
         return levelSequenceMap.getOrDefault(pos, new ArrayList<>());

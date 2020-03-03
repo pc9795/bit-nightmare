@@ -4,7 +4,7 @@ import game.framework.Model;
 import game.objects.Difficulty;
 import game.objects.GameObject;
 import game.objects.GameObjectFactory;
-import game.objects.enemies.Enemy;
+import game.properties.Enemy;
 import game.physics.Point2f;
 
 import java.awt.*;

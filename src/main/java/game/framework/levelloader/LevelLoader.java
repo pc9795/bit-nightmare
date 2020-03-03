@@ -77,6 +77,9 @@ public final class LevelLoader {
         //Load the level png
         BufferedImage levelImg = BufferedImageLoader.getInstance().loadImage(getLevelDesignFilename(levelName));
 
+        //REF: https://www.youtube.com/watch?v=1TFDOT1HiBo&list=PLWms45O3n--54U-22GDqKMRGlXROOZtMx&index=11
+        //Used the idea described in the mentioned video on how can we use pixels in an image for level design. I kept
+        //the logic of level loading and creation of game object segregated to reduce coupling in my code.
         int imgWidth = levelImg.getWidth();
         int imgHeight = levelImg.getHeight();
         //maxX and maxY will hold the boundary of the level.

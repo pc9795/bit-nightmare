@@ -22,8 +22,10 @@ public interface EnemyCollider extends FineGrainedCollider {
     default boolean enemyCollision(GameObject obj, Model model) {
         boolean[] collisions;
         boolean bottomCollision = false;
+
         List<GameObject> collisionCheck = model.getEnvironmentQuadTree().retrieve(obj);
         collisionCheck.addAll(model.getMovableEnvironment());
+
         for (GameObject env : collisionCheck) {
             Rectangle bounds = env.getBounds();
             switch (env.getType()) {

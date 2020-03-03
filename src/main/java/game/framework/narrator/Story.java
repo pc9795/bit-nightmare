@@ -5,8 +5,10 @@ import java.awt.image.BufferedImage;
 /**
  * Created By: Prashant Chaubey
  * Created On: 25-02-2020 13:54
- * Purpose: TODO:
+ * Purpose: Represents a story identified by the text and the actor.
  **/
+//We need public getter methods for jackson to work that's why suppressing the warnings.
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class Story {
     private BufferedImage image;
     private String actor;

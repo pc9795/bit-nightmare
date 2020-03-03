@@ -4,9 +4,9 @@ import game.framework.Model;
 import game.objects.GameObject;
 import game.objects.weapons.bullets.BitMatrixBlastBullet;
 import game.physics.Point2f;
+import game.properties.Weapon;
 
 import java.awt.*;
-import java.io.Serializable;
 
 /**
  * Created By: Prashant Chaubey

@@ -6,7 +6,11 @@ import java.awt.image.BufferedImage;
 /**
  * Created By: Prashant Chaubey
  * Created On: 23-02-2020 18:26
- * Purpose: TODO:
+ * Purpose: Class which generate animation from a set of images.
+ * <p>
+ * REF: https://www.youtube.com/watch?v=kzgNCEWUqUs&list=PLWms45O3n--54U-22GDqKMRGlXROOZtMx&index=13
+ * Used the mentioned video for basic concepts. My implementation is much refactored and I added a looping and non-looping
+ * variation. Also I delegated the drawing responsibilities to the animator itself.
  **/
 public class Animator {
     private int frameGap;
@@ -21,7 +25,11 @@ public class Animator {
         this.loop = loop;
     }
 
+    /**
+     * Run the animation
+     */
     private void run() {
+        //Skip some frames according to frame gap.
         if (index != frameGap) {
             index++;
             return;
@@ -38,10 +46,22 @@ public class Animator {
         count++;
     }
 
+    /**
+     * Reset the animation so that it can run from start. Important for non looping animations.
+     */
     public void reset() {
         count = 0;
     }
 
+    /**
+     * Draw the image.
+     *
+     * @param g      graphics object
+     * @param x      x position
+     * @param y      y position
+     * @param width  width of the image.
+     * @param height height of the image.
+     */
     public void draw(Graphics g, float x, float y, int width, int height) {
         run();
         g.drawImage(images[count], (int) x, (int) y, width, height, null);

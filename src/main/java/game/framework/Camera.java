@@ -10,6 +10,9 @@ import static game.utils.Constants.CAMERA_OFFSET;
  * Created By: Prashant Chaubey
  * Created On: 19-02-2020 00:48
  * Purpose: Camera object which follows a object
+ * <p>
+ * REF: https://www.youtube.com/watch?v=vdcOIwkB6dA&list=PLWms45O3n--54U-22GDqKMRGlXROOZtMx&index=10
+ * Use the mentioned video for camera implementation.
  **/
 public class Camera {
     private Point point;

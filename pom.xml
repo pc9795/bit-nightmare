@@ -6,7 +6,7 @@
 
     <groupId>games</groupId>
     <artifactId>bit-nightmare</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -14,18 +14,20 @@
     </properties>
 
     <dependencies>
-        <!--Game-pad Integration START-->
+        <!--Gamepad START-->
         <dependency>
             <groupId>net.java.jinput</groupId>
             <artifactId>jinput</artifactId>
             <version>2.0.9</version>
         </dependency>
-        <!--Game-pad Integration END-->
+        <!--Gamepad END-->
+        <!--Audio START-->
         <dependency>
             <groupId>org.slick2d</groupId>
             <artifactId>slick2d-core</artifactId>
             <version>1.0.2</version>
         </dependency>
+        <!--Audio END-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

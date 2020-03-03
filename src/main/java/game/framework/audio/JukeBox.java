@@ -8,7 +8,9 @@ import java.io.InputStream;
 /**
  * Created By: Prashant Chaubey
  * Created On: 23-02-2020 21:18
- * Purpose: TODO:
+ * Purpose: Used the slick library to add music.
+ * <p>
+ * REF: https://mvnrepository.com/artifact/org.slick2d/slick2d-core
  **/
 public class JukeBox {
     private static final JukeBox INSTANCE = new JukeBox();
@@ -22,6 +24,9 @@ public class JukeBox {
         return INSTANCE;
     }
 
+    /**
+     * Initialization
+     */
     private void init() {
         try (InputStream in = JukeBox.class.getResourceAsStream(Constants.SoundPaths.MAIN_THEME)) {
             //REF: https://www.dl-sounds.com/royalty-free/blazer-rail/
@@ -33,6 +38,9 @@ public class JukeBox {
         }
     }
 
+    /**
+     * Play the theme song in a loop.
+     */
     public void playTheme() {
         if (themeMusic == null) {
             return;

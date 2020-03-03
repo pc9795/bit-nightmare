@@ -24,18 +24,22 @@ public interface BulletCollider {
         if (bullet.getCentre().getX() < model.getLevelBoundary().getxMin() || bullet.getCentre().getX() > model.getLevelBoundary().getxMax()) {
             return true;
         }
+        //Collecting environment objects to which it can collide.
         List<GameObject> willCollide = model.getEnvironmentQuadTree().retrieve(bullet);
         willCollide.addAll(model.getMovableEnvironment());
+
         for (GameObject env : willCollide) {
+            //Skipping if no intersection
+            if (!env.getBounds().intersects(bullet.getBounds())) {
+                continue;
+            }
             switch (env.getType()) {
                 case BLOCK:
                 case GATE:
                 case LAVA:
                 case HIDING_BLOCK:
                 case MOVABLE_BLOCK:
-                    if (env.getBounds().intersects(bullet.getBounds())) {
-                        return true;
-                    }
+                    return true;
             }
         }
         return false;
@@ -50,19 +54,24 @@ public interface BulletCollider {
      */
     default boolean bulletPlayerOrEnemyCollision(Model model, GameObject bullet, boolean isFiredByPlayer, int damage) {
         if (!isFiredByPlayer && model.getPlayer1().getBounds().intersects(bullet.getBounds())) {
+            //Damage health.
             model.getPlayer1().damageHealth(damage);
             return true;
         }
         for (GameObject obj : model.getEnemies()) {
+            //An enemies bullet can't damage an enemy.
+            //Skipping if no intersection.
+            if (!isFiredByPlayer || !obj.getBounds().intersects(bullet.getBounds())) {
+                continue;
+            }
             switch (obj.getType()) {
                 case CHARGER:
                 case SOLDIER:
                 case SUPER_SOLDIER:
                 case GUARDIAN:
-                    if (isFiredByPlayer && obj.getBounds().intersects(bullet.getBounds())) {
-                        ((Healthy) obj).damageHealth(damage);
-                        return true;
-                    }
+                    //Damage health.
+                    ((Healthy) obj).damageHealth(damage);
+                    return true;
             }
         }
         return false;

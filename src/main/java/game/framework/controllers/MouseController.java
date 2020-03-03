@@ -2,7 +2,9 @@ package game.framework.controllers;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,6 +14,8 @@ import java.util.Map;
  **/
 public final class MouseController implements MouseMotionListener, MouseListener, MouseWheelListener {
     private static final MouseController INSTANCE = new MouseController();
+    //As mouse events return a point object I have directly used an AWT point here instead of our Point2f. The places
+    //where we need Point2f we will do the conversion there.
     private Point currentPos = new Point(0, 0);
     private Map<Integer, Boolean> keys = new HashMap<>();
     private Map<Integer, Integer> pollCount = new HashMap<>();
@@ -19,10 +23,11 @@ public final class MouseController implements MouseMotionListener, MouseListener
     private MouseController() {
         // All the keys supported by the class must be entered in the map for one time. Else it can result in
         // NullPointerException if we trying to access a non-existing key.
-        keys.put(MouseEvent.BUTTON1, false);
-        keys.put(MouseEvent.BUTTON3, false);
-        pollCount.put(MouseEvent.BUTTON1, 0);
-        pollCount.put(MouseEvent.BUTTON3, 0);
+        List<Integer> configuredKeys = Arrays.asList(MouseEvent.BUTTON1, MouseEvent.BUTTON3);
+        for (Integer key : configuredKeys) {
+            keys.put(key, false);
+            pollCount.put(key, 0);
+        }
     }
 
     public static MouseController getInstance() {
@@ -32,6 +37,9 @@ public final class MouseController implements MouseMotionListener, MouseListener
     /**
      * It must be called per frame. This method implements a functionality to check whether a button is pressed once
      * or not. As when button is pressed for multiple frames it can cause unexpected behavior
+     * <p>
+     * REF: https://books.google.ie/books/about/Fundamental_2D_Game_Programming_with_Jav.html?id=iRFvCgAAQBAJ&redir_esc=y
+     * The idea to use a poll count to detect whether a key is pressed once or not is taken by the Chapter 2 of this book.
      */
     public void poll() {
         for (Integer key : pollCount.keySet()) {
@@ -97,9 +105,5 @@ public final class MouseController implements MouseMotionListener, MouseListener
 
     public boolean isRightClicked() {
         return pollCount.get(MouseEvent.BUTTON3) > 0;
-    }
-
-    public boolean isRightClickedOnce() {
-        return pollCount.get(MouseEvent.BUTTON3) == 1;
     }
 }

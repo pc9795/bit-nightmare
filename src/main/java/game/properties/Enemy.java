@@ -1,4 +1,4 @@
-package game.objects.enemies;
+package game.properties;
 
 import game.framework.Model;
 

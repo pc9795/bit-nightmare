@@ -3,10 +3,10 @@ package game.objects.enemies.adapters;
 import game.colliders.EnemyCollider;
 import game.framework.Model;
 import game.framework.visual.Animator;
-import game.objects.Animated;
+import game.properties.Animated;
 import game.objects.GameObject;
 import game.objects.GameObjectFactory;
-import game.objects.enemies.Enemy;
+import game.properties.Enemy;
 import game.physics.Point2f;
 import game.properties.Healthy;
 
@@ -15,7 +15,7 @@ import java.awt.*;
 /**
  * Created By: Prashant Chaubey
  * Created On: 24-02-2020 01:26
- * Purpose: TODO:
+ * Purpose: This object will shoot
  **/
 public class ShootingEnemyAdapter extends GameObject implements Enemy, EnemyCollider, Healthy, Animated {
     private Animator idleLeft, idleRight, attackLeft, attackRight, deathLeft, deathRight;
@@ -31,12 +31,11 @@ public class ShootingEnemyAdapter extends GameObject implements Enemy, EnemyColl
     }
 
     @Override
-    public void
-    setupAnimator() {
+    public void setupAnimator() {
         if (!isTextured()) {
             return;
         }
-        //Value of frame gap depends on sprites so it will change according to images.
+        //FRAME GAP IS DEPENDENT ON THE IMAGES USED
         idleRight = new Animator(20, true, texture.getIdleRight());
         idleLeft = new Animator(20, true, texture.getIdleLeft());
         attackLeft = new Animator(20, true, texture.getAttackLeft());
@@ -45,6 +44,9 @@ public class ShootingEnemyAdapter extends GameObject implements Enemy, EnemyColl
         deathRight = new Animator(20, false, texture.getDeathRight());
     }
 
+    /**
+     * @return animator according to object's state.
+     */
     protected Animator getAnimatorAccordingToState() {
         Animator animator = null;
         switch (facingDirection) {

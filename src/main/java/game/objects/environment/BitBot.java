@@ -2,7 +2,7 @@ package game.objects.environment;
 
 import game.framework.Model;
 import game.framework.visual.Animator;
-import game.objects.Animated;
+import game.properties.Animated;
 import game.objects.GameObject;
 import game.physics.Point2f;
 
@@ -37,12 +37,22 @@ public class BitBot extends GameObject implements Animated {
         }
     }
 
+    /**
+     * Render the texture for the given object
+     *
+     * @param g grpahics object
+     */
     private void renderTexture(Graphics g) {
         //THIS PORTION IS TOO MUCH DEPENDENT ON TEXTURE USED.
         idleRight.draw(g, (int) centre.getX(), (int) centre.getY(), width, height);
 
     }
 
+    /**
+     * When there is no texture it will render a rectangle with a selected color for this object
+     *
+     * @param g graphics object
+     */
     private void renderDefault(Graphics g) {
         g.setColor(new Color(195, 195, 195));
         g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
@@ -55,10 +65,10 @@ public class BitBot extends GameObject implements Animated {
 
     @Override
     public void setupAnimator() {
-        //FRAME GAP IS DEPENDENT ON THE IMAGES USED
         if (!isTextured()) {
             return;
         }
+        //FRAME GAP IS DEPENDENT ON THE IMAGES USED
         idleRight = new Animator(40, true, texture.getIdleRight());
     }
 }

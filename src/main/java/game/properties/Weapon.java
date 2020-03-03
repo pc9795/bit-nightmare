@@ -1,4 +1,4 @@
-package game.objects.weapons;
+package game.properties;
 
 import game.objects.GameObject;
 import game.physics.Point2f;
