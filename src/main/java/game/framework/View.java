@@ -428,7 +428,10 @@ class View extends Canvas {
                 }
                 break;
             case IN_GAME:
-                if (gameWorld.isPaused()) {
+                if (gameWorld.isCompleted()) {
+                    currScreen = Screen.END;
+                    prevScreen = Screen.IN_GAME;
+                } else if (gameWorld.isPaused()) {
                     gameWorld.pause();
                     currScreen = Screen.PAUSE;
                     prevScreen = Screen.IN_GAME;
@@ -461,6 +464,21 @@ class View extends Canvas {
                 text = "Hope you enjoyed!";
                 textWidth = fm.stringWidth(text);
                 g.drawString(text, getWidth() / 2 - textWidth / 2, margin + fontHeight);
+                g.setFont(new Font("Game Music Love", Font.BOLD, 30));
+                text = "LEFT CLICK TO CONTINUE";
+                fm = g.getFontMetrics();
+                textWidth = fm.stringWidth(text);
+                fontHeight = fm.getHeight() + fm.getDescent() + fm.getAscent();
+                textArea = new Rectangle(getWidth() / 2 - textWidth / 2, getHeight() - fontHeight - margin, textWidth, fontHeight);
+                if (textArea.contains(MouseController.getInstance().getCurrentPos())) {
+                    g.setColor(Color.GRAY);
+                }
+                g.drawString(text, getWidth() / 2 - textWidth / 2, getHeight() - margin);
+                MouseController.getInstance().poll();
+                if (MouseController.getInstance().isLeftClickedOnce()) {
+                    currScreen = Screen.MAIN;
+                    prevScreen = Screen.END;
+                }
                 break;
 
         }

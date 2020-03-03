@@ -12,7 +12,6 @@ import game.physics.Boundary;
 import game.physics.Point2f;
 import game.physics.QuadTree;
 import game.utils.Constants;
-import org.lwjgl.input.Mouse;
 
 import java.awt.*;
 import java.io.*;
@@ -62,8 +61,7 @@ public class Model {
     private List<String> levels;
     private Boundary levelBoundary;
     private int currLevelIndex;
-    private boolean pause;
-    private boolean started;
+    private boolean pause, started, completed;
     private Point2f lastCheckPointSaved;
     private Difficulty difficulty;
     private Descriptor descriptor;
@@ -167,6 +165,14 @@ public class Model {
 
     public String getCurrentLevel() {
         return levels.get(currLevelIndex);
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 
     public void nextLevel() {

@@ -60,7 +60,7 @@ public class Guardian extends ShootingEnemyAdapter {
             case EASY:
                 speedX -= 1f;
                 chargeDurationInSec -= 0.5f;
-                bulletIntervalInSec -= 0.5f;
+                bulletIntervalInSec += 0.5f;
                 chargingProb /= 2;
                 health -= 200;
                 break;
@@ -68,7 +68,7 @@ public class Guardian extends ShootingEnemyAdapter {
                 los += 300;
                 speedX += 1f;
                 chargeDurationInSec += 0.5f;
-                bulletIntervalInSec += 0.5f;
+                bulletIntervalInSec -= 0.5f;
                 chargingProb *= 2;
                 health += 200;
                 break;

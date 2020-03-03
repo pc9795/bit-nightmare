@@ -18,8 +18,8 @@ import static game.utils.Constants.CAMERA_OFFSET;
 public class Descriptor extends GameObject {
     private static final int DEFAULT_HEIGHT = 16;
     private static final int DEFAULT_WIDTH = 16;
-    private static final int DEFAULT_DIALOG_WIDTH = 150;
-    private static final int DEFAULT_DIALOG_HEIGHT = 80;
+    private static final int DEFAULT_DIALOG_WIDTH = 200;
+    private static final int DEFAULT_DIALOG_HEIGHT = 100;
     private String desc;
     private int dialogWidth, dialogHeight;
     private Font font;

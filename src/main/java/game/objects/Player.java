@@ -204,6 +204,11 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
                         bottomCollision = true;
                     }
                     break;
+                case END_GAME:
+                    if (bounds.intersects(getBounds())) {
+                        model.setCompleted(true);
+                    }
+                    break;
                 case CHANGE_LEVEL:
                     if (bounds.intersects(getBounds())) {
                         model.nextLevel();
