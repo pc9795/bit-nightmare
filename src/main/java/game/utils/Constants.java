@@ -10,6 +10,7 @@ public final class Constants {
 
     }
 
+    public static final boolean DEV_MODE = false;
     public static final String GAME_NAME = "Bit Nightmare";
     public static final int TARGET_FPS = 100;
     public static final int SCREEN_WIDTH = 1366;
@@ -19,6 +20,8 @@ public final class Constants {
     public static final String TEXTURE_CONFIG_FILE_LOC = "/texture_config.json";
     //REF: https://opengameart.org/content/construct-2-4x-tilemaps-4x-backgrounds-4x-objects
     public static final String BACKGROUND_IMG_LOC = "/sprites/spooky.png";
+    //REF: https://opengameart.org/content/retropixel-icons-v1-9x9
+    public static final String HEALTH_MARKER_IMG_LOC = "/sprites/heart_shaded.png";
     public static final String STORY_CONFIG_FILE_LOC = "/story.json";
     public static final String SAVE_DIRECTORY_NAME = "Bit-Nightmare";
     public static final String SAVE_FILE_NAME = "data.sav";

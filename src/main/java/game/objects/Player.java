@@ -14,6 +14,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static game.utils.Constants.DEV_MODE;
+
 /**
  * Created By: Prashant Chaubey
  * Created On: 17-02-2020 23:07
@@ -27,10 +29,11 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
     private static final float DEFAULT_SPEED_Y = 5f;
     private static final float DEFAULT_BULLET_FREQ_IN_SEC = 1f;
     private static final int DEFAULT_HEALTH = 200;
+    private static final int DEFAULT_LIVES = 10;
     //Variables
     private List<Weapon> weapons;
     private boolean ducking, attacking, bitBotFound, hasKey;
-    private int health, maxHealth, currentWeaponIndex;
+    private int health, maxHealth, currentWeaponIndex, lives;
     private transient long lastFiredBullet;
     private float speedX, speedY, bulletFreqInSec;
     private transient Animator idleLeft, idleRight, jumpLeft, jumpRight, runningLeft, runningRight, duckLeft, duckRight,
@@ -53,13 +56,7 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
         speedX = DEFAULT_SPEED_X;
         speedY = DEFAULT_SPEED_Y;
         lastFiredBullet = System.currentTimeMillis();
-
-        //todo remove
-        //this.centre.setX(3861);
-        //this.centre.setY(321);
-        //bitBotFound = true;
-        //addWeapon(new BitArrayGun(new Point2f(0, 0)));
-
+        lives = DEFAULT_LIVES;
         setupAnimator();
     }
 
@@ -99,6 +96,18 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
         return health;
     }
 
+    public void decreaseLives() {
+        lives--;
+    }
+
+    public int getLives() {
+        return lives;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+
     @Override
     public void update() {
         //Movement
@@ -117,10 +126,12 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
         } else {
             renderDefault(g);
         }
-        //todo remove
-        g.setColor(Color.RED);
-        g.setFont(new Font("Time New Roman", Font.BOLD, 20));
-        g.drawString(String.format("X:%s,Y:%s", (int) centre.getX(), (int) centre.getY()), (int) centre.getX(), (int) centre.getY() - 20);
+
+        if (DEV_MODE) {
+            g.setColor(Color.RED);
+            g.setFont(new Font("Time New Roman", Font.BOLD, 20));
+            g.drawString(String.format("X:%s,Y:%s", (int) centre.getX(), (int) centre.getY()), (int) centre.getX(), (int) centre.getY() - 20);
+        }
     }
 
     private void renderTexture(Graphics g) {

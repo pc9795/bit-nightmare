@@ -11,7 +11,6 @@ import game.objects.Difficulty;
 import game.utils.BufferedImageLoader;
 import game.utils.Constants;
 import game.utils.Utils;
-import org.lwjgl.input.Mouse;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -19,6 +18,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
+
+import static game.utils.Constants.CAMERA_OFFSET;
+import static game.utils.Constants.DEV_MODE;
 
 
 /*
@@ -49,7 +51,7 @@ class View extends Canvas {
     private Model gameWorld;
     private BufferStrategy bs;
     private Camera camera;
-    private BufferedImage bg;
+    private BufferedImage bg, healthMarker;
     private StoryTeller storyTeller = new StoryTeller();
     private HashSet<Integer> storyLocationsProcessed = new HashSet<>();
     private float gameScreenAlpha = 1f;
@@ -64,10 +66,24 @@ class View extends Canvas {
         TextureLoader.getInstance();
         try {
             this.bg = BufferedImageLoader.getInstance().loadImage(Constants.BACKGROUND_IMG_LOC);
+            this.healthMarker = BufferedImageLoader.getInstance().loadImage(Constants.HEALTH_MARKER_IMG_LOC);
+
         } catch (IOException e) {
-            System.out.println(String.format("Unable to load background image:%s", Constants.BACKGROUND_IMG_LOC));
+            System.out.println("Unable to load images for main screen");
             e.printStackTrace();
         }
+    }
+
+    private void renderPlayerStats(Graphics g) {
+        int margin = 10;
+        int imgHeight = 50;
+        int imgWidth = 50;
+        g.drawImage(healthMarker, margin, margin, imgWidth, imgHeight, null);
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Times New Roman", Font.BOLD, 30));
+        FontMetrics fm = g.getFontMetrics();
+        int fontHeight = fm.getHeight();
+        g.drawString(String.format("x %s", gameWorld.getPlayer1().getLives()), margin + imgWidth, margin + fontHeight);
     }
 
     void updateView() {
@@ -114,9 +130,9 @@ class View extends Canvas {
                 List<String> menuItems;
                 boolean checkpointAvailable = gameWorld.isLastCheckpointAvailable();
                 if (checkpointAvailable) {
-                    menuItems = Arrays.asList("Continue", "New Game", "Select Level", "Settings", "Quit");
+                    menuItems = Arrays.asList("Continue", "New Game", "Settings", "Quit");
                 } else {
-                    menuItems = Arrays.asList("New Game", "Select Level", "Settings", "Quit");
+                    menuItems = Arrays.asList("New Game", "Settings", "Quit");
                 }
                 int option = renderMenu(menuItems, MouseController.getInstance().getCurrentPos(), g, margin, margin);
                 //Shifting as we now don't have a continue option
@@ -144,14 +160,10 @@ class View extends Canvas {
                             prevScreen = Screen.MAIN;
                             break;
                         case 2:
-                            currScreen = Screen.LEVEL_SELECT;
-                            prevScreen = Screen.MAIN;
-                            break;
-                        case 3:
                             currScreen = Screen.SETTINGS;
                             prevScreen = Screen.MAIN;
                             break;
-                        case 4:
+                        case 3:
                             currScreen = Screen.QUIT;
                             prevScreen = Screen.MAIN;
                             break;
@@ -224,33 +236,6 @@ class View extends Canvas {
                 if (KeyboardController.getInstance().isEscPressedOnce()) {
                     currScreen = Screen.MAIN;
                     prevScreen = Screen.DIFFICULTY_SELECT;
-                }
-                break;
-            case LEVEL_SELECT:
-                g.setFont(new Font("Game Music Love", Font.BOLD, 60));
-                menuItems = gameWorld.getLevels();
-                option = renderMenu(menuItems, MouseController.getInstance().getCurrentPos(), g, margin, margin);
-                MouseController.getInstance().poll();
-                if (MouseController.getInstance().isLeftClickedOnce()) {
-                    switch (option) {
-                        case -1:
-                            break;
-                        default:
-                            levelSelected = option;
-                            if (gameWorld.isLastCheckpointAvailable()) {
-                                currScreen = Screen.NEW_GAME;
-                            } else {
-                                currScreen = Screen.DIFFICULTY_SELECT;
-                            }
-                            prevScreen = Screen.LEVEL_SELECT;
-                            break;
-                    }
-                }
-                KeyboardController.getInstance().poll();
-                if (KeyboardController.getInstance().isEscPressedOnce()) {
-                    currScreen = Screen.MAIN;
-                    prevScreen = Screen.LEVEL_SELECT;
-                    return;
                 }
                 break;
             case SETTINGS:
@@ -342,7 +327,9 @@ class View extends Canvas {
                         prevScreen = Screen.CONTROL_LAYOUT;
                         return;
                     }
+
                 } catch (Exception e) {
+                    System.out.println("Unable to show the controller layout screen.");
                     e.printStackTrace();
                 }
                 break;
@@ -428,7 +415,10 @@ class View extends Canvas {
                 }
                 break;
             case IN_GAME:
-                if (gameWorld.isCompleted()) {
+                if (gameWorld.isGameOver()) {
+                    currScreen = Screen.GAME_OVER;
+                    prevScreen = Screen.IN_GAME;
+                } else if (gameWorld.isCompleted()) {
                     currScreen = Screen.END;
                     prevScreen = Screen.IN_GAME;
                 } else if (gameWorld.isPaused()) {
@@ -440,6 +430,7 @@ class View extends Canvas {
                 //call to the controller will produce unexpected results.
                 checkStories(gameWorld.getCurrentLevel());
                 renderGame(g);
+                renderPlayerStats(g);
                 if (storyTeller.isOn()) {
                     gameWorld.stop();
                     gameScreenAlpha = 0.5f;
@@ -450,9 +441,6 @@ class View extends Canvas {
                 }
                 break;
             case END:
-                g.clearRect(0, 0, getWidth(), getHeight());
-                g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
-                g.setColor(Color.ORANGE);
                 g.setFont(new Font("Game Music Love", Font.BOLD, 100));
                 text = "A Game by Prashant";
                 fm = g.getFontMetrics();
@@ -465,7 +453,7 @@ class View extends Canvas {
                 textWidth = fm.stringWidth(text);
                 g.drawString(text, getWidth() / 2 - textWidth / 2, margin + fontHeight);
                 g.setFont(new Font("Game Music Love", Font.BOLD, 30));
-                text = "LEFT CLICK TO CONTINUE";
+                text = "LEFT CLICK TO GO TO MAIN MENU";
                 fm = g.getFontMetrics();
                 textWidth = fm.stringWidth(text);
                 fontHeight = fm.getHeight() + fm.getDescent() + fm.getAscent();
@@ -480,15 +468,37 @@ class View extends Canvas {
                     prevScreen = Screen.END;
                 }
                 break;
-
+            case GAME_OVER:
+                g.setFont(new Font("Game Music Love", Font.BOLD, 150));
+                text = "GAME OVER";
+                fm = g.getFontMetrics();
+                fontHeight = fm.getHeight() + fm.getDescent() + fm.getAscent();
+                textWidth = fm.stringWidth(text);
+                g.drawString(text, getWidth() / 2 - textWidth / 2, margin + fontHeight);
+                g.setFont(new Font("Game Music Love", Font.BOLD, 30));
+                text = "LEFT CLICK TO GO TO MAIN MENU";
+                fm = g.getFontMetrics();
+                textWidth = fm.stringWidth(text);
+                fontHeight = fm.getHeight() + fm.getDescent() + fm.getAscent();
+                textArea = new Rectangle(getWidth() / 2 - textWidth / 2, getHeight() - fontHeight - margin, textWidth, fontHeight);
+                if (textArea.contains(MouseController.getInstance().getCurrentPos())) {
+                    g.setColor(Color.GRAY);
+                }
+                g.drawString(text, getWidth() / 2 - textWidth / 2, getHeight() - margin);
+                MouseController.getInstance().poll();
+                if (MouseController.getInstance().isLeftClickedOnce()) {
+                    currScreen = Screen.MAIN;
+                    prevScreen = Screen.END;
+                }
+                break;
         }
 
-        //todo remove; only for debug
-        Point mousePos = MouseController.getInstance().getCurrentPos();
-        g.setColor(Color.RED);
-        g.setFont(new Font("Time New Roman", Font.BOLD, 20));
-        g.drawString(String.format("X=%s,Y=%s", mousePos.getX(), mousePos.getY()), mousePos.x, mousePos.y);
-
+        if (DEV_MODE) {
+            Point mousePos = MouseController.getInstance().getCurrentPos();
+            g.setColor(Color.RED);
+            g.setFont(new Font("Time New Roman", Font.BOLD, 20));
+            g.drawString(String.format("X=%s,Y=%s", mousePos.getX(), mousePos.getY()), mousePos.x, mousePos.y);
+        }
         g.dispose();
         bs.show();
     }
@@ -556,8 +566,8 @@ class View extends Canvas {
     }
 
     private enum Screen {
-        TITLE, LEVEL_SELECT, MAIN, QUIT_TO_MENU, PAUSE, QUIT, SETTINGS, CONTROL_LAYOUT, IN_GAME,
-        NEW_GAME, DIFFICULTY_SELECT, END
+        TITLE, MAIN, QUIT_TO_MENU, PAUSE, QUIT, SETTINGS, CONTROL_LAYOUT, IN_GAME,
+        NEW_GAME, DIFFICULTY_SELECT, END, GAME_OVER
     }
 
     private static class StoryTeller {

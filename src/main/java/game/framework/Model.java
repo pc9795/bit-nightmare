@@ -61,7 +61,7 @@ public class Model {
     private List<String> levels;
     private Boundary levelBoundary;
     private int currLevelIndex;
-    private boolean pause, started, completed;
+    private boolean pause, started, completed, gameOver;
     private Point2f lastCheckPointSaved;
     private Difficulty difficulty;
     private Descriptor descriptor;
@@ -175,6 +175,10 @@ public class Model {
         this.completed = completed;
     }
 
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
     public void nextLevel() {
         if (currLevelIndex == levels.size() - 1) {
             System.out.println("!!!WARNING!!!Next level requested at the last level.");
@@ -280,17 +284,26 @@ public class Model {
         if (lastCheckPointSaved != null && (lastCheckPointSaved.getX() == checkPointLocation.getX() && lastCheckPointSaved.getY() == checkPointLocation.getY())) {
             return;
         }
+
+        if (saveCheckPointUtil()) {
+            //Expecting that I am getting a copy so not calling copy().
+            lastCheckPointSaved = checkPointLocation;
+        }
+    }
+
+    private boolean saveCheckPointUtil() {
         try {
             Path savePath = savePath();
             //Auto closing
             try (FileOutputStream fos = new FileOutputStream(savePath.toFile()); ObjectOutputStream oos = new ObjectOutputStream(fos)) {
                 oos.writeObject(toCheckpoint());
             }
-            //Expecting that I am getting a copy so not calling copy().
-            lastCheckPointSaved = checkPointLocation;
+            return true;
+
         } catch (Exception exc) {
             System.out.println("Not able to save checkpoint");
             exc.printStackTrace();
+            return false;
         }
     }
 
@@ -312,13 +325,6 @@ public class Model {
     public void loadLastCheckPoint() {
         Checkpoint checkpoint;
         try {
-            //If no check point then load the current level.
-            if (!isLastCheckpointAvailable()) {
-                assert difficulty != null : "Difficulty can't be null at this point";
-                loadLevel(currLevelIndex, difficulty);
-                return;
-            }
-
             Path savePath = savePath();
             //Auto closing
             try (FileInputStream fis = new FileInputStream(savePath.toFile()); ObjectInputStream ois = new ObjectInputStream(fis)) {
@@ -331,6 +337,7 @@ public class Model {
             player1.setBitBotFound(checkpoint.player1.isBitBotFound());
             player1.setWeapons(checkpoint.player1.getWeapons());
             player1.setCurrentWeaponIndex(checkpoint.player1.getCurrentWeaponIndex());
+            player1.setLives(checkpoint.player1.getLives());
 
             //Removing collectibles which wre already found. This code looks like mess but right now I think it is
             //the best way to do it may be can clean in future.
@@ -359,6 +366,17 @@ public class Model {
         pause = false;
     }
 
+    private void gameOver() {
+        try {
+            Files.delete(savePath());
+
+        } catch (IOException e) {
+            System.out.println("Unable to delete old saves");
+            e.printStackTrace();
+        }
+        gameOver = true;
+    }
+
     /**
      * This is the heart of the game , where the model takes in all the inputs ,decides the outcomes and then changes the model accordingly.
      */
@@ -371,6 +389,12 @@ public class Model {
         }
         if (player1.getHealth() <= 0) {
             loadLastCheckPoint();
+            player1.decreaseLives();
+            if (player1.getLives() == 0) {
+                gameOver();
+                return;
+            }
+            saveCheckPointUtil();
         }
         processInput();
         //Player
