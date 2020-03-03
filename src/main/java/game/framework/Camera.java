@@ -8,6 +8,7 @@ import static game.utils.Constants.CAMERA_OFFSET;
 
 /**
  * Created By: Prashant Chaubey
+ * Student No: 18200540
  * Created On: 19-02-2020 00:48
  * Purpose: Camera object which follows a object
  * <p>

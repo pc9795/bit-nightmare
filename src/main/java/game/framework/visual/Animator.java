@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 
 /**
  * Created By: Prashant Chaubey
+ * Student No: 18200540
  * Created On: 23-02-2020 18:26
  * Purpose: Class which generate animation from a set of images.
  * <p>

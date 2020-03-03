@@ -10,6 +10,7 @@ import java.awt.*;
 
 /**
  * Created By: Prashant Chaubey
+ * Student No: 18200540
  * Created On: 18-02-2020 00:00
  * Purpose: BitBot collectible which gives jumping ability to the player
  **/

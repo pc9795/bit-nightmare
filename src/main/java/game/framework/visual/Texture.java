@@ -8,6 +8,7 @@ import java.io.IOException;
 
 /**
  * Created By: Prashant Chaubey
+ * Student No: 18200540
  * Created On: 23-02-2020 18:21
  * Purpose: Represents texture for a game object
  * <p>

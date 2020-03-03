@@ -12,6 +12,7 @@ import static game.utils.Constants.CAMERA_OFFSET;
 
 /**
  * Created By: Prashant Chaubey
+ * Student No: 18200540
  * Created On: 02-03-2020 21:16
  * Purpose: A game object which displays information about other game objects
  **/

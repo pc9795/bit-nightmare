@@ -2,6 +2,7 @@ package game.framework.narrator;
 
 /**
  * Created By: Prashant Chaubey
+ * Student No: 18200540
  * Created On: 25-02-2020 13:41
  * Purpose: Configuration for stories.
  **/

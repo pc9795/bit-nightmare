@@ -2,6 +2,7 @@ package game.framework.visual;
 
 /**
  * Created By: Prashant Chaubey
+ * Student No: 18200540
  * Created On: 23-02-2020 18:25
  * Purpose: An object representing texture configuration
  **/

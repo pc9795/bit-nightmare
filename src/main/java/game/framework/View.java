@@ -48,6 +48,8 @@ SOFTWARE.
  */
 
 /**
+ * Created By: Prashant Chaubey
+ * Student No: 18200540
  * Class which is responsible for rendering everything on the screen.
  */
 class View extends Canvas {

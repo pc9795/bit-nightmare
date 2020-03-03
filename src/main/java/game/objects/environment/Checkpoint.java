@@ -8,6 +8,7 @@ import java.awt.*;
 
 /**
  * Created By: Prashant Chaubey
+ * Student No: 18200540
  * Created On: 21-02-2020 14:26
  * Purpose: Game object representing a point where player can save its progress
  **/

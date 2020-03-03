@@ -52,6 +52,8 @@ SOFTWARE.
  */
 
 /**
+ * Created By: Prashant Chaubey
+ * Student No: 18200540
  * To start the model see `loadLastCheckpoint` and `loadLevel`
  */
 public class Model {

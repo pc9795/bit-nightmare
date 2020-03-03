@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 
 /**
  * Created By: Prashant Chaubey
+ * Student No: 18200540
  * Created On: 25-02-2020 13:54
  * Purpose: Represents a story identified by the text and the actor.
  **/

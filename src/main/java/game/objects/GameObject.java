@@ -35,6 +35,8 @@ SOFTWARE.
  */
 
 /**
+ * Created By: Prashant Chaubey
+ * Student No: 18200540
  * A class which is the building block for other game objects.
  * <p>
  * REF: https://www.youtube.com/watch?v=LLTCdv2KFkc&list=PLWms45O3n--54U-22GDqKMRGlXROOZtMx&index=3
