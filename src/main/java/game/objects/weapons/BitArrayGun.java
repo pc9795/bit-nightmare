@@ -4,12 +4,13 @@ import game.framework.Model;
 import game.objects.GameObject;
 import game.objects.weapons.bullets.BitArrayGunBullet;
 import game.physics.Point2f;
+import game.properties.Weapon;
 
 import java.awt.*;
-import java.io.Serializable;
 
 /**
  * Created By: Prashant Chaubey
+ * Student No: 18200540
  * Created On: 18-02-2020 00:02
  * Purpose: Bit array gun
  **/

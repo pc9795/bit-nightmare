@@ -33,11 +33,14 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-   
-   (MIT LICENSE ) e.g do what you want with this :-) 
+
+   (MIT LICENSE ) e.g do what you want with this :-)
  */
 
-
+/**
+ * Created By: Prashant Chaubey
+ * Student No: 18200540
+ */
 public class Game extends JFrame implements Runnable {
     private Model gameWorld;
     private View canvas;
@@ -52,24 +55,18 @@ public class Game extends JFrame implements Runnable {
     }
 
     public void start() {
-        //Loading model
         try {
             gameWorld = new Model(width, height);
+            registerFonts();
+            canvas = new View(gameWorld);
 
         } catch (Exception e) {
-            System.out.println("Not able to load the game world.");
+            System.out.println("Not able to load the game.");
             e.printStackTrace();
             System.exit(1);
         }
-        try {
-            registerFonts();
 
-        } catch (Exception e) {
-            System.out.println("Not able to register fonts");
-            e.printStackTrace();
-        }
-        //Loading and configuring view
-        canvas = new View(gameWorld);
+        // Configuring view
         // It is important that the preferred size is set on the GamePanel and not on the JFrame. If the application
         // size is set on the JFrame, some of the drawing area will be taken up by the frame and the drawing area will
         // be little smaller.
@@ -84,8 +81,8 @@ public class Game extends JFrame implements Runnable {
         canvas.addMouseMotionListener(MouseController.getInstance());
         canvas.addMouseWheelListener(MouseController.getInstance());
         GamepadController.getInstance().setDetecting(true);
-        //gamepadControllerThread = new Thread(GamepadController.getInstance());
-        //gamepadControllerThread.start();
+        gamepadControllerThread = new Thread(GamepadController.getInstance());
+        gamepadControllerThread.start();
 
         //Configuring game window
         getContentPane().add(canvas);
@@ -103,15 +100,22 @@ public class Game extends JFrame implements Runnable {
         setVisible(true);
 
         running = true;
+        //REF: https://books.google.ie/books/about/Fundamental_2D_Game_Programming_with_Jav.html?id=iRFvCgAAQBAJ&redir_esc=y
+        //The idea of starting rendering in a separate thread is taken from the chapter 1 of this book.
         // Starting game thread
         gameThread = new Thread(this);
         gameThread.start();
     }
 
+    /**
+     * REF: https://www.youtube.com/watch?v=Zh7YiiEuJFw&list=PLWms45O3n--54U-22GDqKMRGlXROOZtMx&index=2
+     * I have used the mentioned video to design my game loop.
+     */
     @Override
     public void run() {
         canvas.requestFocus();
-        //JukeBox.getInstance().playTheme();
+        JukeBox.getInstance().playTheme();
+
         // Can shift to nano seconds if need more accuracy with frames.
         long lastTime = System.currentTimeMillis();
         double timeBetweenFrames = 1000 / Constants.TARGET_FPS;
@@ -148,21 +152,30 @@ public class Game extends JFrame implements Runnable {
 
     private void onWindowClosing() {
         try {
-            running = false;
+            //Waiting  for controller thread to finish.
             GamepadController.getInstance().setDetecting(false);
             if (gamepadControllerThread != null) {
                 gamepadControllerThread.join();
             }
+            //Waiting for the game thread to finish
+            running = false;
             if (gameThread != null) {
                 gameThread.join();
             }
 
         } catch (InterruptedException e) {
+            System.out.println("Error while closing game.");
             e.printStackTrace();
         }
         System.exit(0);
     }
 
+    /**
+     * Register fonts
+     *
+     * @throws IOException         fonts not found at the location
+     * @throws FontFormatException fonts are not of correct format.
+     */
     private void registerFonts() throws IOException, FontFormatException {
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         //REF: https://www.1001fonts.com/game-music-love-font.html

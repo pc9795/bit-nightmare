@@ -9,8 +9,13 @@ import java.util.List;
 
 /**
  * Created By: Prashant Chaubey
+ * Student No: 18200540
  * Created On: 18-02-2020 20:15
  * Purpose: Quad tree for game objects
+ * <p>
+ * REF: https://gamedevelopment.tutsplus.com/tutorials/quick-tip-use-quadtrees-to-detect-likely-collisions-in-2d-space--gamedev-374
+ * Used the following article for the basics. I have refactored and re-purposed the discussed implementation for game objects.
+ * In addition I have implemented a `chop` method so that it works for unbalanced objects and boundary cases.
  **/
 public class QuadTree {
     //How many objects a node can hold

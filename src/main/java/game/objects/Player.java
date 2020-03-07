@@ -6,8 +6,10 @@ import game.framework.visual.Animator;
 import game.objects.environment.Gate;
 import game.objects.environment.HidingBlock;
 import game.objects.environment.movables.MovableBlock;
-import game.objects.weapons.Weapon;
+import game.properties.Enemy;
+import game.properties.Weapon;
 import game.physics.Point2f;
+import game.properties.Animated;
 import game.properties.Healthy;
 
 import java.awt.*;
@@ -18,6 +20,7 @@ import static game.utils.Constants.DEV_MODE;
 
 /**
  * Created By: Prashant Chaubey
+ * Student No: 18200540
  * Created On: 17-02-2020 23:07
  * Purpose: Player of the game
  **/
@@ -32,7 +35,7 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
     private static final int DEFAULT_LIVES = 10;
     //Variables
     private List<Weapon> weapons;
-    private boolean ducking, attacking, bitBotFound, hasKey;
+    private boolean ducking, attacking, bitBotFound, hasKey, cantDuck;
     private int health, maxHealth, currentWeaponIndex, lives;
     private transient long lastFiredBullet;
     private float speedX, speedY, bulletFreqInSec;
@@ -128,12 +131,18 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
         }
 
         if (DEV_MODE) {
+            //Debug for player position.
             g.setColor(Color.RED);
             g.setFont(new Font("Time New Roman", Font.BOLD, 20));
             g.drawString(String.format("X:%s,Y:%s", (int) centre.getX(), (int) centre.getY()), (int) centre.getX(), (int) centre.getY() - 20);
         }
     }
 
+    /**
+     * Render the texture for the given object
+     *
+     * @param g grpahics object
+     */
     private void renderTexture(Graphics g) {
         Animator animator = null;
         switch (facingDirection) {
@@ -175,10 +184,14 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
         }
     }
 
+    /**
+     * When there is no texture it will render a rectangle with a selected color for this object
+     *
+     * @param g graphics object
+     */
     private void renderDefault(Graphics g) {
         g.setColor(new Color(0, 0, 255));
         g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
-        //todo remove
         Graphics2D g2d = (Graphics2D) g;
         g.setColor(Color.RED);
         g2d.draw(getBoundsBottom());
@@ -202,8 +215,10 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
     private void collisionWithEnvironment(Model model) {
         boolean[] collisions;
         boolean bottomCollision = false;
+
         List<GameObject> willCollide = model.getEnvironmentQuadTree().retrieve(this);
         willCollide.addAll(model.getMovableEnvironment());
+
         for (GameObject env : willCollide) {
             Rectangle bounds = env.getBounds();
             switch (env.getType()) {
@@ -242,6 +257,10 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
                     if (collisions[FineGrainedCollider.BOTTOM]) {
                         bottomCollision = true;
                     }
+                    //Ideally it should be implemented with all the scenarios where we are checking fine grained
+                    //Collision but not needed now.
+                    //fixme because of checking individual collisions this is not working.
+                    cantDuck = collisions[FineGrainedCollider.BOTTOM] && collisions[FineGrainedCollider.TOP];
                     break;
                 case MOVABLE_BLOCK:
                     collisions = fineGrainedCollision(this, env);
@@ -293,6 +312,7 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
                     hasKey = true;
                     break;
             }
+            //Collectibles are picked up so removed from the world.
             model.getCollectibles().remove(obj);
         }
     }
@@ -310,7 +330,7 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
                 case SUPER_SOLDIER:
                 case CHARGER:
                     //Don't touch me
-                    if (obj.getBounds().intersects(getBounds())) {
+                    if (obj.getBounds().intersects(getBounds()) && !((Enemy) obj).isDead()) {
                         health = 0;
                     }
                     break;
@@ -338,6 +358,9 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
         return new Rectangle((int) (centre.getX() + (width / 2) - (width / 4)), (int) (centre.getY() + height / 2), width / 2, height / 2);
     }
 
+    /**
+     * Cycle weapons.
+     */
     public void cycleWeapon() {
         if (currentWeaponIndex == -1) {
             return;
@@ -345,6 +368,11 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
         currentWeaponIndex = (currentWeaponIndex + 1) % weapons.size();
     }
 
+    /**
+     * Fire weapon
+     *
+     * @return a bullet as a result of firing weapon.
+     */
     public GameObject fireWeapon() {
         attacking = true;
         if (currentWeaponIndex == -1) {
@@ -364,14 +392,22 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
         return weapons.get(currentWeaponIndex).fire(bulletPos, facingDirection);
     }
 
+    /**
+     * Add a weapon
+     *
+     * @param weapon weapon
+     */
     private void addWeapon(Weapon weapon) {
         weapons.add(weapon);
         currentWeaponIndex = weapons.size() - 1;
     }
 
+    /**
+     * Move right.
+     */
     public void moveRight() {
-        //ADJUST ACCORDING TO DEFAULTS
         if (ducking) {
+            //ADJUST ACCORDING TO DEFAULTS
             velocity.setX(speedX - 1);
         } else {
             velocity.setX(speedX);
@@ -380,9 +416,12 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
         attacking = false;
     }
 
+    /**
+     * Move left
+     */
     public void moveLeft() {
-        //ADJUST ACCORDING TO DEFAULTS
         if (ducking) {
+            //ADJUST ACCORDING TO DEFAULTS
             velocity.setX(-speedX + 1f);
         } else {
             velocity.setX(-speedX);
@@ -392,6 +431,9 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
         attacking = false;
     }
 
+    /**
+     * Stand still.
+     */
     public void makeIdle() {
         if (velocity.getX() > 0) {
             facingDirection = FacingDirection.RIGHT;
@@ -401,8 +443,15 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
         velocity.setX(0);
     }
 
+    /**
+     * Duck and Stand
+     */
     public void toggleDuck() {
         if (ducking) {
+            //In the case when in tunnel kind of structure.
+            if (cantDuck) {
+                return;
+            }
             centre.setY(centre.getY() - height / 2);
             height *= 2;
             ducking = false;
@@ -413,11 +462,15 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
         }
     }
 
+    /**
+     * Jump
+     */
     public void jump() {
         if (jumping || !isBitBotFound()) {
             return;
         }
         if (ducking) {
+            //ADJUST ACCORDING TO DEFAULTS
             velocity.setY(-speedY + 1);
         } else {
             velocity.setY(-speedY);

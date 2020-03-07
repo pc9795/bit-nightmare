@@ -28,6 +28,8 @@ SOFTWARE.
 import java.io.Serializable;
 
 /**
+ * Created By: Prashant Chaubey
+ * Student No: 18200540
  * Modified from Graphics 3033J course point class  by Abey Campbell
  * It behaves same as `Point2f` but will help in distinguishing the applications.
  */

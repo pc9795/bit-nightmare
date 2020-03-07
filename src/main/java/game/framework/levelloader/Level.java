@@ -5,10 +5,12 @@ import java.util.List;
 
 /**
  * Created By: Prashant Chaubey
+ * Student No: 18200540
  * Created On: 20-02-2020 14:56
  * Purpose: An object containing the information about a level
  **/
 public class Level {
+    //The maximum x and y coordinates found. These represents a boundary for the level.
     private int maxX, maxY;
     private List<LevelObject> levelObjects;
 

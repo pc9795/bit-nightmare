@@ -2,13 +2,14 @@ package game.objects.enemies.adapters;
 
 import game.framework.Model;
 import game.framework.visual.Animator;
-import game.objects.Animated;
+import game.properties.Animated;
 import game.physics.Point2f;
 
 /**
  * Created By: Prashant Chaubey
+ * Student No: 18200540
  * Created On: 24-02-2020 01:59
- * Purpose: TODO:
+ * Purpose: This object will shoot and duck
  **/
 public class ShootingAndDuckingEnemyAdapter extends ShootingEnemyAdapter implements Animated {
     protected boolean ducking;
@@ -66,13 +67,12 @@ public class ShootingAndDuckingEnemyAdapter extends ShootingEnemyAdapter impleme
         }
         //Detect player and attack
         attackPlayer(model);
-
         //Check collision
         falling = enemyCollision(this, model);
     }
 
     /**
-     * toogle ducking state
+     * toggle ducking state
      */
     protected void toggleDuck() {
         if (ducking) {
@@ -86,5 +86,4 @@ public class ShootingAndDuckingEnemyAdapter extends ShootingEnemyAdapter impleme
             ducking = true;
         }
     }
-
 }

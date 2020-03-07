@@ -2,10 +2,12 @@ package game.framework.visual;
 
 /**
  * Created By: Prashant Chaubey
+ * Student No: 18200540
  * Created On: 23-02-2020 18:25
  * Purpose: An object representing texture configuration
  **/
-@SuppressWarnings({"WeakerAccess", "unused"}) //Public access is needed by jackson. Fields are assigned by jackson
+//We need public getter methods for jackson to work that's why suppressing the warnings.
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class TextureConfig {
     private String type;
     private String[] spriteSheets;
@@ -82,12 +84,22 @@ public class TextureConfig {
         SPRITE_SHEET, SINGLE
     }
 
+    /**
+     * Image configuration for a particular texture property such as `idealRight`.
+     */
     public static class ImageConfig {
+        //If the `ImageType` is SPRITE_SHEET then it will hold the index of the sprite sheet loaded in the main texture
+        //configuration
         private int index;
+        //Applicable for `ImageType` SPRITE_SHEET. Width of the sub image inside sprite sheet.
         private int width;
+        //Applicable for `ImageType` SPRITE_SHEET. Height of the sub image inside sprite sheet.
         private int height;
+        //Applicable for `ImageType` SPRITE_SHEET. x position of the sub image inside sprite sheet. 1-based index.
         private int x;
+        //Applicable for `ImageType` SPRITE_SHEET. y position of the sub image inside sprite sheet. 1-based index.
         private int y;
+        //Applicable for `ImageType` SINGLE. Location of the image.
         private String imgLoc;
         private ImageType imageType;
 

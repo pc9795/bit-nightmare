@@ -12,14 +12,17 @@ import static game.utils.Constants.CAMERA_OFFSET;
 
 /**
  * Created By: Prashant Chaubey
+ * Student No: 18200540
  * Created On: 02-03-2020 21:16
- * Purpose: TODO:
+ * Purpose: A game object which displays information about other game objects
  **/
 public class Descriptor extends GameObject {
+    //Constants
     private static final int DEFAULT_HEIGHT = 16;
     private static final int DEFAULT_WIDTH = 16;
     private static final int DEFAULT_DIALOG_WIDTH = 200;
     private static final int DEFAULT_DIALOG_HEIGHT = 100;
+    //Variables
     private String desc;
     private int dialogWidth, dialogHeight;
     private Font font;
@@ -28,9 +31,14 @@ public class Descriptor extends GameObject {
         super(DEFAULT_WIDTH, DEFAULT_HEIGHT, new Point2f(0, 0), type);
         dialogHeight = DEFAULT_DIALOG_HEIGHT;
         dialogWidth = DEFAULT_DIALOG_WIDTH;
+        //Caching a font.
         font = new Font("Times New Roman", Font.BOLD, 16);
     }
 
+    /**
+     * @param type game object type
+     * @return description of a given game object type
+     */
     private String getDescription(GameObjectType type) {
         switch (type) {
             case CHARGER:
@@ -92,10 +100,13 @@ public class Descriptor extends GameObject {
 
     @Override
     public void perceiveEnv(Model model) {
+        //Description is shown when the right button of mouse is pressed.
         if (!MouseController.getInstance().isRightClicked()) {
             desc = null;
             return;
         }
+        //Configure the centre according to the mouse position. We use the fact that we know the poistion of the player
+        //because of camera offset.
         Point mousePtr = MouseController.getInstance().getCurrentPos();
         float x = (float) (model.getPlayer1().getCentre().getX() + (mousePtr.getX() - CAMERA_OFFSET));
         centre = new Point2f(x, (float) mousePtr.getY());
@@ -104,6 +115,7 @@ public class Descriptor extends GameObject {
         willCollide.addAll(model.getMovableEnvironment());
         willCollide.addAll(model.getCollectibles());
         willCollide.addAll(model.getEnemies());
+
         boolean descFound = false;
         for (GameObject env : willCollide) {
             if (!env.getBounds().contains(centre.toAWTPoint())) {

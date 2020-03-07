@@ -3,10 +3,11 @@ package game.objects.enemies;
 import game.colliders.FineGrainedCollider;
 import game.framework.Model;
 import game.framework.visual.Animator;
-import game.objects.Animated;
+import game.properties.Animated;
 import game.objects.Difficulty;
 import game.objects.GameObject;
 import game.physics.Point2f;
+import game.properties.Enemy;
 import game.properties.Healthy;
 
 import java.awt.*;
@@ -14,6 +15,7 @@ import java.util.List;
 
 /**
  * Created By: Prashant Chaubey
+ * Student No: 18200540
  * Created On: 18-02-2020 00:01
  * Purpose: Charges at player.
  **/
@@ -26,7 +28,7 @@ public class Charger extends GameObject implements FineGrainedCollider, Healthy,
     private static final int DEFAULT_LOS = 300;
     private static final int DEFAULT_HEALTH = 30;
     //Variables
-    private boolean playerDetected;
+    private boolean playerDetected, dead;
     private int health, los, maxHealth;
     private float speedX;
     private Animator idleRight, idleLeft;
@@ -87,6 +89,11 @@ public class Charger extends GameObject implements FineGrainedCollider, Healthy,
         showHealth(centre, health, maxHealth, g);
     }
 
+    /**
+     * Render the texture for the given object
+     *
+     * @param g grpahics object
+     */
     private void renderTexture(Graphics g) {
         Animator animator = null;
         switch (facingDirection) {
@@ -101,6 +108,11 @@ public class Charger extends GameObject implements FineGrainedCollider, Healthy,
         animator.draw(g, (int) centre.getX(), (int) centre.getY(), width, height);
     }
 
+    /**
+     * When there is no texture it will render a rectangle with a selected color for this object
+     *
+     * @param g graphics object
+     */
     private void renderDefault(Graphics g) {
         g.setColor(new Color(136, 9, 27));
         g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);
@@ -111,6 +123,7 @@ public class Charger extends GameObject implements FineGrainedCollider, Healthy,
         //Cease to exist
         if (health <= 0) {
             model.getEnemies().remove(this);
+            dead = true;
             return;
         }
 
@@ -120,8 +133,10 @@ public class Charger extends GameObject implements FineGrainedCollider, Healthy,
         //Collisions
         boolean[] collisions;
         boolean bottomCollision = false;
+
         List<GameObject> willCollide = model.getEnvironmentQuadTree().retrieve(this);
         willCollide.addAll(model.getMovableEnvironment());
+
         for (GameObject env : willCollide) {
             Rectangle bounds = env.getBounds();
             switch (env.getType()) {
@@ -139,9 +154,11 @@ public class Charger extends GameObject implements FineGrainedCollider, Healthy,
                     if (collisions[FineGrainedCollider.BOTTOM]) {
                         bottomCollision = true;
                     } else if (collisions[FineGrainedCollider.LEFT]) {
+                        //Turn the direction
                         facingDirection = FacingDirection.RIGHT;
                         velocity.setX(speedX);
                     } else if (collisions[FineGrainedCollider.RIGHT]) {
+                        //Turn the direction
                         facingDirection = FacingDirection.LEFT;
                         velocity.setX(-speedX);
                     }
@@ -173,6 +190,11 @@ public class Charger extends GameObject implements FineGrainedCollider, Healthy,
             velocity.setX(speedX);
         }
         playerDetected = true;
+    }
+
+    @Override
+    public boolean isDead() {
+        return dead;
     }
 
     @Override

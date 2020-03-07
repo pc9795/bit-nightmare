@@ -4,7 +4,7 @@ import game.framework.Model;
 import game.objects.Difficulty;
 import game.objects.GameObject;
 import game.objects.GameObjectFactory;
-import game.objects.enemies.Enemy;
+import game.properties.Enemy;
 import game.physics.Point2f;
 
 import java.awt.*;
@@ -14,6 +14,7 @@ import java.util.Random;
 
 /**
  * Created By: Prashant Chaubey
+ * Student No: 18200540
  * Created On: 18-02-2020 00:02
  * Purpose: A portal which can spawn different enemies
  **/
@@ -116,5 +117,10 @@ public class EnemyPortal extends GameObject implements Enemy {
         model.getEnemies().add(enemy);
         lastBeingSpawned = now;
         enemyCount--;
+    }
+
+    @Override
+    public boolean isDead() {
+        return false;
     }
 }

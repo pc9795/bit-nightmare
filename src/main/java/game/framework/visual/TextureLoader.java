@@ -12,6 +12,7 @@ import java.util.Map;
 
 /**
  * Created By: Prashant Chaubey
+ * Student No: 18200540
  * Created On: 23-02-2020 18:05
  * Purpose: Load texture for various game objects
  **/
@@ -34,9 +35,16 @@ public class TextureLoader {
         return INSTANCE;
     }
 
+    /**
+     * Initialization
+     *
+     * @throws IOException if the configuration file is missing.
+     */
     private void init() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
+        //I have added references for the images inside the JSON itself therefore enabling comments.
         mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+
         try (InputStream in = TextureLoader.class.getResourceAsStream(Constants.TEXTURE_CONFIG_FILE_LOC)) {
             //Loading data from json
             TextureConfig[] configs = mapper.readValue(in, TextureConfig[].class);
@@ -55,6 +63,10 @@ public class TextureLoader {
         }
     }
 
+    /**
+     * @param type game object type
+     * @return texture for a given object type.
+     */
     public Texture getTexture(GameObject.GameObjectType type) {
         return textureInfo.get(type);
     }

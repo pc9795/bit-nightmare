@@ -7,7 +7,7 @@ import game.framework.levelloader.Level;
 import game.framework.levelloader.LevelLoader;
 import game.framework.levelloader.LevelObject;
 import game.objects.*;
-import game.objects.weapons.Weapon;
+import game.properties.Weapon;
 import game.physics.Boundary;
 import game.physics.Point2f;
 import game.physics.QuadTree;
@@ -52,6 +52,8 @@ SOFTWARE.
  */
 
 /**
+ * Created By: Prashant Chaubey
+ * Student No: 18200540
  * To start the model see `loadLastCheckpoint` and `loadLevel`
  */
 public class Model {
@@ -61,13 +63,14 @@ public class Model {
     private List<String> levels;
     private Boundary levelBoundary;
     private int currLevelIndex;
+    //`started` is used for story telling and `pause` is for pause menu.
     private boolean pause, started, completed, gameOver;
     private Point2f lastCheckPointSaved;
     private Difficulty difficulty;
     private Descriptor descriptor;
 
     public Model(int width, int height) throws IOException, URISyntaxException {
-        //Things which will be added and removed are stored in ArrayList.
+        //Things which will be added and removed are stored in CopyOnWriteArrayList.
         this.enemies = new CopyOnWriteArrayList<>();
         this.environment = new ArrayList<>();
         this.collectibles = new CopyOnWriteArrayList<>();
@@ -76,6 +79,7 @@ public class Model {
         this.movableEnvironment = new ArrayList<>();
         this.bullets = new CopyOnWriteArrayList<>();
         this.levelBoundary = new Boundary(width, height);
+        this.descriptor = new Descriptor(GameObject.GameObjectType.DESCRIPTOR);
         init();
     }
 
@@ -96,7 +100,12 @@ public class Model {
         if (levels.size() == 0) {
             throw new RuntimeException("No levels to load");
         }
-        this.descriptor = new Descriptor(GameObject.GameObjectType.DESCRIPTOR);
+
+        Path saveDirectory = Paths.get(Paths.get(System.getProperty("user.home")).toString(), Constants.SAVE_DIRECTORY_NAME);
+        //Creating save directory if not exist.
+        if (!Files.isDirectory(saveDirectory)) {
+            Files.createDirectory(saveDirectory);
+        }
     }
 
     public Difficulty getDifficulty() {
@@ -135,15 +144,11 @@ public class Model {
         return levelBoundary;
     }
 
-    public List<String> getLevels() {
-        return levels;
-    }
-
-    public void pause() {
+    void pause() {
         pause = true;
     }
 
-    public void resume() {
+    void resume() {
         pause = false;
     }
 
@@ -151,23 +156,23 @@ public class Model {
         started = true;
     }
 
-    public void stop() {
+    void stop() {
         started = false;
     }
 
-    public boolean isPaused() {
+    boolean isPaused() {
         return pause;
     }
 
-    public Descriptor getDescriptor() {
+    Descriptor getDescriptor() {
         return descriptor;
     }
 
-    public String getCurrentLevel() {
+    String getCurrentLevel() {
         return levels.get(currLevelIndex);
     }
 
-    public boolean isCompleted() {
+    boolean isCompleted() {
         return completed;
     }
 
@@ -175,27 +180,48 @@ public class Model {
         this.completed = completed;
     }
 
-    public boolean isGameOver() {
+    boolean isGameOver() {
         return gameOver;
     }
 
+    /**
+     * Start a new game
+     *
+     * @param difficulty difficulty
+     * @throws IOException if not able to save checkpoint.
+     */
+    void newGame(Difficulty difficulty) throws IOException {
+        loadLevel(0, difficulty);
+        saveCheckpoint(getPlayer1().getCentre().copy());
+        gameOver = false;
+    }
+
+    /**
+     * Switch to the next level in the list of levels.
+     * Usually if any logic change in `loadLastCheckpoint` then we have to assess and make some changes here. As it is
+     * also caching some state and transferring it to the next level. We can work on breaking this dependency.
+     */
     public void nextLevel() {
         if (currLevelIndex == levels.size() - 1) {
             System.out.println("!!!WARNING!!!Next level requested at the last level.");
             return;
         }
         try {
-            //Can look for a better way to do it. Currently changing levels can't be saved.
             //Caching previous state
             boolean bitBotFound = player1.isBitBotFound();
             List<Weapon> weapons = player1.getWeapons();
             int currWeaponIndex = player1.getCurrentWeaponIndex();
+            int lives = player1.getLives();
+
             //Loading next level
             loadLevel(currLevelIndex + 1, difficulty);
+
             //Setting the cached state.
             player1.setBitBotFound(bitBotFound);
             player1.setWeapons(weapons);
             player1.setCurrentWeaponIndex(currWeaponIndex);
+            player1.setLives(lives);
+
             //Saving checkpoint on next level.
             saveCheckpoint(player1.getCentre().copy());
 
@@ -203,11 +229,6 @@ public class Model {
             System.out.println(String.format("Unable to load level at index:%s from levels:%s", currLevelIndex + 1, levels));
             e.printStackTrace();
         }
-    }
-
-    public void newGame(Difficulty difficulty) throws IOException {
-        loadLevel(0, difficulty);
-        saveCheckpoint(getPlayer1().getCentre().copy());
     }
 
     /**
@@ -232,10 +253,10 @@ public class Model {
      * @param level level object
      */
     private void loadLevelUtil(Level level, Difficulty difficulty) {
-        this.levelBoundary = new Boundary(level.getMaxX() * Constants.Level.PIXEL_TO_WIDTH_RATIO,
-                level.getMaxY() * Constants.Level.PIXEL_TO_WIDTH_RATIO);
+        this.levelBoundary = new Boundary(level.getMaxX() * Constants.Level.PIXEL_TO_WIDTH_RATIO, level.getMaxY() * Constants.Level.PIXEL_TO_WIDTH_RATIO);
+
         // QuadTree is to be initialized by the new boundaries.
-        environmentQuadTree = new QuadTree(new Rectangle(0, 0, (int) levelBoundary.getxMax(), (int) levelBoundary.getyMax()));
+        this.environmentQuadTree = new QuadTree(new Rectangle(0, 0, (int) levelBoundary.getxMax(), (int) levelBoundary.getyMax()));
 
         //Convert level objects to game object
         for (LevelObject object : level.getLevelObjects()) {
@@ -246,10 +267,10 @@ public class Model {
 
             } catch (Exception e) {
                 System.out.println(String.format("Invalid configuration found while loading level with type: %s", object.getType()));
+                e.printStackTrace();
                 continue;
             }
-            Point2f center = new Point2f(object.getCentre().getX() * Constants.Level.PIXEL_TO_WIDTH_RATIO,
-                    object.getCentre().getY() * Constants.Level.PIXEL_TO_WIDTH_RATIO, levelBoundary);
+            Point2f center = new Point2f(object.getCentre().getX() * Constants.Level.PIXEL_TO_WIDTH_RATIO, object.getCentre().getY() * Constants.Level.PIXEL_TO_WIDTH_RATIO, levelBoundary);
             GameObject gameObject = GameObjectFactory.getGameObject(type, center, difficulty);
             addGameObject(gameObject);
         }
@@ -268,17 +289,24 @@ public class Model {
         collectibles.clear();
         bullets.clear();
         movableEnvironment.clear();
+        lastCheckPointSaved = null;
         player1 = null;
     }
 
-    private Path savePath() throws IOException {
+    /**
+     * @return save path of the checkpoints
+     */
+    private Path savePath() {
         Path saveDirectory = Paths.get(Paths.get(System.getProperty("user.home")).toString(), Constants.SAVE_DIRECTORY_NAME);
-        if (!Files.isDirectory(saveDirectory)) {
-            Files.createDirectory(saveDirectory);
-        }
         return Paths.get(saveDirectory.toString(), Constants.SAVE_FILE_NAME);
     }
 
+    /**
+     * Save check point at a checkpoint location. This will cache the checkpoint location so that repeated saving doesn't
+     * occur if player is standing at a checkpoint.
+     *
+     * @param checkPointLocation location of the check point.
+     */
     public void saveCheckpoint(Point2f checkPointLocation) {
         //If player is standing on the same checkpoint.
         if (lastCheckPointSaved != null && (lastCheckPointSaved.getX() == checkPointLocation.getX() && lastCheckPointSaved.getY() == checkPointLocation.getY())) {
@@ -291,6 +319,11 @@ public class Model {
         }
     }
 
+    /**
+     * Save the state of the game world
+     *
+     * @return true if successful in saving.
+     */
     private boolean saveCheckPointUtil() {
         try {
             Path savePath = savePath();
@@ -307,22 +340,17 @@ public class Model {
         }
     }
 
-    public boolean isLastCheckpointAvailable() {
-        Path savePath;
-        try {
-            savePath = savePath();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return Files.exists(savePath);
+    /**
+     * @return true if a check point is available.
+     */
+    boolean isLastCheckpointAvailable() {
+        return Files.exists(savePath());
     }
 
     /**
      * Load a last checkpoint
      */
-    public void loadLastCheckPoint() {
+    void loadLastCheckPoint() {
         Checkpoint checkpoint;
         try {
             Path savePath = savePath();
@@ -332,7 +360,8 @@ public class Model {
             }
 
             loadLevel(checkpoint.currLevelIndex, checkpoint.difficulty);
-            //Configuring player attributes.
+
+            //Restoring player attributes.
             player1.setCentre(checkpoint.player1.getCentre());
             player1.setBitBotFound(checkpoint.player1.isBitBotFound());
             player1.setWeapons(checkpoint.player1.getWeapons());
@@ -341,9 +370,12 @@ public class Model {
 
             //Removing collectibles which wre already found. This code looks like mess but right now I think it is
             //the best way to do it may be can clean in future.
+
             //Checking which weapon types are found.
             Set<GameObject.GameObjectType> weaponTypes = new HashSet<>();
             checkpoint.player1.getWeapons().forEach(weapon -> weaponTypes.add(((GameObject) weapon).getType()));
+
+            //Removing collectibles.
             for (int i = 0; i < collectibles.size(); ) {
                 GameObject object = collectibles.get(i);
                 //Bit bot is already found then removing from collectibles.
@@ -375,6 +407,7 @@ public class Model {
             e.printStackTrace();
         }
         gameOver = true;
+        pause = true;
     }
 
     /**
@@ -418,7 +451,8 @@ public class Model {
     }
 
     /**
-     * Process the input. My philosophy is that the controllers are affecting the state fo the player. So it can be
+     * Process the input.
+     * My philosophy is that the controllers are affecting the state fo the player. So it can be
      * handled centrally in the model class. If another objects needs information then it can check the state of player
      * as it will have a method with `Model` object in it. Maybe this approach can change in future.
      */
@@ -502,12 +536,15 @@ public class Model {
         return new Checkpoint(player1, currLevelIndex, difficulty);
     }
 
+    /**
+     * A class which represents the state of the game-world which needs to be saved to restore a progress from a checkpoint.
+     */
     private static class Checkpoint implements Serializable {
         private Player player1;
         private int currLevelIndex;
         private Difficulty difficulty;
 
-        public Checkpoint(Player player1, int currLevelIndex, Difficulty difficulty) {
+        Checkpoint(Player player1, int currLevelIndex, Difficulty difficulty) {
             this.player1 = player1;
             this.currLevelIndex = currLevelIndex;
             this.difficulty = difficulty;

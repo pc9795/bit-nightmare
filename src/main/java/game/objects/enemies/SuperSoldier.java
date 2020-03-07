@@ -12,6 +12,7 @@ import java.util.Random;
 
 /**
  * Created By: Prashant Chaubey
+ * Student No: 18200540
  * Created On: 18-02-2020 00:01
  * Purpose: Attack player using bit array gun
  **/
@@ -88,6 +89,11 @@ public class SuperSoldier extends ShootingAndDuckingEnemyAdapter {
         }
     }
 
+    /**
+     * Render the texture for the given object
+     *
+     * @param g grpahics object
+     */
     private void renderTexture(Graphics g) {
         Animator animator = getAnimatorAccordingToState();
         if (lastAnimator != null && lastAnimator != animator) {
@@ -108,6 +114,11 @@ public class SuperSoldier extends ShootingAndDuckingEnemyAdapter {
         }
     }
 
+    /**
+     * When there is no texture it will render a rectangle with a selected color for this object
+     *
+     * @param g graphics object
+     */
     private void renderDefault(Graphics g) {
         g.setColor(new Color(255, 127, 39));
         g.fillRect((int) centre.getX(), (int) centre.getY(), width, height);

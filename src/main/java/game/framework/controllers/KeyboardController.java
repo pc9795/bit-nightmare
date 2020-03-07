@@ -33,11 +33,12 @@ SOFTWARE.
  */
 
 /**
+ * Created By: Prashant Chaubey
+ * Student No: 18200540
  * Controller to access keyboard
  */
 public final class KeyboardController implements KeyListener {
     private static final KeyboardController instance = new KeyboardController();
-    //Right now implemented keys as map. In future can move to array based implementation
     private Map<Integer, Boolean> keys = new HashMap<>();
     private Map<Integer, Integer> pollCount = new HashMap<>();
 
@@ -67,6 +68,9 @@ public final class KeyboardController implements KeyListener {
     /**
      * It must be called per frame. This method implements a functionality to check whether a button is pressed once
      * or not. As when button is pressed for multiple frames it can cause unexpected behavior
+     * <p>
+     * REF: https://books.google.ie/books/about/Fundamental_2D_Game_Programming_with_Jav.html?id=iRFvCgAAQBAJ&redir_esc=y
+     * The idea to use a poll count to detect whether a key is pressed once or not is taken by the Chapter 2 of this book.
      */
     public void poll() {
         for (Integer key : pollCount.keySet()) {

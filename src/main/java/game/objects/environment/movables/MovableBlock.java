@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * Created By: Prashant Chaubey
+ * Student No: 18200540
  * Created On: 18-02-2020 00:02
  * Purpose: Block which can be moved by player
  **/
@@ -70,15 +71,14 @@ public class MovableBlock extends GameObject implements FineGrainedCollider {
         if (touchingPlayer) {
             velocity.setX(velocity.getX() + model.getPlayer1().getVelocity().getX() > 0 ? speedX : -speedX);
         }
-
-        //todo implement LOS because when player is around only then this object may be moving.
-
         boolean[] collisions;
         boolean bottomCollision = false;
+
         List<GameObject> willCollide = model.getEnvironmentQuadTree().retrieve(this);
         willCollide.addAll(model.getCollectibles());
         willCollide.addAll(model.getMovableEnvironment());
         willCollide.addAll(model.getEnemies());
+
         //Not taking account that this block can fall on a player.
         for (GameObject object : willCollide) {
             if (object == this) {

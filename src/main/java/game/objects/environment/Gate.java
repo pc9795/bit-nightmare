@@ -8,6 +8,7 @@ import java.awt.*;
 
 /**
  * Created By: Prashant Chaubey
+ * Student No: 18200540
  * Created On: 18-02-2020 00:02
  * Purpose: Represent a gate
  **/
@@ -30,6 +31,7 @@ public class Gate extends GameObject {
     public void render(Graphics g) {
         //We expect two textures. First will be for closed and second for opened
         if (texture != null && texture.getIdleRight().length >= 2) {
+            //THIS PORTION IS TOO MUCH DEPENDENT ON IMAGES USED.
             if (opened) {
                 g.drawImage(texture.getIdleRight()[1], (int) centre.getX(), (int) centre.getY(), width, height, null);
             } else {
