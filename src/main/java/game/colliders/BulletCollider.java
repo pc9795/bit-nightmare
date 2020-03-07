@@ -2,6 +2,7 @@ package game.colliders;
 
 import game.framework.Model;
 import game.objects.GameObject;
+import game.properties.Enemy;
 import game.properties.Healthy;
 
 import java.util.List;
@@ -70,6 +71,10 @@ public interface BulletCollider {
                 case SOLDIER:
                 case SUPER_SOLDIER:
                 case GUARDIAN:
+                    //Already dead pass through it.
+                    if (((Enemy) obj).isDead()) {
+                        return false;
+                    }
                     //Damage health.
                     ((Healthy) obj).damageHealth(damage);
                     return true;

@@ -28,7 +28,7 @@ public class Charger extends GameObject implements FineGrainedCollider, Healthy,
     private static final int DEFAULT_LOS = 300;
     private static final int DEFAULT_HEALTH = 30;
     //Variables
-    private boolean playerDetected;
+    private boolean playerDetected, dead;
     private int health, los, maxHealth;
     private float speedX;
     private Animator idleRight, idleLeft;
@@ -123,6 +123,7 @@ public class Charger extends GameObject implements FineGrainedCollider, Healthy,
         //Cease to exist
         if (health <= 0) {
             model.getEnemies().remove(this);
+            dead = true;
             return;
         }
 
@@ -189,6 +190,11 @@ public class Charger extends GameObject implements FineGrainedCollider, Healthy,
             velocity.setX(speedX);
         }
         playerDetected = true;
+    }
+
+    @Override
+    public boolean isDead() {
+        return dead;
     }
 
     @Override

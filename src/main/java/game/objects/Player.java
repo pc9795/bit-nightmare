@@ -6,6 +6,7 @@ import game.framework.visual.Animator;
 import game.objects.environment.Gate;
 import game.objects.environment.HidingBlock;
 import game.objects.environment.movables.MovableBlock;
+import game.properties.Enemy;
 import game.properties.Weapon;
 import game.physics.Point2f;
 import game.properties.Animated;
@@ -34,7 +35,7 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
     private static final int DEFAULT_LIVES = 10;
     //Variables
     private List<Weapon> weapons;
-    private boolean ducking, attacking, bitBotFound, hasKey;
+    private boolean ducking, attacking, bitBotFound, hasKey, cantDuck;
     private int health, maxHealth, currentWeaponIndex, lives;
     private transient long lastFiredBullet;
     private float speedX, speedY, bulletFreqInSec;
@@ -256,6 +257,10 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
                     if (collisions[FineGrainedCollider.BOTTOM]) {
                         bottomCollision = true;
                     }
+                    //Ideally it should be implemented with all the scenarios where we are checking fine grained
+                    //Collision but not needed now.
+                    //fixme because of checking individual collisions this is not working.
+                    cantDuck = collisions[FineGrainedCollider.BOTTOM] && collisions[FineGrainedCollider.TOP];
                     break;
                 case MOVABLE_BLOCK:
                     collisions = fineGrainedCollision(this, env);
@@ -325,7 +330,7 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
                 case SUPER_SOLDIER:
                 case CHARGER:
                     //Don't touch me
-                    if (obj.getBounds().intersects(getBounds())) {
+                    if (obj.getBounds().intersects(getBounds()) && !((Enemy) obj).isDead()) {
                         health = 0;
                     }
                     break;
@@ -443,6 +448,10 @@ public class Player extends GameObject implements FineGrainedCollider, Healthy, 
      */
     public void toggleDuck() {
         if (ducking) {
+            //In the case when in tunnel kind of structure.
+            if (cantDuck) {
+                return;
+            }
             centre.setY(centre.getY() - height / 2);
             height *= 2;
             ducking = false;

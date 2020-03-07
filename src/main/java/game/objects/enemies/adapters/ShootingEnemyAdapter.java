@@ -133,4 +133,9 @@ public class ShootingEnemyAdapter extends GameObject implements Enemy, EnemyColl
     public void damageHealth(int damage) {
         health = Math.max(0, health - damage);
     }
+
+    @Override
+    public boolean isDead() {
+        return dead;
+    }
 }

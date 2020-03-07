@@ -17,6 +17,7 @@ import java.awt.*;
  * experimentation.
  **/
 public interface FineGrainedCollider {
+    int TOP = 0;
     int BOTTOM = 1;
     int LEFT = 2;
     int RIGHT = 3;

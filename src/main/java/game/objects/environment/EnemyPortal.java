@@ -118,4 +118,9 @@ public class EnemyPortal extends GameObject implements Enemy {
         lastBeingSpawned = now;
         enemyCount--;
     }
+
+    @Override
+    public boolean isDead() {
+        return false;
+    }
 }

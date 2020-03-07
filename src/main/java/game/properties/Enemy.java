@@ -10,4 +10,6 @@ import game.framework.Model;
  **/
 public interface Enemy {
     void attackPlayer(Model model);
+
+    boolean isDead();
 }

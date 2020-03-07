@@ -8,4 +8,5 @@ libraries as input.
 `java -Djava.library.path=/natives/windows/ game.MainWindow`
 
 Screen shot for setting this in intellij.
+
 ![Intellij Config](intellij_config.PNG)

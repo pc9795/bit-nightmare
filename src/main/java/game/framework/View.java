@@ -60,7 +60,7 @@ class View extends Canvas {
     private StoryTeller storyTeller;
     private HashSet<Integer> storyLocationsProcessed;
     private float gameScreenAlpha;
-    private Screen currScreen, prevScreen = null;
+    private Screen currScreen, prevScreen;
 
 
     View(Model world) throws IOException {
@@ -560,6 +560,7 @@ class View extends Canvas {
         }
         //Skipping
         KeyboardController.getInstance().poll();
+        GamepadController.getInstance().poll();
         if (KeyboardController.getInstance().isSpacePressedOnce() || GamepadController.getInstance().isAPressedOnce()) {
             storyTeller.skip();
         }

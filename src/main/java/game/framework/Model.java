@@ -193,6 +193,7 @@ public class Model {
     void newGame(Difficulty difficulty) throws IOException {
         loadLevel(0, difficulty);
         saveCheckpoint(getPlayer1().getCentre().copy());
+        gameOver = false;
     }
 
     /**
@@ -288,6 +289,7 @@ public class Model {
         collectibles.clear();
         bullets.clear();
         movableEnvironment.clear();
+        lastCheckPointSaved = null;
         player1 = null;
     }
 
@@ -405,6 +407,7 @@ public class Model {
             e.printStackTrace();
         }
         gameOver = true;
+        pause = true;
     }
 
     /**
