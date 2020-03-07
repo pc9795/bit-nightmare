@@ -1,5 +1,10 @@
 # BIT NIGHTMARE
 
+* Thanks [Craftpix](https://craftpix.net/) and [Open Game Art](https://opengameart.org/) for amazing assets.
+* Thanks [1001 Fonts](https://www.1001fonts.com/) for excellent fonts.
+* Thanks [DL Sounds](https://www.dl-sounds.com/) for stunning sounds.
+* Thanks [RealTutsGML](https://www.youtube.com/user/RealTutsGML) for phenomenal tutorial on Java game programming.
+
 ## Genre/Theme
 A 2-D platformer where a programmer is trapped in an Alien prison
 
