@@ -1,4 +1,4 @@
-#Bit Nightmare
+# BIT NIGHTMARE
 
 ## Genre/Theme
 A 2-D platformer where a programmer is trapped in an Alien prison
