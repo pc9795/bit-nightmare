@@ -67,6 +67,7 @@ class View extends Canvas {
         this.gameWorld = world;
         this.camera = new Camera(0, 0);
         this.storyTeller = new StoryTeller();
+        //todo it should be part of the model.
         this.storyLocationsProcessed = new HashSet<>();
         this.gameScreenAlpha = 1f;
         this.currScreen = Screen.TITLE;
@@ -76,7 +77,6 @@ class View extends Canvas {
 
         this.bg = BufferedImageLoader.getInstance().loadImage(Constants.BACKGROUND_IMG_LOC);
         this.healthMarker = BufferedImageLoader.getInstance().loadImage(Constants.HEALTH_MARKER_IMG_LOC);
-
     }
 
     private enum Screen {
