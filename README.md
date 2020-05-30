@@ -5,6 +5,8 @@
 * Thanks [DL Sounds](https://www.dl-sounds.com/) for stunning sounds.
 * Thanks [RealTutsGML](https://www.youtube.com/user/RealTutsGML) for phenomenal tutorial on Java game programming.
 
+**Gameplay Video** - https://www.youtube.com/watch?v=0y7qBGYuIDE
+
 ## Genre/Theme
 A 2-D platformer where a programmer is trapped in an Alien prison
 
